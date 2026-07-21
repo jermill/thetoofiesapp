@@ -14,7 +14,7 @@ The app is **fully on-device: no backend, no database, no accounts, no network, 
 All commands run from `toofies/` (npm; `package-lock.json` is the lockfile):
 
 - Run (dev): `npx expo start --web` (Metro bundler serves on `http://localhost:8081`). First browser request triggers the initial bundle (~10s). `npm run ios` / `npm run android` need simulators/emulators not available in the cloud.
-- Lint: `npm run lint` (→ `expo lint`). Note: currently exits non-zero with **2 pre-existing lint errors** in `src/lib/store.tsx` and `src/hooks/use-color-scheme.web.ts` — these are not caused by setup.
+- Lint: `npm run lint` (→ `expo lint`). On the very first run in a fresh checkout `expo lint` auto-installs `eslint`/`eslint-config-expo` and writes `toofies/eslint.config.js`, which dirties the working tree — this is expected; leave those out of commits unless intentionally adopting them. Note: lint currently exits non-zero with **2 pre-existing lint errors** in `src/lib/store.tsx` and `src/hooks/use-color-scheme.web.ts` — these are not caused by setup.
 - Tests: `node scripts/economy.test.mjs` (economy parity suite; it self-compiles `src/lib/{economy,treats}.ts` via `tsc`). It is **not** wired to `npm test` — invoke it directly.
 - Typecheck: `npx tsc --noEmit` reports **pre-existing** errors for `*.module.css` / `global.css` side-effect imports (no CSS type declarations). The economy test avoids these via `--skipLibCheck` and by compiling only the two lib files.
 
