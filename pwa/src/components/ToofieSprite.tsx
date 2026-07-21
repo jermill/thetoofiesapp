@@ -155,13 +155,9 @@ export function ToofieSprite({
   function playTap() {
     if (!tappable) return;
     setTapKey((k) => k + 1);
-    setWiggling(false);
-    // Retrigger CSS animation even on rapid taps
-    requestAnimationFrame(() => {
-      setWiggling(true);
-      setTapPlaying(true);
-    });
-    window.setTimeout(() => setWiggling(false), 700);
+    setWiggling(true);
+    setTapPlaying(true);
+    window.setTimeout(() => setWiggling(false), 900);
   }
 
   const spriteClass = [
@@ -190,10 +186,14 @@ export function ToofieSprite({
   return (
     <button
       type="button"
-      className="toofie-tap"
+      className={`toofie-tap${wiggling ? ' is-active' : ''}`}
       aria-label={`${alt} — tap to wiggle`}
-      onClick={playTap}
-      style={{ width: size + 16, height: size + 16 }}
+      onPointerUp={(e) => {
+        // Pointer covers mouse + touch; ignore right-click / pen barrels.
+        if (e.button !== 0 && e.pointerType === 'mouse') return;
+        playTap();
+      }}
+      style={{ width: size + 20, height: size + 20 }}
     >
       {sprite}
     </button>
