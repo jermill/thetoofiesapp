@@ -27,11 +27,20 @@ export function HomeScreen() {
 
   return (
     <>
-      <p className="provisional-banner">Provisional OCHA direction · design not ratified</p>
+      <p className="provisional-banner">OCHA shell provisional · Toofie mascot 🟢 D14</p>
 
       <header className="brand-lockup">
-        <h1>Toofies</h1>
-        <p className="tag">Dessert, with peace of mind.</p>
+        <div className="brand-left">
+          <h1>Toofies</h1>
+          <p className="tag">Dessert, with peace of mind.</p>
+        </div>
+        <img
+          className="toofie-mark"
+          src="/mascot/toofie-g5-hero-black-glasses.png"
+          alt="Toofie — walking tooth with frosting hair, black glasses, and a fanny pack"
+          width={88}
+          height={88}
+        />
       </header>
 
       {showMilestone && t.streakMilestoneToday != null && (

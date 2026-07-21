@@ -97,10 +97,17 @@ a {
 
 .brand-lockup {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 4px 2px 2px;
+}
+
+.brand-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .brand-lockup h1 {
@@ -116,8 +123,19 @@ a {
   font-size: 12px;
   font-weight: 600;
   color: var(--ink-soft);
-  text-align: right;
-  max-width: 9.5rem;
+  max-width: 11rem;
+}
+
+.toofie-mark {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 2px solid var(--ink);
+  background: #dfe8d8;
+  flex: 0 0 auto;
+  box-shadow: var(--shadow-soft);
+  animation: rise 0.55s ease both;
 }
 
 .hero {

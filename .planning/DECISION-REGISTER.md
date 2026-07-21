@@ -259,33 +259,36 @@ IAP means you never hold card data. **Rec (🟡):** free v1, revisit paid at v2.
 
 ---
 
-## Tier 4 — Design (ALL open — per your correction, nothing assumed)
+## Tier 4 — Design
 
-### D11 Vibe 🔴 · D12 Color 🔴 · D13 Typography 🔴 · D14 Mascot treatment 🔴 · D15 Layout 🔴
+### D11 Vibe 🔴 · D12 Color 🔴 · D13 Typography 🔴 · D15 Layout 🔴
 Process agreed ("both in parallel"): you share Mobbin references + we ground in
-Apple HIG, then decide each one explicitly. A candidate palette/type direction
-exists from an earlier exploration **as options only** — not applied. See
-`DESIGN-SPEC.md`.
+Apple HIG, then decide each one explicitly. See `DESIGN-SPEC.md`.
 
 **Update 2026-07-21 — provisional apply in `pwa/` only (still 🔴, not ratified):**
 Founder asked to *design* the web PWA. Applied the **OCHA soft-brutalist dessert
 ritual** candidate from `design-library/ocha/teardown.md` as a **working
 prototype** (cream `#fefae7`, matcha `#03563e`, blossom `#ffbad8`, Anton +
-Outfit, rounded cards, Home / Log / You). Banner in-app labels it provisional.
-**Founder must still ratify or reject** before this becomes the product design
-system. Expo/SwiftUI scaffolds stay unstyled.
+Outfit, rounded cards, Home / Log / You). Banner in-app labels it provisional
+except where a ratified piece (D14) is applied. Expo/SwiftUI scaffolds stay
+unstyled pending the rest of the design gate.
 
-**Update 2026-07-21 — D14 mascot options (still 🔴):** interactive HTML gallery at
-`.planning/design-library/mascot-options.html` with six directions for founder
-pick: **A Classic Toofie** · **B Frosted Toofie** · **C Editorial Outline** ·
-**D Sweet Blob** · **E The Toofies (pair)** · **F Mark only**. Nothing applied
-to the PWA until ratified.
+### D14 · Mascot treatment 🟢 RATIFIED 2026-07-21
+Founder: **"LETS GO G5 WITH FANNIE PACE AND BLACK FRAME GLASSES"**
+(fanny pack + black-frame glasses).
 
-**Update 2026-07-21 — D14 image mockups (founder brief):** founder shared a
-blob-mascot reference and asked for a **walking tooth** with **gold glasses**
-and **frosting as hair** (no cap). Generated mockups + HTML picker:
-`pwa/public/mascot-walk-mockups.html` / live at
-https://toofies-demo.netlify.app/mascot-walk-mockups.html (G1–G5). Still 🔴.
+**Locked direction:**
+- **Form:** walking tooth (molar crown + root-legs) — not a marshmallow blob
+- **Hair:** pink frosting swirl on the crown (no cap)
+- **Glasses:** **black frames** (not gold)
+- **Accessory:** **fanny pack** on the waist
+- **Pose system:** G5 sheet energy — walk / wave / celebrate
+- **Assets:** `pwa/public/mascot/toofie-g5-*.png` +
+  `.planning/design-library/mascot/toofie-g5-*.png`
+- **Live lock page:** https://toofies-demo.netlify.app/mascot-locked.html
+
+Applied on the PWA home as the brand mascot mark. Further polish (exact line
+weight, prop set per screen) can iterate inside this lock.
 
 ---
 
