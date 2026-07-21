@@ -95,7 +95,9 @@ def key_sheet(path: Path, cols: int, rows: int) -> Image.Image:
     pink = (r > 165) & (b > 95) & (g < 165) & (r > g + 12)
     ink = (r < 100) & (g < 100) & (b < 100)
     chocolate = (r > 85) & (g < 95) & (b < 85) & (r > g + 18)
-    vivid = ((mx - mn) >= 80) & (mn < 175)
+    # Green-dominant plate must never count as "vivid character" (was protecting mint).
+    green_plate = (g >= r + 2) & (g >= b - 1) & (g >= 160) & (r >= 100) & (b >= 100)
+    vivid = ((mx - mn) >= 80) & (mn < 175) & ~green_plate
     # Core pigments — always keep. Tooth fill is NOT protected during edge eat
     # so chalky white halos can be removed.
     core = pink | ink | chocolate | vivid
@@ -132,7 +134,7 @@ def key_sheet(path: Path, cols: int, rows: int) -> Image.Image:
     gray = (mn >= 175) & (mx <= 244) & ((mx - mn) <= 18)
     wash = (mn >= 210) & ((mx - mn) <= 30) & (g >= r + 2) & (g >= b) & ((r - b) <= 10)
 
-    mint_bg = (mint | chroma | gray | wash) & ~core
+    mint_bg = (mint | chroma | gray | wash | green_plate) & ~core
     cream_bg = cream & ~core & ~tooth
 
     # Cell-corner seeds (grid gutters)

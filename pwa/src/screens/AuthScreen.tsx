@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
-import { saveUiPrefs } from '../lib/uiPrefs';
+import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 export function AuthScreen() {
   const navigate = useNavigate();
@@ -12,6 +12,11 @@ export function AuthScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
+
+  function goNext() {
+    const prefs = loadUiPrefs();
+    navigate(prefs.onboardingDone ? '/' : '/onboarding', { replace: true });
+  }
 
   function mockContinue() {
     if (busy) return;
@@ -23,11 +28,11 @@ export function AuthScreen() {
     });
     window.setTimeout(() => {
       saveUiPrefs({
+        authGateDone: true,
         signedInMock: true,
         displayName: name.trim() || 'Friend',
-        onboardingDone: true,
       });
-      navigate('/', { replace: true });
+      goNext();
     }, 700);
   }
 
@@ -94,8 +99,9 @@ export function AuthScreen() {
           className="ghost-btn"
           disabled={busy}
           onClick={() => {
+            saveUiPrefs({ authGateDone: true });
             show('Continuing locally', { tone: 'soft', anim: 'peace', ms: 1600 });
-            navigate('/', { replace: true });
+            goNext();
           }}
         >
           Continue without account

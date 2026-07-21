@@ -45,7 +45,7 @@ export function OnboardingScreen() {
   function finish() {
     saveUiPrefs({ onboardingDone: true, economyOptIn: economy });
     show('You’re in — let’s go', { tone: 'good', anim: 'cheer', ms: 1800 });
-    navigate('/auth', { replace: true });
+    navigate('/', { replace: true });
   }
 
   return (

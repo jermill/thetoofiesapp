@@ -2,6 +2,8 @@
 const KEY = 'toofies.pwa.ui';
 
 export type UiPrefs = {
+  /** Create-account / sign-in / continue-without completed. */
+  authGateDone: boolean;
   onboardingDone: boolean;
   signedInMock: boolean;
   displayName: string;
@@ -12,6 +14,7 @@ export type UiPrefs = {
 };
 
 const defaults: UiPrefs = {
+  authGateDone: false,
   onboardingDone: false,
   signedInMock: false,
   displayName: '',
@@ -26,7 +29,12 @@ export function loadUiPrefs(): UiPrefs {
     const raw = localStorage.getItem(KEY);
     if (!raw) return { ...defaults };
     const parsed = JSON.parse(raw) as Partial<UiPrefs>;
-    return { ...defaults, ...parsed };
+    const next = { ...defaults, ...parsed };
+    // Older builds finished onboarding before auth-first existed.
+    if (next.onboardingDone && parsed.authGateDone === undefined) {
+      next.authGateDone = true;
+    }
+    return next;
   } catch {
     return { ...defaults };
   }

@@ -421,6 +421,9 @@ reckoned with, not assumed away.
   building.
 - **R6 · Privacy-as-a-feature vs the social/location vision directly conflict**
   (D4/D23). You cannot fully have both; a deliberate tradeoff is required.
+- **R8 · First-run order (PWA mock):** founder directed 2026-07-21 — **Create
+  account → Onboarding → Home** (not onboarding-first). Auth remains a mock
+  stub until D31 ships; “continue without account” still satisfies the gate.
 - **R7 · Disney — CLOSED. It was only an illustrative example, never a
   strategy** (clarified 2026-07-13: *"This isn't about Disney at all — I live in
   Orlando and am referencing them as a place people go to try new desserts and

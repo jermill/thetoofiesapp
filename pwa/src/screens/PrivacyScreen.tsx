@@ -21,6 +21,7 @@ export function PrivacyScreen() {
     }
     reset();
     saveUiPrefs({
+      authGateDone: false,
       onboardingDone: false,
       signedInMock: false,
       displayName: '',
@@ -42,7 +43,7 @@ export function PrivacyScreen() {
     saveBuddy(defaultBuddyState());
     clearLogMeta();
     show('Local account data cleared', { tone: 'soft', anim: 'sit', ms: 2000 });
-    navigate('/onboarding', { replace: true });
+    navigate('/auth', { replace: true });
   }
 
   return (

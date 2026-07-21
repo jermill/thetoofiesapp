@@ -43,10 +43,11 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const tall = ch / cw > 1.5;
 
   // Tall cells: fit ~42% of cell height (character band) into the box.
-  // Square-ish cells: cover the box.
+  // Grid cells: zoom past plate margins (~72% of the cell) so mint/cream
+  // gutters at the top/bottom don't show in the square viewport.
   const scale = tall
     ? Math.min(size / cw, size / (ch * 0.42))
-    : Math.max(size / cw, size / ch);
+    : Math.max(size / (cw * 0.72), size / (ch * 0.72));
 
   const bgW = sheetW * scale;
   const bgH = sheetH * scale;

@@ -25,15 +25,23 @@ import './styles/app.css';
 
 function Gate({ children }: { children: React.ReactNode }) {
   const loc = useLocation();
+  const [authGateDone, setAuthGateDone] = useState(true);
   const [onboardingDone, setOnboardingDone] = useState(true);
 
   useEffect(() => {
     const p = loadUiPrefs();
+    setAuthGateDone(p.authGateDone);
     setOnboardingDone(p.onboardingDone);
   }, [loc.pathname]);
 
-  const bypass = loc.pathname === '/onboarding' || loc.pathname === '/auth';
-  if (!onboardingDone && !bypass) {
+  const onAuth = loc.pathname === '/auth';
+  const onOnboarding = loc.pathname === '/onboarding';
+
+  // Account first, then onboarding — never the reverse.
+  if (!authGateDone && !onAuth) {
+    return <Navigate to="/auth" replace />;
+  }
+  if (authGateDone && !onboardingDone && !onOnboarding && !onAuth) {
     return <Navigate to="/onboarding" replace />;
   }
 
