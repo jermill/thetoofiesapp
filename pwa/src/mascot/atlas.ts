@@ -10,7 +10,7 @@ export const atlas = {
   },
   "sheets": {
     "actions": {
-      "src": "/mascot/toofie-sprite-sheet-actions.png",
+      "src": "/mascot/toofie-sprite-sheet-actions.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -29,7 +29,7 @@ export const atlas = {
       ]
     },
     "moods": {
-      "src": "/mascot/toofie-sprite-sheet-moods.png",
+      "src": "/mascot/toofie-sprite-sheet-moods.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -48,7 +48,7 @@ export const atlas = {
       ]
     },
     "app": {
-      "src": "/mascot/toofie-sprite-sheet-app.png",
+      "src": "/mascot/toofie-sprite-sheet-app.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -67,7 +67,7 @@ export const atlas = {
       ]
     },
     "walk_cycle": {
-      "src": "/mascot/toofie-sprite-walk-cycle.png",
+      "src": "/mascot/toofie-sprite-walk-cycle.png?v=5",
       "cols": 8,
       "rows": 1,
       "frames": [
@@ -82,7 +82,7 @@ export const atlas = {
       ]
     },
     "celebrate_cycle": {
-      "src": "/mascot/toofie-sprite-celebrate-cycle.png",
+      "src": "/mascot/toofie-sprite-celebrate-cycle.png?v=5",
       "cols": 6,
       "rows": 1,
       "frames": [
@@ -95,7 +95,7 @@ export const atlas = {
       ]
     },
     "milestone_cycle": {
-      "src": "/mascot/toofie-sprite-milestone-cycle.png",
+      "src": "/mascot/toofie-sprite-milestone-cycle.png?v=5",
       "cols": 8,
       "rows": 1,
       "frames": [
@@ -110,7 +110,7 @@ export const atlas = {
       ]
     },
     "log_cycle": {
-      "src": "/mascot/toofie-sprite-log-cycle.png",
+      "src": "/mascot/toofie-sprite-log-cycle.png?v=5",
       "cols": 6,
       "rows": 1,
       "frames": [

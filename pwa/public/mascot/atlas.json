@@ -10,7 +10,7 @@
   },
   "sheets": {
     "actions": {
-      "src": "/mascot/toofie-sprite-sheet-actions.png",
+      "src": "/mascot/toofie-sprite-sheet-actions.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -20,7 +20,7 @@
       ]
     },
     "moods": {
-      "src": "/mascot/toofie-sprite-sheet-moods.png",
+      "src": "/mascot/toofie-sprite-sheet-moods.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -30,7 +30,7 @@
       ]
     },
     "app": {
-      "src": "/mascot/toofie-sprite-sheet-app.png",
+      "src": "/mascot/toofie-sprite-sheet-app.png?v=5",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -40,25 +40,25 @@
       ]
     },
     "walk_cycle": {
-      "src": "/mascot/toofie-sprite-walk-cycle.png",
+      "src": "/mascot/toofie-sprite-walk-cycle.png?v=5",
       "cols": 8,
       "rows": 1,
       "frames": ["w0", "w1", "w2", "w3", "w4", "w5", "w6", "w7"]
     },
     "celebrate_cycle": {
-      "src": "/mascot/toofie-sprite-celebrate-cycle.png",
+      "src": "/mascot/toofie-sprite-celebrate-cycle.png?v=5",
       "cols": 6,
       "rows": 1,
       "frames": ["c0", "c1", "c2", "c3", "c4", "c5"]
     },
     "milestone_cycle": {
-      "src": "/mascot/toofie-sprite-milestone-cycle.png",
+      "src": "/mascot/toofie-sprite-milestone-cycle.png?v=5",
       "cols": 8,
       "rows": 1,
       "frames": ["m0", "m1", "m2", "m3", "m4", "m5", "m6", "m7"]
     },
     "log_cycle": {
-      "src": "/mascot/toofie-sprite-log-cycle.png",
+      "src": "/mascot/toofie-sprite-log-cycle.png?v=5",
       "cols": 6,
       "rows": 1,
       "frames": ["l0", "l1", "l2", "l3", "l4", "l5"]
