@@ -644,20 +644,14 @@ a {
   position: relative;
 }
 
-.load-orbit {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 2px dashed color-mix(in oklab, var(--matcha) 35%, transparent);
-  animation: spin 6s linear infinite;
-  top: 8px;
-}
-
 .load-mascot {
   position: relative;
   z-index: 1;
   animation: bob-load 1.1s ease-in-out infinite;
+  /* no plate / orbit ring — character only */
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .load-brand {

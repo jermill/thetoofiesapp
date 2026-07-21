@@ -77,13 +77,22 @@ function paint() {
   const sheet = atlas.sheets[def.sheet];
   const name = def.frames[frame % def.frames.length];
   const idx = sheet.frames.indexOf(name);
-  const col = idx % sheet.cols;
-  const row = Math.floor(idx / sheet.cols);
-  const x = sheet.cols === 1 ? 0 : (col / (sheet.cols - 1)) * 100;
-  const y = sheet.rows === 1 ? 0 : (row / (sheet.rows - 1)) * 100;
+  const cols = sheet.cols;
+  const rows = sheet.rows;
+  const col = idx % cols;
+  const row = Math.floor(idx / cols);
+  const size = 140;
+  const sheetW = sheet.width || cols * 256;
+  const sheetH = sheet.height || rows * 256;
+  const cw = sheetW / cols;
+  const ch = sheetH / rows;
+  const scale = Math.max(size / cw, size / ch);
+  const x = -(col * cw * scale) - (cw * scale - size) / 2;
+  const y = -(row * ch * scale) - (ch * scale - size) / 2;
   stage.style.backgroundImage = `url(${sheet.src})`;
-  stage.style.backgroundSize = `${sheet.cols * 100}% ${sheet.rows * 100}%`;
-  stage.style.backgroundPosition = `${x}% ${y}%`;
+  stage.style.backgroundSize = `${sheetW * scale}px ${sheetH * scale}px`;
+  stage.style.backgroundPosition = `${x}px ${y}px`;
+  stage.style.overflow = 'hidden';
   document.getElementById('animName').textContent = current;
   document.getElementById('animMeta').textContent = `${def.sheet} · ${def.frames.length} frames · ${def.fps} fps · loop=${def.loop}`;
 }

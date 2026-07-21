@@ -12,6 +12,37 @@ type Props = {
   onComplete?: () => void;
 };
 
+type Sheet = (typeof atlas.sheets)[keyof typeof atlas.sheets];
+
+/** Uniform cover crop — never stretches non-square cycle cells into a square. */
+function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
+  const cols = sheet.cols;
+  const rows = sheet.rows;
+  const sheetW = 'width' in sheet ? Number(sheet.width) : cols * 256;
+  const sheetH = 'height' in sheet ? Number(sheet.height) : rows * 256;
+  const cw = sheetW / cols;
+  const ch = sheetH / rows;
+  const col = cellIndex % cols;
+  const row = Math.floor(cellIndex / cols);
+
+  // Cover the size×size box without distortion; center the cell.
+  const scale = Math.max(size / cw, size / ch);
+  const bgW = sheetW * scale;
+  const bgH = sheetH * scale;
+  const x = -(col * cw * scale) - (cw * scale - size) / 2;
+  const y = -(row * ch * scale) - (ch * scale - size) / 2;
+
+  return {
+    width: size,
+    height: size,
+    overflow: 'hidden' as const,
+    backgroundImage: `url(${sheet.src})`,
+    backgroundSize: `${bgW}px ${bgH}px`,
+    backgroundPosition: `${x}px ${y}px`,
+    backgroundRepeat: 'no-repeat' as const,
+  };
+}
+
 /** Plays a named Toofie animation from the sprite atlas. */
 export function ToofieSprite({
   anim,
@@ -29,20 +60,10 @@ export function ToofieSprite({
   const frameName = def.frames[Math.min(frameIdx, def.frames.length - 1)] as string;
   const cellIndex = Math.max(0, (sheet.frames as readonly string[]).indexOf(frameName));
 
-  const bg = useMemo(() => {
-    const cols = sheet.cols;
-    const rows = sheet.rows;
-    const col = cellIndex % cols;
-    const row = Math.floor(cellIndex / cols);
-    const x = cols <= 1 ? 0 : (col / (cols - 1)) * 100;
-    const y = rows <= 1 ? 0 : (row / (rows - 1)) * 100;
-    return {
-      backgroundImage: `url(${sheet.src})`,
-      backgroundSize: `${cols * 100}% ${rows * 100}%`,
-      backgroundPosition: `${x}% ${y}%`,
-      backgroundRepeat: 'no-repeat' as const,
-    };
-  }, [cellIndex, sheet]);
+  const style = useMemo(
+    () => frameStyle(sheet, cellIndex, size),
+    [cellIndex, sheet, size],
+  );
 
   useEffect(() => {
     setFrameIdx(0);
@@ -76,10 +97,8 @@ export function ToofieSprite({
       role="img"
       aria-label={alt}
       style={{
-        width: size,
-        height: size,
         flex: '0 0 auto',
-        ...bg,
+        ...style,
       }}
     />
   );
