@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Toofies — Mascot options (D14)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #fefae7;
+    --paper-2: #f3edd4;
+    --ink: #121212;
+    --ink-soft: #4a4a44;
+    --ink-faint: #8a8a82;
+    --line: rgba(18,18,18,.12);
+    --matcha: #03563e;
+    --blossom: #ffbad8;
+    --blossom-deep: #f08bb8;
+    --lime: #c6ff3a;
+    --surface: #fffdf5;
+    --font-d: 'Anton', Impact, sans-serif;
+    --font-b: 'Outfit', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-b);
+    color: var(--ink);
+    background:
+      radial-gradient(900px 400px at 10% -5%, color-mix(in oklab, var(--blossom) 30%, transparent), transparent 55%),
+      radial-gradient(700px 380px at 95% 0%, color-mix(in oklab, var(--matcha) 12%, transparent), transparent 50%),
+      var(--paper);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 18px 100px; }
+  .banner {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); border: 1px dashed var(--line); border-radius: 999px;
+    padding: 7px 12px; margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--font-d); font-size: clamp(36px, 8vw, 56px);
+    letter-spacing: .02em; text-transform: uppercase; line-height: .95; margin: 0 0 10px;
+  }
+  .lede { max-width: 58ch; color: var(--ink-soft); margin: 0 0 8px; font-size: 16px; }
+  .note {
+    max-width: 62ch; font-size: 13.5px; color: var(--ink-soft);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px 14px; margin: 18px 0 28px;
+  }
+  .note b { color: var(--ink); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 22px;
+    padding: 16px 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    cursor: pointer;
+    transition: border-color .15s ease, transform .12s ease, box-shadow .15s ease;
+    box-shadow: 0 12px 28px -22px rgba(18,18,18,.4);
+  }
+  .card:hover { border-color: color-mix(in oklab, var(--matcha) 45%, var(--line)); transform: translateY(-2px); }
+  .card.selected {
+    border-color: var(--matcha);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--lime) 55%, transparent), 0 14px 30px -20px rgba(18,18,18,.45);
+  }
+  .card input { position: absolute; opacity: 0; pointer-events: none; }
+
+  .stage {
+    height: 220px;
+    border-radius: 16px;
+    background:
+      radial-gradient(120px 80px at 70% 30%, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--paper-2), var(--paper));
+    display: grid; place-items: center;
+    overflow: hidden;
+  }
+  .stage svg { width: 160px; height: 160px; display: block; }
+
+  .meta { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .letter {
+    font-family: var(--font-d); font-size: 28px; letter-spacing: .04em;
+    color: var(--matcha);
+  }
+  .pill {
+    font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    padding: 5px 9px; border-radius: 999px; background: var(--paper-2); color: var(--ink-soft);
+  }
+  .pill.rec { background: var(--lime); color: var(--ink); }
+  .name { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+  .blurb { margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .traits { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .traits li {
+    font-size: 11px; font-weight: 600; color: var(--ink-soft);
+    border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px;
+  }
+
+  .dock {
+    position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+    width: min(920px, calc(100% - 24px));
+    background: color-mix(in oklab, var(--ink) 94%, black);
+    color: var(--paper);
+    border-radius: 18px;
+    padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    box-shadow: 0 18px 40px -18px rgba(0,0,0,.5);
+    z-index: 20;
+  }
+  .dock .pick { font-size: 14px; }
+  .dock .pick strong { color: var(--lime); }
+  .dock button {
+    appearance: none; border: none; cursor: pointer;
+    background: var(--blossom-deep); color: var(--ink);
+    font-weight: 700; font-size: 14px; border-radius: 999px;
+    padding: 11px 16px;
+  }
+  .dock button:disabled { opacity: .4; cursor: not-allowed; }
+
+  .pose-row {
+    display: flex; gap: 8px; justify-content: center; margin-top: -2px;
+  }
+  .pose-row button {
+    appearance: none; border: 1px solid var(--line); background: var(--paper);
+    border-radius: 999px; font-size: 11px; font-weight: 600; padding: 5px 10px;
+    cursor: pointer; color: var(--ink-soft);
+  }
+  .pose-row button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* subtle bounce for selected */
+  .card.selected .stage svg { animation: bob 1.6s ease-in-out infinite; }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.selected .stage svg { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">D14 · Mascot treatment · options only — not applied</div>
+  <h1>Pick a Toofies mascot</h1>
+  <p class="lede">Six directions for the character that cheers milestones, empty states, and “you’re good to treat yourself.” Soft, playful, never scolding.</p>
+  <p class="note"><b>How to use:</b> tap a card to select. Each concept includes a short vibe note and tags. Nothing ships until you ratify D14. Grounded in the provisional OCHA palette (cream / matcha / blossom).</p>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="dock" role="status">
+  <div class="pick" id="dockText">No pick yet — choose a direction above.</div>
+  <button type="button" id="confirmBtn" disabled>Lock this pick (for discussion)</button>
+</div>
+
+<script>
+/* —— Shared SVG helpers —— */
+const eye = (x, y, r = 5, fill = '#121212') =>
+  `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`;
+const blush = (x, y) =>
+  `<ellipse cx="${x}" cy="${y}" rx="9" ry="5" fill="#ffbad8" opacity=".85"/>`;
+
+/** Concept library */
+const CONCEPTS = [
+  {
+    id: 'classic',
+    letter: 'A',
+    name: 'Classic Toofie',
+    pill: 'Closest to current draft',
+    rec: true,
+    blurb: 'Friendly literal tooth — soft corners, rosy cheeks, big eyes. Easy to read at small sizes (widget / streak).',
+    traits: ['Literal tooth', 'Warm', 'App-icon friendly', 'Duolingo-adjacent'],
+    poses: {
+      idle: classicIdle,
+      celebrate: classicCelebrate,
+      wink: classicWink,
+    },
+  },
+  {
+    id: 'frosted',
+    letter: 'B',
+    name: 'Frosted Toofie',
+    pill: 'Dessert-forward',
+    blurb: 'Same tooth body, topped with a soft frosting swirl + cherry. Sells “dessert ritual” harder; slightly busier as an icon.',
+    traits: ['Dessert cue', 'Playful', 'Celebration-ready'],
+    poses: { idle: frostedIdle, celebrate: frostedCelebrate, wink: frostedWink },
+  },
+  {
+    id: 'editorial',
+    letter: 'C',
+    name: 'Editorial Outline',
+    pill: 'OCHA soft-brutalist',
+    blurb: 'Bold black outline, cream fill, tiny blossom accents. Feels poster-like and premium — less “cute app,” more brand mark.',
+    traits: ['Minimal', 'Brand-mark', 'Matches OCHA type energy'],
+    poses: { idle: editorialIdle, celebrate: editorialCelebrate, wink: editorialWink },
+  },
+  {
+    id: 'blob',
+    letter: 'D',
+    name: 'Sweet Blob',
+    pill: 'Less literal',
+    blurb: 'A soft dumpling-creature with a subtle tooth silhouette. More abstract — avoids “dentist” read, keeps sweetness.',
+    traits: ['Abstract', 'Anti-dentist', 'Mascot-as-mood'],
+    poses: { idle: blobIdle, celebrate: blobCelebrate, wink: blobWink },
+  },
+  {
+    id: 'twins',
+    letter: 'E',
+    name: 'The Toofies (pair)',
+    pill: 'Social-ready',
+    blurb: 'Two teeth — one blossom, one matcha — for “your sweet Toofies.” Fits the plural name and future friends/social layer.',
+    traits: ['Plural brand', 'Social v1 cue', 'Duo chemistry'],
+    poses: { idle: twinsIdle, celebrate: twinsCelebrate, wink: twinsWink },
+  },
+  {
+    id: 'mark',
+    letter: 'F',
+    name: 'Mark only (no character)',
+    pill: 'Voice in copy',
+    blurb: 'A geometric tooth monogram — no face. Personality lives in writing + motion. Cleanest for serious health-adjacent trust.',
+    traits: ['No face', 'Logo-first', 'Lowest risk'],
+    poses: { idle: markIdle, celebrate: markCelebrate, wink: markWink },
+  },
+];
+
+function classicIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="138" rx="36" ry="8" fill="#000" opacity=".08"/>
+    <path d="M48 42c0-18 14-30 32-30s32 12 32 30v18c0 4 2 7 5 10 8 7 12 16 12 26 0 22-18 38-49 38S31 126 31 104c0-10 4-19 12-26 3-3 5-6 5-10V42z" fill="#fffdf5" stroke="#121212" stroke-width="4"/>
+    ${blush(58,78)}${blush(102,78)}
+    ${eye(62,70,5.5)}${eye(98,70,5.5)}
+    <path d="M70 92c6 8 14 8 20 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+  </svg>`;
+}
+function classicCelebrate() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="138" rx="36" ry="8" fill="#000" opacity=".08"/>
+    <circle cx="28" cy="36" r="4" fill="#c6ff3a"/><circle cx="132" cy="44" r="5" fill="#ffbad8"/>
+    <circle cx="118" cy="24" r="3" fill="#03563e"/><rect x="40" y="22" width="8" height="8" rx="2" fill="#ffbad8" transform="rotate(20 44 26)"/>
+    <path d="M48 42c0-18 14-30 32-30s32 12 32 30v18c0 4 2 7 5 10 8 7 12 16 12 26 0 22-18 38-49 38S31 126 31 104c0-10 4-19 12-26 3-3 5-6 5-10V42z" fill="#fffdf5" stroke="#121212" stroke-width="4"/>
+    ${blush(58,78)}${blush(102,78)}
+    <path d="M54 68c4-6 12-6 16 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M90 68c4-6 12-6 16 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M66 90c8 12 20 12 28 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M118 78c10-2 18 6 16 14" fill="none" stroke="#f08bb8" stroke-width="4" stroke-linecap="round"/>
+  </svg>`;
+}
+function classicWink() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="138" rx="36" ry="8" fill="#000" opacity=".08"/>
+    <path d="M48 42c0-18 14-30 32-30s32 12 32 30v18c0 4 2 7 5 10 8 7 12 16 12 26 0 22-18 38-49 38S31 126 31 104c0-10 4-19 12-26 3-3 5-6 5-10V42z" fill="#fffdf5" stroke="#121212" stroke-width="4"/>
+    ${blush(58,78)}${blush(102,78)}
+    ${eye(62,70,5.5)}
+    <path d="M90 70c5 0 12 0 16 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M70 92c6 7 14 7 20 0" fill="none" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function frostedIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="140" rx="38" ry="8" fill="#000" opacity=".08"/>
+    <path d="M52 58c0-16 12-28 28-28s28 12 28 28v14c0 3 2 6 4 8 7 6 11 14 11 23 0 20-16 34-43 34S41 123 41 103c0-9 4-17 11-23 2-2 4-5 4-8V58z" fill="#fffdf5" stroke="#121212" stroke-width="4"/>
+    <path d="M50 48c8-22 22-34 38-34 18 0 30 14 34 30 2 8-4 14-12 12-6-2-10 2-18 2s-14-6-20-4c-8 2-16 2-22-6z" fill="#ffbad8" stroke="#121212" stroke-width="3.5"/>
+    <circle cx="96" cy="28" r="8" fill="#03563e" stroke="#121212" stroke-width="3"/>
+    <path d="M96 20v-8" stroke="#03563e" stroke-width="3" stroke-linecap="round"/>
+    ${blush(62,88)}${blush(98,88)}
+    ${eye(64,80)}${eye(96,80)}
+    <path d="M72 98c5 6 11 6 16 0" fill="none" stroke="#121212" stroke-width="3.2" stroke-linecap="round"/>
+  </svg>`;
+}
+function frostedCelebrate() {
+  return frostedIdle().replace('</svg>', `
+    <circle cx="24" cy="40" r="4" fill="#c6ff3a"/><circle cx="130" cy="50" r="4" fill="#ffbad8"/>
+    <path d="M66 96c8 12 20 12 28 0" fill="none" stroke="#121212" stroke-width="3.2" stroke-linecap="round"/>
+  </svg>`).replace(`<path d="M72 98c5 6 11 6 16 0"`, `<path d="M72 98c5 6 11 6 16 0" opacity="0"`);
+}
+function frostedWink() {
+  return frostedIdle().replace(`${eye(96,80)}`, `<path d="M88 80h16" stroke="#121212" stroke-width="3.2" stroke-linecap="round"/>`);
+}
+
+function editorialIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <rect x="18" y="18" width="124" height="124" rx="20" fill="#fefae7" stroke="#121212" stroke-width="5"/>
+    <path d="M56 52c0-12 10-22 24-22s24 10 24 22v12c0 3 1 5 3 7 6 5 9 11 9 18 0 16-13 28-36 28S44 105 44 89c0-7 3-13 9-18 2-2 3-4 3-7V52z" fill="none" stroke="#121212" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="68" cy="72" r="4" fill="#121212"/><circle cx="92" cy="72" r="4" fill="#121212"/>
+    <path d="M72 88c4 5 12 5 16 0" fill="none" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="118" cy="40" r="7" fill="#ffbad8"/>
+  </svg>`;
+}
+function editorialCelebrate() {
+  return editorialIdle().replace('</svg>', `
+    <text x="28" y="40" font-family="Anton,sans-serif" font-size="14" fill="#03563e">YAY</text>
+  </svg>`);
+}
+function editorialWink() {
+  return editorialIdle().replace(`<circle cx="92" cy="72" r="4" fill="#121212"/>`, `<path d="M86 72h12" stroke="#121212" stroke-width="4" stroke-linecap="round"/>`);
+}
+
+function blobIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="136" rx="40" ry="9" fill="#000" opacity=".08"/>
+    <path d="M40 86c0-28 18-52 40-52s40 24 40 52c0 10-2 18-6 24-6 10-18 18-34 18s-28-8-34-18c-4-6-6-14-6-24z" fill="#fffdf5" stroke="#121212" stroke-width="4"/>
+    <path d="M58 108c6 8 14 12 22 12s16-4 22-12" fill="none" stroke="#03563e" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+    ${blush(58,90)}${blush(102,90)}
+    ${eye(64,82,6)}${eye(96,82,6)}
+    <circle cx="66" cy="80" r="2" fill="#fff"/><circle cx="98" cy="80" r="2" fill="#fff"/>
+    <path d="M72 100c5 6 11 6 16 0" fill="none" stroke="#121212" stroke-width="3.2" stroke-linecap="round"/>
+  </svg>`;
+}
+function blobCelebrate() {
+  return blobIdle().replace('</svg>', `
+    <path d="M28 70c-8 0-12-8-8-14 6-2 12 4 8 14z" fill="#c6ff3a" stroke="#121212" stroke-width="2"/>
+    <path d="M132 66c8 0 12-8 8-14-6-2-12 4-8 14z" fill="#ffbad8" stroke="#121212" stroke-width="2"/>
+  </svg>`);
+}
+function blobWink() {
+  return blobIdle().replace(`${eye(96,82,6)}`, `<path d="M88 82h16" stroke="#121212" stroke-width="3.5" stroke-linecap="round"/>`);
+}
+
+function twinsIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <ellipse cx="80" cy="138" rx="46" ry="8" fill="#000" opacity=".08"/>
+    <!-- left blossom -->
+    <g transform="translate(-6,8)">
+      <path d="M42 48c0-12 9-20 20-20s20 8 20 20v10c0 2 1 4 3 6 5 4 8 10 8 16 0 14-12 24-31 24S31 104 31 90c0-6 3-12 8-16 2-2 3-4 3-6V48z" fill="#fffdf5" stroke="#121212" stroke-width="3.5"/>
+      <circle cx="54" cy="66" r="3.5" fill="#121212"/><circle cx="70" cy="66" r="3.5" fill="#121212"/>
+      <path d="M56 78c4 4 8 4 12 0" fill="none" stroke="#121212" stroke-width="2.8" stroke-linecap="round"/>
+      <circle cx="78" cy="52" r="5" fill="#ffbad8"/>
+    </g>
+    <!-- right matcha -->
+    <g transform="translate(18,0)">
+      <path d="M42 48c0-12 9-20 20-20s20 8 20 20v10c0 2 1 4 3 6 5 4 8 10 8 16 0 14-12 24-31 24S31 104 31 90c0-6 3-12 8-16 2-2 3-4 3-6V48z" fill="#03563e" stroke="#121212" stroke-width="3.5"/>
+      <circle cx="54" cy="66" r="3.5" fill="#fefae7"/><circle cx="70" cy="66" r="3.5" fill="#fefae7"/>
+      <path d="M56 78c4 4 8 4 12 0" fill="none" stroke="#fefae7" stroke-width="2.8" stroke-linecap="round"/>
+    </g>
+  </svg>`;
+}
+function twinsCelebrate() {
+  return twinsIdle().replace('</svg>', `
+    <text x="54" y="28" font-family="Anton,sans-serif" font-size="16" fill="#121212">TOOFIES</text>
+  </svg>`);
+}
+function twinsWink() {
+  return twinsIdle();
+}
+
+function markIdle() {
+  return `
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <rect x="20" y="20" width="120" height="120" rx="28" fill="#03563e"/>
+    <path d="M58 52c0-12 10-22 22-22s22 10 22 22v10c0 3 1 5 3 7 6 5 9 11 9 18 0 16-13 28-34 28S47 103 47 87c0-7 3-13 9-18 2-2 3-4 3-7V52z" fill="#fefae7"/>
+    <circle cx="112" cy="44" r="10" fill="#ffbad8"/>
+  </svg>`;
+}
+function markCelebrate() {
+  return markIdle().replace('#03563e', '#121212').replace('#ffbad8', '#c6ff3a');
+}
+function markWink() {
+  return markIdle();
+}
+
+const state = { selected: null, pose: {} };
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = CONCEPTS.map((c) => {
+    const pose = state.pose[c.id] || 'idle';
+    const selected = state.selected === c.id;
+    return `
+      <label class="card${selected ? ' selected' : ''}" data-id="${c.id}">
+        <input type="radio" name="mascot" value="${c.id}" ${selected ? 'checked' : ''} />
+        <div class="stage">${c.poses[pose]()}</div>
+        <div class="pose-row" data-poses="${c.id}">
+          <button type="button" data-pose="idle" class="${pose==='idle'?'on':''}">Idle</button>
+          <button type="button" data-pose="celebrate" class="${pose==='celebrate'?'on':''}">Celebrate</button>
+          <button type="button" data-pose="wink" class="${pose==='wink'?'on':''}">Wink</button>
+        </div>
+        <div class="meta">
+          <span class="letter">${c.letter}</span>
+          <span class="pill${c.rec ? ' rec' : ''}">${c.pill}</span>
+        </div>
+        <h2 class="name">${c.name}</h2>
+        <p class="blurb">${c.blurb}</p>
+        <ul class="traits">${c.traits.map((t) => `<li>${t}</li>`).join('')}</ul>
+      </label>`;
+  }).join('');
+
+  const dock = document.getElementById('dockText');
+  const btn = document.getElementById('confirmBtn');
+  if (!state.selected) {
+    dock.innerHTML = 'No pick yet — choose a direction above.';
+    btn.disabled = true;
+  } else {
+    const c = CONCEPTS.find((x) => x.id === state.selected);
+    dock.innerHTML = `Selected: <strong>${c.letter} — ${c.name}</strong>`;
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('grid').addEventListener('click', (e) => {
+  const poseBtn = e.target.closest('[data-pose]');
+  if (poseBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const row = poseBtn.closest('[data-poses]');
+    const id = row.dataset.poses;
+    state.pose[id] = poseBtn.dataset.pose;
+    state.selected = id;
+    render();
+    return;
+  }
+  const card = e.target.closest('.card');
+  if (!card) return;
+  state.selected = card.dataset.id;
+  render();
+});
+
+document.getElementById('confirmBtn').addEventListener('click', () => {
+  const c = CONCEPTS.find((x) => x.id === state.selected);
+  if (!c) return;
+  const msg = `Noted for discussion: D14 → ${c.letter} “${c.name}” (${c.id}). Not ratified until you say so.`;
+  document.getElementById('dockText').innerHTML = `<strong>${msg}</strong>`;
+  try {
+    localStorage.setItem('toofies.mascot.pick', JSON.stringify({ id: c.id, letter: c.letter, name: c.name, at: new Date().toISOString() }));
+  } catch {}
+});
+
+render();
+</script>
+</body>
+</html>

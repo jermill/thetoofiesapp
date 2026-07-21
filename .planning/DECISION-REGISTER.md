@@ -275,6 +275,12 @@ Outfit, rounded cards, Home / Log / You). Banner in-app labels it provisional.
 **Founder must still ratify or reject** before this becomes the product design
 system. Expo/SwiftUI scaffolds stay unstyled.
 
+**Update 2026-07-21 — D14 mascot options (still 🔴):** interactive HTML gallery at
+`.planning/design-library/mascot-options.html` with six directions for founder
+pick: **A Classic Toofie** · **B Frosted Toofie** · **C Editorial Outline** ·
+**D Sweet Blob** · **E The Toofies (pair)** · **F Mark only**. Nothing applied
+to the PWA until ratified.
+
 ---
 
 ## Tier 5 — Platform & feature scope
