@@ -30,21 +30,30 @@ export function MoveScreen() {
   }
 
   return (
-    <>
+    <div className="page-stack">
       <p className="ui-only-chip">UI only · HealthKit not connected</p>
-      <div className="brand-lockup">
-        <div className="brand-left">
+
+      <header className="page-header">
+        <div className="page-header-copy">
           <h1 className="screen-title">Move</h1>
-          <p className="lede">Steps add sweetness to your day — never as penance.</p>
+          <p className="lede">
+            Steps add sweetness to your day — never as penance.
+          </p>
         </div>
-        <ToofieSprite anim={connected ? 'hike' : 'think'} size={84} />
-      </div>
+        <ToofieSprite
+          anim={connected ? 'hike' : 'think'}
+          size={88}
+          tapAnim={connected ? 'hike' : 'wave'}
+        />
+      </header>
 
       <section className="hero move-hero">
         <p className="eyebrow">Today</p>
         <h2 className="headline">{connected ? steps.toLocaleString() : '—'}</h2>
-        <p className="sub">{connected ? `of ${goal.toLocaleString()} quest steps` : 'Connect activity to see steps'}</p>
-        <div className="progress" style={{ marginTop: 14 }}>
+        <p className="sub">
+          {connected ? `of ${goal.toLocaleString()} quest steps` : 'Connect activity to see steps'}
+        </p>
+        <div className="progress" aria-hidden>
           <span style={{ width: `${connected ? pct : 0}%` }} />
         </div>
       </section>
@@ -52,10 +61,15 @@ export function MoveScreen() {
       <section className="card">
         <p className="eyebrow">Daily quest</p>
         <p className="title" style={{ fontSize: 18 }}>
-          {connected ? (steps >= goal ? 'Quest complete — nice work' : 'Keep strolling') : 'Quest waits for activity'}
+          {connected
+            ? steps >= goal
+              ? 'Quest complete — nice work'
+              : 'Keep strolling'
+            : 'Quest waits for activity'}
         </p>
         <p className="muted">
-          Adaptive goal from your recent week (placeholder). Bonus banks at midnight when connected.
+          Adaptive goal from your recent week (placeholder). Bonus banks at midnight when
+          connected.
         </p>
       </section>
 
@@ -86,6 +100,6 @@ export function MoveScreen() {
           <p className="muted">quest pts tonight</p>
         </div>
       </section>
-    </>
+    </div>
   );
 }

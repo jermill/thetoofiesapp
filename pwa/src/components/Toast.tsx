@@ -68,6 +68,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 className="toast-mascot"
                 motion="task"
                 loop={false}
+                tappable={false}
               />
             )}
             <span>{t.message}</span>

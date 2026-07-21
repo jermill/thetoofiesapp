@@ -21,10 +21,15 @@ type Props = {
   motion?: ToofieMotion;
   /** Override atlas loop when `motion="task"`. */
   loop?: boolean;
+  /** Tap for a gentle wiggle + short reaction. Default true. */
+  tappable?: boolean;
+  /** Sprite played once on tap. Default `wave`. */
+  tapAnim?: ToofieAnim | string;
   onComplete?: () => void;
 };
 
 type Sheet = (typeof atlas.sheets)[keyof typeof atlas.sheets];
+type AnimDef = (typeof atlas.animations)[ToofieAnimName];
 
 /**
  * Map one atlas cell into a size×size box without stretching.
@@ -65,6 +70,12 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   };
 }
 
+function resolveAnim(name: string): AnimDef {
+  return (
+    (atlas.animations as Record<string, AnimDef>)[name] ?? atlas.animations.idle
+  );
+}
+
 /** Plays a named Toofie animation from the sprite atlas. */
 export function ToofieSprite({
   anim,
@@ -73,13 +84,17 @@ export function ToofieSprite({
   alt = 'Toofie',
   motion = 'still',
   loop: loopOverride,
+  tappable = true,
+  tapAnim = 'wave',
   onComplete,
 }: Props) {
-  const def =
-    (atlas.animations as Record<string, (typeof atlas.animations)[ToofieAnimName]>)[anim] ??
-    atlas.animations.idle;
-  const sheet = atlas.sheets[def.sheet as keyof typeof atlas.sheets];
   const [frameIdx, setFrameIdx] = useState(0);
+  const [wiggling, setWiggling] = useState(false);
+  const [tapPlaying, setTapPlaying] = useState(false);
+
+  const activeName = tapPlaying ? tapAnim : anim;
+  const def = resolveAnim(activeName);
+  const sheet = atlas.sheets[def.sheet as keyof typeof atlas.sheets];
 
   const frameName = def.frames[Math.min(frameIdx, def.frames.length - 1)] as string;
   const cellIndex = Math.max(0, (sheet.frames as readonly string[]).indexOf(frameName));
@@ -89,12 +104,13 @@ export function ToofieSprite({
     [cellIndex, sheet, size],
   );
 
-  const shouldPlay = motion === 'task' && def.frames.length > 1;
-  const shouldLoop = loopOverride ?? def.loop;
+  const shouldPlay =
+    (motion === 'task' || tapPlaying) && def.frames.length > 1;
+  const shouldLoop = tapPlaying ? false : (loopOverride ?? def.loop);
 
   useEffect(() => {
     setFrameIdx(0);
-  }, [anim, motion]);
+  }, [activeName, motion, tapPlaying]);
 
   useEffect(() => {
     if (!shouldPlay) return;
@@ -108,7 +124,8 @@ export function ToofieSprite({
           if (!finished) {
             finished = true;
             window.clearInterval(id);
-            onComplete?.();
+            if (tapPlaying) setTapPlaying(false);
+            else onComplete?.();
           }
           return i;
         }
@@ -116,11 +133,46 @@ export function ToofieSprite({
       });
     }, ms);
     return () => window.clearInterval(id);
-  }, [anim, shouldPlay, shouldLoop, def.fps, def.frames.length, onComplete]);
+  }, [activeName, shouldPlay, shouldLoop, def.fps, def.frames.length, onComplete, tapPlaying]);
+
+  function playTap() {
+    if (!tappable || wiggling) return;
+    setWiggling(true);
+    setTapPlaying(true);
+    window.setTimeout(() => setWiggling(false), 600);
+  }
+
+  const classes = [
+    'toofie-sprite',
+    tappable ? 'is-tappable' : '',
+    wiggling ? 'is-wiggle' : '',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  if (tappable) {
+    return (
+      <button
+        type="button"
+        className={classes}
+        aria-label={`${alt} — tap to wiggle`}
+        onClick={playTap}
+        style={{
+          flex: '0 0 auto',
+          padding: 0,
+          border: 0,
+          background: 'transparent',
+          cursor: 'pointer',
+          ...style,
+        }}
+      />
+    );
+  }
 
   return (
     <div
-      className={['toofie-sprite', className].filter(Boolean).join(' ')}
+      className={classes}
       role="img"
       aria-label={alt}
       style={{
