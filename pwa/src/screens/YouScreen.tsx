@@ -1,4 +1,9 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { ToofieSprite } from '../components/ToofieSprite';
 import { useStore, useToofies } from '../lib/store';
+import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 function formatWhen(iso: string): string {
   const d = new Date(iso);
@@ -15,11 +20,21 @@ export function YouScreen() {
   const now = new Date();
   const t = useToofies(now);
   const recent = [...state.entries].reverse().slice(0, 12);
+  const [prefs, setPrefs] = useState(loadUiPrefs);
 
   return (
     <>
-      <h1 className="screen-title">You</h1>
-      <p className="lede">On-device only for now — nothing leaves this phone.</p>
+      <div className="brand-lockup">
+        <div className="brand-left">
+          <h1 className="screen-title">You</h1>
+          <p className="lede">
+            {prefs.signedInMock
+              ? `Signed in (mock) as ${prefs.displayName || 'Friend'}`
+              : 'Local preview · account optional'}
+          </p>
+        </div>
+        <ToofieSprite anim="proud" size={80} />
+      </div>
 
       <section className="card">
         <p className="eyebrow">Snapshot</p>
@@ -33,6 +48,25 @@ export function YouScreen() {
               ? 'Last dessert: today'
               : `Last dessert: ${t.daysSinceLastDessert} day${t.daysSinceLastDessert === 1 ? '' : 's'} ago`}
         </p>
+      </section>
+
+      <section className="card">
+        <p className="eyebrow">Account & sync</p>
+        <div className="link-rows">
+          <Link to="/auth">{prefs.signedInMock ? 'Account (mock)' : 'Sign in / create account'}</Link>
+          <Link to="/notifications">Reminders</Link>
+          <Link to="/resources">Care & ED resources</Link>
+          <Link to="/onboarding">Replay onboarding</Link>
+        </div>
+        {prefs.signedInMock && (
+          <button
+            type="button"
+            className="ghost-btn"
+            onClick={() => setPrefs(saveUiPrefs({ signedInMock: false, displayName: '' }))}
+          >
+            Sign out (mock)
+          </button>
+        )}
       </section>
 
       <section className="card">
@@ -52,7 +86,17 @@ export function YouScreen() {
           aria-valuetext={`${state.dessertCost} points`}
           style={{ width: '100%' }}
         />
-        <p className="muted">Placeholder economy values — not ratified (D7).</p>
+        <label className="toggle-row" style={{ marginTop: 10 }}>
+          <span>
+            <strong>Points economy</strong>
+            <span className="muted">Opt-in experiment (D7–D9).</span>
+          </span>
+          <input
+            type="checkbox"
+            checked={prefs.economyOptIn}
+            onChange={() => setPrefs(saveUiPrefs({ economyOptIn: !prefs.economyOptIn }))}
+          />
+        </label>
       </section>
 
       <section className="card">
@@ -85,7 +129,7 @@ export function YouScreen() {
           Reset local preview data
         </button>
         <p className="muted" style={{ marginTop: 8 }}>
-          Frontend-only PWA. Accounts, sync, and social arrive later — not in this build.
+          Screens beyond Home/Log/You are UI shells — no sync or push yet.
         </p>
       </section>
     </>

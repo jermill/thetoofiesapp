@@ -49,9 +49,15 @@ Or connect the GitHub repo in the Netlify UI (base directory `pwa` / use root `n
 
 | Route | Purpose |
 |---|---|
-| `/` | Home — recency hero, days on plan, readiness, CTA |
-| `/log` | Log a dessert (8 treat types) |
-| `/you` | Snapshot, placeholder threshold, history, reset |
+| `/onboarding` | Welcome flow (UI only) |
+| `/auth` | Sign in / up mock (no backend) |
+| `/` | Home — recency, streak, readiness, CTA |
+| `/log` | Log a dessert + Toofie anim |
+| `/move` | Steps / quest UI mock |
+| `/moments` | Social dessert feed UI mock |
+| `/you` | Profile, settings links, history |
+| `/notifications` | Reminder prefs UI |
+| `/resources` | ED / care resources |
 
 ## Notes
 
