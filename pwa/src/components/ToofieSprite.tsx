@@ -91,6 +91,7 @@ export function ToofieSprite({
   const [frameIdx, setFrameIdx] = useState(0);
   const [wiggling, setWiggling] = useState(false);
   const [tapPlaying, setTapPlaying] = useState(false);
+  const [tapKey, setTapKey] = useState(0);
 
   const activeName = tapPlaying ? tapAnim : anim;
   const def = resolveAnim(activeName);
@@ -110,10 +111,17 @@ export function ToofieSprite({
 
   useEffect(() => {
     setFrameIdx(0);
-  }, [activeName, motion, tapPlaying]);
+  }, [activeName, motion, tapPlaying, tapKey]);
 
   useEffect(() => {
-    if (!shouldPlay) return;
+    if (!shouldPlay) {
+      // Single-frame tap (or reduced sheets): still end the tap cycle.
+      if (tapPlaying && def.frames.length <= 1) {
+        const t = window.setTimeout(() => setTapPlaying(false), 550);
+        return () => window.clearTimeout(t);
+      }
+      return;
+    }
     const ms = Math.max(40, Math.round(1000 / Math.max(1, def.fps)));
     let finished = false;
     const id = window.setInterval(() => {
@@ -133,53 +141,62 @@ export function ToofieSprite({
       });
     }, ms);
     return () => window.clearInterval(id);
-  }, [activeName, shouldPlay, shouldLoop, def.fps, def.frames.length, onComplete, tapPlaying]);
+  }, [
+    activeName,
+    shouldPlay,
+    shouldLoop,
+    def.fps,
+    def.frames.length,
+    onComplete,
+    tapPlaying,
+    tapKey,
+  ]);
 
   function playTap() {
-    if (!tappable || wiggling) return;
-    setWiggling(true);
-    setTapPlaying(true);
-    window.setTimeout(() => setWiggling(false), 600);
+    if (!tappable) return;
+    setTapKey((k) => k + 1);
+    setWiggling(false);
+    // Retrigger CSS animation even on rapid taps
+    requestAnimationFrame(() => {
+      setWiggling(true);
+      setTapPlaying(true);
+    });
+    window.setTimeout(() => setWiggling(false), 700);
   }
 
-  const classes = [
+  const spriteClass = [
     'toofie-sprite',
-    tappable ? 'is-tappable' : '',
     wiggling ? 'is-wiggle' : '',
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
-  if (tappable) {
-    return (
-      <button
-        type="button"
-        className={classes}
-        aria-label={`${alt} — tap to wiggle`}
-        onClick={playTap}
-        style={{
-          flex: '0 0 auto',
-          padding: 0,
-          border: 0,
-          background: 'transparent',
-          cursor: 'pointer',
-          ...style,
-        }}
-      />
-    );
-  }
-
-  return (
+  const sprite = (
     <div
-      className={classes}
-      role="img"
-      aria-label={alt}
+      className={spriteClass}
+      role={tappable ? undefined : 'img'}
+      aria-hidden={tappable ? true : undefined}
+      aria-label={tappable ? undefined : alt}
       style={{
         flex: '0 0 auto',
         ...style,
       }}
     />
+  );
+
+  if (!tappable) return sprite;
+
+  return (
+    <button
+      type="button"
+      className="toofie-tap"
+      aria-label={`${alt} — tap to wiggle`}
+      onClick={playTap}
+      style={{ width: size + 16, height: size + 16 }}
+    >
+      {sprite}
+    </button>
   );
 }
 

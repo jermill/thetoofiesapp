@@ -136,6 +136,26 @@ a {
   max-width: 11rem;
 }
 
+.toofie-tap {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  margin: -8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.toofie-tap:focus-visible {
+  outline: 2px solid var(--matcha);
+  outline-offset: 2px;
+  border-radius: 18px;
+}
+
 .toofie-sprite {
   border: none !important;
   background-color: transparent !important;
@@ -144,21 +164,17 @@ a {
   /* Sheets are green-screen keyed → transparent PNGs */
   image-rendering: auto;
   transform-origin: 50% 70%;
-}
-
-.toofie-sprite.is-tappable {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-.toofie-sprite.is-tappable:focus-visible {
-  outline: 2px solid var(--matcha);
-  outline-offset: 4px;
-  border-radius: 16px !important;
+  pointer-events: none;
 }
 
 .toofie-sprite.is-wiggle {
-  animation: toofie-wiggle 0.55s ease;
+  animation: toofie-wiggle 0.7s ease;
+}
+
+/* Even when reduced-motion kills keyframes, give a quick pop */
+.toofie-tap:active .toofie-sprite {
+  transform: scale(0.94) rotate(-4deg);
+  transition: transform 0.12s ease;
 }
 
 .toofie-mark {
@@ -782,11 +798,12 @@ a {
 }
 
 @keyframes toofie-wiggle {
-  0%, 100% { transform: rotate(0deg) translateY(0); }
-  18% { transform: rotate(-7deg) translateY(-3px); }
-  36% { transform: rotate(6deg) translateY(-1px); }
-  54% { transform: rotate(-4deg) translateY(-2px); }
-  72% { transform: rotate(3deg) translateY(0); }
+  0%, 100% { transform: rotate(0deg) scale(1) translateY(0); }
+  15% { transform: rotate(-10deg) scale(1.04) translateY(-4px); }
+  30% { transform: rotate(9deg) scale(1.02) translateY(-1px); }
+  45% { transform: rotate(-7deg) scale(1.05) translateY(-3px); }
+  60% { transform: rotate(5deg) scale(1.02) translateY(0); }
+  75% { transform: rotate(-3deg) scale(1.01) translateY(-1px); }
 }
 
 @keyframes scroll {
@@ -852,6 +869,12 @@ a {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  /* Keep a tiny tap acknowledgment even when motion is reduced */
+  .toofie-sprite.is-wiggle {
+    animation: none !important;
+    transform: scale(1.06);
   }
 }
 
