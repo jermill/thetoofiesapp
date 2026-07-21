@@ -30,9 +30,12 @@ npm run preview
 
 ## Deploy (Netlify)
 
+**Live demo:** https://toofies-demo.netlify.app  
+Admin: https://app.netlify.com/projects/toofies-demo
+
 Config is in the repo root `netlify.toml` (build base = `pwa`).
 
-**One-shot CLI deploy** (needs a Netlify personal access token):
+**Redeploy from CLI** (needs a Netlify personal access token — do not commit it):
 
 ```bash
 cd pwa
