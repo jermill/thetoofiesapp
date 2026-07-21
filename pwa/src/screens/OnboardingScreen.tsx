@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
+import { useToast } from '../components/Toast';
 import { saveUiPrefs } from '../lib/uiPrefs';
 
 const STEPS = [
@@ -33,6 +34,7 @@ const STEPS = [
 
 export function OnboardingScreen() {
   const navigate = useNavigate();
+  const { show } = useToast();
   const [i, setI] = useState(0);
   const [economy, setEconomy] = useState(true);
   const step = STEPS[i];
@@ -41,6 +43,7 @@ export function OnboardingScreen() {
 
   function finish() {
     saveUiPrefs({ onboardingDone: true, economyOptIn: economy });
+    show('You’re in — let’s go', { tone: 'good', anim: 'cheer', ms: 1800 });
     navigate('/auth', { replace: true });
   }
 
@@ -90,6 +93,7 @@ export function OnboardingScreen() {
           className="ghost-btn"
           onClick={() => {
             saveUiPrefs({ onboardingDone: true, economyOptIn: economy });
+            show('Skipped — you can replay from You', { tone: 'soft', anim: 'peace', ms: 1800 });
             navigate('/', { replace: true });
           }}
         >

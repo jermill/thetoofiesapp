@@ -1,14 +1,33 @@
 import { useState } from 'react';
 
 import { ToofieSprite } from '../components/ToofieSprite';
+import { useToast } from '../components/Toast';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 export function MoveScreen() {
+  const { show } = useToast();
   const [prefs, setPrefs] = useState(loadUiPrefs);
+  const [connecting, setConnecting] = useState(false);
   const connected = prefs.healthConnectedMock;
   const steps = connected ? 7420 : 0;
   const goal = 6000;
   const pct = Math.min(100, Math.round((steps / goal) * 100));
+
+  function toggleHealth() {
+    if (connecting) return;
+    if (connected) {
+      setPrefs(saveUiPrefs({ healthConnectedMock: false }));
+      show('Activity disconnected (mock)', { tone: 'soft', anim: 'shrug', ms: 1800 });
+      return;
+    }
+    setConnecting(true);
+    show('Connecting…', { tone: 'soft', anim: 'hike', ms: 1200 });
+    window.setTimeout(() => {
+      setPrefs(saveUiPrefs({ healthConnectedMock: true }));
+      setConnecting(false);
+      show('Steps synced (mock)', { tone: 'good', anim: 'cheer', ms: 2000 });
+    }, 1100);
+  }
 
   return (
     <>
@@ -49,12 +68,8 @@ export function MoveScreen() {
               Read-only steps. UI mock only.
             </p>
           </div>
-          <button
-            type="button"
-            className="mini-btn"
-            onClick={() => setPrefs(saveUiPrefs({ healthConnectedMock: !connected }))}
-          >
-            {connected ? 'Disconnect' : 'Connect'}
+          <button type="button" className="mini-btn" onClick={toggleHealth} disabled={connecting}>
+            {connecting ? 'Connecting…' : connected ? 'Disconnect' : 'Connect'}
           </button>
         </div>
       </section>

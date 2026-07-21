@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useToast } from '../components/Toast';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 export function NotificationsScreen() {
+  const { show } = useToast();
   const [prefs, setPrefs] = useState(loadUiPrefs);
 
   function toggle(key: 'notifyEvening' | 'notifyMilestone') {
-    setPrefs(saveUiPrefs({ [key]: !prefs[key] }));
+    const next = !prefs[key];
+    setPrefs(saveUiPrefs({ [key]: next }));
+    show(next ? 'Reminder on' : 'Reminder off', {
+      tone: next ? 'good' : 'soft',
+      anim: next ? 'wave' : 'sleepy',
+      ms: 1500,
+    });
   }
 
   return (

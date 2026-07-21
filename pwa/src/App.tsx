@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppShell } from './components/AppShell';
-import { StoreProvider } from './lib/store';
+import { LoadSplash } from './components/LoadSplash';
+import { PageTransition } from './components/PageTransition';
+import { ToastProvider } from './components/Toast';
+import { StoreProvider, useStore } from './lib/store';
 import { loadUiPrefs } from './lib/uiPrefs';
 import { AuthScreen } from './screens/AuthScreen';
 import { HomeScreen } from './screens/HomeScreen';
@@ -17,16 +20,28 @@ import './styles/app.css';
 
 function Gate({ children }: { children: React.ReactNode }) {
   const loc = useLocation();
-  const [ready, setReady] = useState(false);
+  const { ready: storeReady } = useStore();
+  const [prefsReady, setPrefsReady] = useState(false);
   const [onboardingDone, setOnboardingDone] = useState(true);
+  const [minSplashDone, setMinSplashDone] = useState(false);
 
   useEffect(() => {
     const p = loadUiPrefs();
     setOnboardingDone(p.onboardingDone);
-    setReady(true);
+    setPrefsReady(true);
   }, [loc.pathname]);
 
-  if (!ready) return null;
+  // Keep splash visible briefly so the load animation can read (not a flash).
+  useEffect(() => {
+    const t = window.setTimeout(() => setMinSplashDone(true), 900);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const booting = !storeReady || !prefsReady || !minSplashDone;
+
+  if (booting) {
+    return <LoadSplash label="Warming up the bakery…" />;
+  }
 
   const bypass = loc.pathname === '/onboarding' || loc.pathname === '/auth';
   if (!onboardingDone && !bypass) {
@@ -41,18 +56,20 @@ function ShellRoutes() {
   return (
     <AppShell path={loc.pathname}>
       <Gate>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/log" element={<LogScreen />} />
-          <Route path="/move" element={<MoveScreen />} />
-          <Route path="/moments" element={<MomentsScreen />} />
-          <Route path="/you" element={<YouScreen />} />
-          <Route path="/onboarding" element={<OnboardingScreen />} />
-          <Route path="/auth" element={<AuthScreen />} />
-          <Route path="/notifications" element={<NotificationsScreen />} />
-          <Route path="/resources" element={<ResourcesScreen />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <PageTransition>
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/log" element={<LogScreen />} />
+            <Route path="/move" element={<MoveScreen />} />
+            <Route path="/moments" element={<MomentsScreen />} />
+            <Route path="/you" element={<YouScreen />} />
+            <Route path="/onboarding" element={<OnboardingScreen />} />
+            <Route path="/auth" element={<AuthScreen />} />
+            <Route path="/notifications" element={<NotificationsScreen />} />
+            <Route path="/resources" element={<ResourcesScreen />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </PageTransition>
       </Gate>
     </AppShell>
   );
@@ -61,9 +78,11 @@ function ShellRoutes() {
 export default function App() {
   return (
     <StoreProvider>
-      <BrowserRouter>
-        <ShellRoutes />
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <ShellRoutes />
+        </BrowserRouter>
+      </ToastProvider>
     </StoreProvider>
   );
 }

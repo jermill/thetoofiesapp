@@ -2,21 +2,33 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
+import { useToast } from '../components/Toast';
 import { saveUiPrefs } from '../lib/uiPrefs';
 
 export function AuthScreen() {
   const navigate = useNavigate();
+  const { show } = useToast();
   const [mode, setMode] = useState<'in' | 'up'>('up');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [busy, setBusy] = useState(false);
 
   function mockContinue() {
-    saveUiPrefs({
-      signedInMock: true,
-      displayName: name.trim() || 'Friend',
-      onboardingDone: true,
+    if (busy) return;
+    setBusy(true);
+    show(mode === 'up' ? 'Account created (mock)' : 'Signed in (mock)', {
+      tone: 'good',
+      anim: 'wave',
+      ms: 1800,
     });
-    navigate('/', { replace: true });
+    window.setTimeout(() => {
+      saveUiPrefs({
+        signedInMock: true,
+        displayName: name.trim() || 'Friend',
+        onboardingDone: true,
+      });
+      navigate('/', { replace: true });
+    }, 700);
   }
 
   return (
@@ -74,10 +86,18 @@ export function AuthScreen() {
           <input type="password" placeholder="••••••••" autoComplete="new-password" />
         </label>
 
-        <button type="button" className="primary-btn" onClick={mockContinue}>
-          {mode === 'up' ? 'Create account (mock)' : 'Sign in (mock)'}
+        <button type="button" className="primary-btn" onClick={mockContinue} disabled={busy}>
+          {busy ? 'One sec…' : mode === 'up' ? 'Create account (mock)' : 'Sign in (mock)'}
         </button>
-        <button type="button" className="ghost-btn" onClick={() => navigate('/', { replace: true })}>
+        <button
+          type="button"
+          className="ghost-btn"
+          disabled={busy}
+          onClick={() => {
+            show('Continuing locally', { tone: 'soft', anim: 'peace', ms: 1600 });
+            navigate('/', { replace: true });
+          }}
+        >
           Continue without account
         </button>
       </section>

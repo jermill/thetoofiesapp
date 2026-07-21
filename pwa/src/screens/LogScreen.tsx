@@ -2,20 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
+import { useToast } from '../components/Toast';
 import { useStore } from '../lib/store';
 import { TREAT_KINDS, TREATS, type TreatKind } from '../lib/treats';
 
 export function LogScreen() {
   const { logDessert, ready } = useStore();
+  const { show } = useToast();
   const navigate = useNavigate();
-  const [toast, setToast] = useState<string | null>(null);
   const [phase, setPhase] = useState<'pick' | 'log_dessert' | 'logged'>('pick');
+  const [logging, setLogging] = useState(false);
 
   function onLog(kind: TreatKind) {
-    if (!ready || phase !== 'pick') return;
+    if (!ready || phase !== 'pick' || logging) return;
+    setLogging(true);
     logDessert(kind);
     const name = TREATS[kind].name;
-    setToast(`${name} logged — enjoy it.`);
+    show(`${name} logged — enjoy it.`, { tone: 'good', anim: 'logged', ms: 2400 });
     setPhase('log_dessert');
   }
 
@@ -34,7 +37,7 @@ export function LogScreen() {
             if (phase === 'log_dessert') {
               setPhase('logged');
               window.setTimeout(() => {
-                setToast(null);
+                setLogging(false);
                 navigate('/');
               }, 700);
             }
@@ -49,9 +52,9 @@ export function LogScreen() {
             <button
               key={kind}
               type="button"
-              className="treat-btn"
+              className={`treat-btn${logging ? ' is-busy' : ''}`}
               onClick={() => onLog(kind)}
-              disabled={phase !== 'pick'}
+              disabled={phase !== 'pick' || logging}
               aria-label={`Log ${TREATS[kind].name}`}
             >
               <span className="glyph" aria-hidden>
@@ -69,12 +72,6 @@ export function LogScreen() {
           Enjoying a dessert you banked keeps you on plan. No scolding. No debt.
         </p>
       </section>
-
-      {toast && (
-        <div className="toast" role="status">
-          {toast}
-        </div>
-      )}
     </>
   );
 }

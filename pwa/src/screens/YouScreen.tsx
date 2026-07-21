@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
+import { useToast } from '../components/Toast';
 import { useStore, useToofies } from '../lib/store';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
@@ -17,6 +18,7 @@ function formatWhen(iso: string): string {
 
 export function YouScreen() {
   const { state, setDessertCost, reset, removeEntry } = useStore();
+  const { show } = useToast();
   const now = new Date();
   const t = useToofies(now);
   const recent = [...state.entries].reverse().slice(0, 12);
@@ -125,7 +127,14 @@ export function YouScreen() {
 
       <section className="card">
         <p className="eyebrow">Data</p>
-        <button type="button" className="ghost-btn" onClick={reset}>
+        <button
+          type="button"
+          className="ghost-btn"
+          onClick={() => {
+            reset();
+            show('Local data cleared', { tone: 'soft', anim: 'sit', ms: 1800 });
+          }}
+        >
           Reset local preview data
         </button>
         <p className="muted" style={{ marginTop: 8 }}>
