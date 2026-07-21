@@ -86,7 +86,7 @@ export async function composeWalkMemoryCard(
     80,
     1110,
   );
-  ctx.fillText('Movement as joy — never penance.', 80, 1170);
+  ctx.fillText('Movement as joy - never penance.', 80, 1170);
 
   ctx.fillStyle = '#03563e';
   ctx.font = '800 32px Outfit, system-ui, sans-serif';

@@ -40,7 +40,7 @@ const defaultChallenges = (): BuddyChallenge[] => [
   {
     id: 'walk-treat',
     title: 'Dessert Walk Duo',
-    blurb: 'Take a stroll together (or asynchronously) — movement as joy, not penance.',
+    blurb: 'Take a stroll together (or asynchronously) - movement as joy, not penance.',
     progress: 4200,
     goal: 8000,
     unit: 'combined steps',
@@ -58,7 +58,7 @@ const defaultChallenges = (): BuddyChallenge[] => [
   {
     id: 'check-in',
     title: 'Peace Check',
-    blurb: 'Ask each other “feeling good about a treat?” — no judgment, just vibes.',
+    blurb: 'Ask each other “feeling good about a treat?” - no judgment, just vibes.',
     progress: 0,
     goal: 3,
     unit: 'check-ins',

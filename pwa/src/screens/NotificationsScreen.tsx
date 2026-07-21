@@ -5,7 +5,7 @@ import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
-/** Playful roast — snarky, never guilt / never “you failed.” */
+/** Playful roast - snarky, never guilt / never “you failed.” */
 const SNARKY_NUDGES = [
   {
     title: 'Oh look who remembered dessert exists',
@@ -19,7 +19,7 @@ const SNARKY_NUDGES = [
   },
   {
     title: 'Banked points just sitting there. Rude.',
-    body: 'Treat window’s open. I’m not saying binge — I’m saying… enjoy something.',
+    body: 'Treat window’s open. I’m not saying binge - I’m saying… enjoy something.',
     anim: 'ready',
   },
   {
@@ -69,7 +69,7 @@ export function NotificationsScreen() {
         <label className="toggle-row">
           <span>
             <strong>Evening check-in</strong>
-            <span className="muted">Soft “how was dessert?” — no report card.</span>
+            <span className="muted">Soft “how was dessert?” - no report card.</span>
           </span>
           <input
             type="checkbox"
@@ -80,7 +80,7 @@ export function NotificationsScreen() {
         <label className="toggle-row">
           <span>
             <strong>Milestone cheers</strong>
-            <span className="muted">Celebrate days on plan — never threaten them.</span>
+            <span className="muted">Celebrate days on plan - never threaten them.</span>
           </span>
           <input
             type="checkbox"

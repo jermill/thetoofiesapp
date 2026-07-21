@@ -13,7 +13,7 @@ const WALK_SRC = atlas.sheets.walk_cycle.src;
 
 /**
  * Full-screen boot splash. Toofie walks while the app warms up.
- * No orbit ring. Splash is a loading moment — walk is intentional motion.
+ * No orbit ring. Splash is a loading moment - walk is intentional motion.
  */
 export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
   useEffect(() => {

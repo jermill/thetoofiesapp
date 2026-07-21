@@ -34,7 +34,7 @@ function mapsEmbedUrl(query: string) {
   return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=13&output=embed`;
 }
 
-/** Explore dessert spots via Google Maps (place search — not live location). */
+/** Explore dessert spots via Google Maps (place search - not live location). */
 export function DessertMapScreen() {
   const defaultQuery = 'dessert restaurants near me';
 
@@ -46,7 +46,7 @@ export function DessertMapScreen() {
         <div className="page-header-copy">
           <h1 className="screen-title">Dessert map</h1>
           <p className="lede">
-            Find somewhere sweet nearby. Places, not your live pin — check in when you want.
+            Find somewhere sweet nearby. Places, not your live pin - check in when you want.
           </p>
         </div>
         <ToofieSprite anim="munch" size={84} tapAnim="wave" />
@@ -73,7 +73,7 @@ export function DessertMapScreen() {
       <section className="card">
         <p className="eyebrow">Toofie’s shortlist</p>
         <p className="muted" style={{ marginTop: 0 }}>
-          Tap a vibe — Maps handles the rest. No tracking trail in-app.
+          Tap a vibe - Maps handles the rest. No tracking trail in-app.
         </p>
         <ul className="map-place-list">
           {NEARBY.map((p) => (

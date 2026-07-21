@@ -12,7 +12,7 @@ function toofieLine(opts: {
   streak: number;
   loggedToday: boolean;
 }): string {
-  if (opts.empty) return 'Fresh plate. Whenever you’re ready — I’m hyped.';
+  if (opts.empty) return 'Fresh plate. Whenever you’re ready - I’m hyped.';
   if (opts.ready) return 'Treat window is open. Enjoy it when it sounds good.';
   if (opts.loggedToday) return 'That looked delicious. Soft accountability only.';
   if (opts.daysSince != null && opts.daysSince >= 3) {
@@ -55,7 +55,7 @@ export function HomeScreen() {
     : `${t.availability.pointsNeeded} pts to the next treat`;
 
   const readySub = ready
-    ? 'Banked and ready — enjoy it guilt-free when you want.'
+    ? 'Banked and ready - enjoy it guilt-free when you want.'
     : t.pendingPointsToday > 0
       ? `${t.availability.balance} / ${t.availability.cost} pts · +${t.pendingPointsToday} banks tonight`
       : `${t.availability.balance} / ${t.availability.cost} pts · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
@@ -164,7 +164,7 @@ export function HomeScreen() {
             </p>
           </div>
           <p className="home-streak-note">
-            Clean days and earned desserts both count. Miss a day? No shame — just keep going.
+            Clean days and earned desserts both count. Miss a day? No shame - just keep going.
           </p>
         </div>
         <div className="streak-row home-streak-row">
@@ -185,8 +185,8 @@ export function HomeScreen() {
         <h2 className="home-recency-title">{recencyHeadline}</h2>
         <p className="home-recency-sub">
           {t.cleanSoFarToday
-            ? 'Clean so far today — savor that calm.'
-            : 'Logged one today — still on plan if it was banked.'}
+            ? 'Clean so far today - savor that calm.'
+            : 'Logged one today - still on plan if it was banked.'}
         </p>
       </section>
 

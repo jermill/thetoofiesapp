@@ -19,7 +19,7 @@ export function ResourcesScreen() {
         <ul className="link-list">
           <li>
             <a href="https://www.nationaleatingdisorders.org/" target="_blank" rel="noreferrer">
-              NEDA — National Eating Disorders Association
+              NEDA - National Eating Disorders Association
             </a>
           </li>
           <li>

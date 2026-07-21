@@ -1,6 +1,6 @@
-/* Toofies PWA — provisional visual direction (OCHA soft-brutalist dessert ritual).
+/* Toofies PWA - provisional visual direction (OCHA soft-brutalist dessert ritual).
    D11–D15 are still OPEN in the Decision Register. This is a working prototype
-   based on the founder's leading OCHA reference — not a ratified design system. */
+   based on the founder's leading OCHA reference - not a ratified design system. */
 
 :root {
   --paper: #fefae7;
@@ -709,7 +709,7 @@ a {
   height: 168px;
   display: grid;
   place-items: center;
-  /* Subtle stroll across the splash — walk frames do the legwork */
+  /* Subtle stroll across the splash - walk frames do the legwork */
   animation: load-stroll 1.6s ease-in-out infinite;
 }
 
@@ -919,7 +919,7 @@ a {
   }
 }
 
-/* —— Missing screens (UI-only shells) —— */
+/* -- Missing screens (UI-only shells) -- */
 
 .ui-only-chip {
   display: inline-flex;
@@ -1440,7 +1440,7 @@ a {
   background: #a23b34 !important;
 }
 
-/* —— You · playful passport —— */
+/* -- You · playful passport -- */
 
 .you-hero {
   position: relative;
@@ -1742,7 +1742,7 @@ a {
   margin-top: 10px;
 }
 
-/* —— Profile edit · sticker stage —— */
+/* -- Profile edit · sticker stage -- */
 
 .profile-stage {
   position: relative;
@@ -1870,7 +1870,7 @@ a {
   margin-top: 4px;
 }
 
-/* —— Home: playful / sticky energy (provisional OCHA tokens) —— */
+/* -- Home: playful / sticky energy (provisional OCHA tokens) -- */
 .home-fun {
   display: flex;
   flex-direction: column;
@@ -2271,7 +2271,7 @@ a {
   }
 }
 
-/* —— Icons-only nav —— */
+/* -- Icons-only nav -- */
 .bottom-nav.icons-only {
   height: calc(64px + env(safe-area-inset-bottom));
   --nav-h: 64px;
@@ -2302,7 +2302,7 @@ a {
   background: var(--matcha);
 }
 
-/* —— Walk capture / memories —— */
+/* -- Walk capture / memories -- */
 .walk-capture-actions {
   display: flex;
   flex-direction: column;
@@ -2351,7 +2351,7 @@ a {
   color: var(--ink-soft);
 }
 
-/* —— Dessert map —— */
+/* -- Dessert map -- */
 .map-frame {
   padding: 10px;
   display: flex;
@@ -2411,7 +2411,7 @@ a {
   text-transform: uppercase;
 }
 
-/* —— Dark mode (provisional) —— */
+/* -- Dark mode (provisional) -- */
 html[data-theme='dark'] {
   --paper: #12160f;
   --paper-deep: #1a2118;

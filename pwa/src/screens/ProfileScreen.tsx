@@ -80,7 +80,7 @@ export function ProfileScreen() {
           {previewHandle}
           {previewPlace ? ` · ${previewPlace}` : ''}
         </p>
-        <p className="profile-stage-hint">On this device only — make it cute.</p>
+        <p className="profile-stage-hint">On this device only - make it cute.</p>
       </section>
 
       <section className="card profile-form">
@@ -167,7 +167,7 @@ export function ProfileScreen() {
       )}
 
       <p className="fineprint">
-        Location is a label you type — not live GPS.{' '}
+        Location is a label you type - not live GPS.{' '}
         <Link to="/privacy">Privacy</Link>
       </p>
     </>

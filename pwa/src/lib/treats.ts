@@ -1,7 +1,7 @@
 // The dessert catalog + the logged-entry shape.
 //
 // Ported from the SwiftUI prototype (Toofies/Models/TreatModels.swift). This is
-// a faithful port of ratified logic — it makes no new product or visual
+// a faithful port of ratified logic - it makes no new product or visual
 // decisions. The emoji here are data, not a design choice.
 
 export type TreatKind =

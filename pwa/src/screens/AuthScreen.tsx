@@ -43,7 +43,7 @@ export function AuthScreen() {
         <ToofieSprite anim="wave" size={100} />
         <h1 className="flow-title">{mode === 'up' ? 'Create account' : 'Welcome back'}</h1>
         <p className="lede">
-          Accounts unlock sync + Moments later. This screen is a visual stub — no auth backend yet.
+          Accounts unlock sync + Moments later. This screen is a visual stub - no auth backend yet.
         </p>
       </div>
 

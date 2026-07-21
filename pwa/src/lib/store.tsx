@@ -1,4 +1,4 @@
-// On-device store for the Toofies PWA — localStorage only, no backend.
+// On-device store for the Toofies PWA - localStorage only, no backend.
 // Provisional UI direction: OCHA soft-brutalist (D11–D15 still open).
 
 import {
@@ -80,7 +80,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch {
-      // Corrupt store — keep demo seed.
+      // Corrupt store - keep demo seed.
     } finally {
       setReady(true);
     }
@@ -91,7 +91,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
-      // Quota / private mode — continue in-memory.
+      // Quota / private mode - continue in-memory.
     }
   }, [state, ready]);
 

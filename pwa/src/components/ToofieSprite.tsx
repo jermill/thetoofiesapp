@@ -5,8 +5,8 @@ import { atlas, type ToofieAnimName } from '../mascot/atlas';
 export type ToofieAnim = ToofieAnimName;
 
 /**
- * still — ambient UI: one pose, no motion while the screen is idle.
- * task — reaction to something the user just did (log, toast, milestone,
+ * still - ambient UI: one pose, no motion while the screen is idle.
+ * task - reaction to something the user just did (log, toast, milestone,
  *        active walk). Plays frames; loops only when the atlas (or override)
  *        says the task is ongoing.
  */
@@ -34,7 +34,7 @@ type AnimDef = (typeof atlas.animations)[ToofieAnimName];
 /**
  * Map one atlas cell into a size×size box without stretching or chopping
  * Toofie. Grid sheets use contain (full cell). Tall cycle sheets fit the
- * character band. Never cover-crop — that was clipping limbs/frosting.
+ * character band. Never cover-crop - that was clipping limbs/frosting.
  */
 function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const cols = sheet.cols;
@@ -48,7 +48,7 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const tall = ch / cw > 1.5;
 
   // Tall cells: fit the ~character band. Grid cells: fit the whole cell
-  // (keyed plates are transparent, so empty margin is fine — cropping is not).
+  // (keyed plates are transparent, so empty margin is fine - cropping is not).
   const scale = tall
     ? Math.min(size / cw, size / (ch * 0.42))
     : Math.min(size / cw, size / ch);
@@ -186,7 +186,7 @@ export function ToofieSprite({
     <button
       type="button"
       className={`toofie-tap${wiggling ? ' is-active' : ''}`}
-      aria-label={`${alt} — tap to wiggle`}
+      aria-label={`${alt} - tap to wiggle`}
       onPointerUp={(e) => {
         // Pointer covers mouse + touch; ignore right-click / pen barrels.
         if (e.button !== 0 && e.pointerType === 'mouse') return;

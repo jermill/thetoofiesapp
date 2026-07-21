@@ -9,7 +9,7 @@ const STEPS = [
   {
     eyebrow: 'Welcome',
     title: 'Dessert, with peace of mind',
-    body: 'Know when you last treated yourself — and feel good about enjoying the next one.',
+    body: 'Know when you last treated yourself - and feel good about enjoying the next one.',
     anim: 'welcome',
   },
   {
@@ -21,7 +21,7 @@ const STEPS = [
   {
     eyebrow: 'Optional points',
     title: 'Bank sweetness your way',
-    body: 'Clean days and movement can bank points toward a treat — as an opt-in experiment, never a punishment.',
+    body: 'Clean days and movement can bank points toward a treat - as an opt-in experiment, never a punishment.',
     anim: 'ready',
   },
   {
@@ -44,7 +44,7 @@ export function OnboardingScreen() {
 
   function finish() {
     saveUiPrefs({ onboardingDone: true, economyOptIn: economy });
-    show('You’re in — let’s go', { tone: 'good', anim: 'cheer', ms: 1800 });
+    show('You’re in - let’s go', { tone: 'good', anim: 'cheer', ms: 1800 });
     navigate('/', { replace: true });
   }
 
@@ -108,7 +108,7 @@ export function OnboardingScreen() {
           className="ghost-btn"
           onClick={() => {
             saveUiPrefs({ onboardingDone: true, economyOptIn: economy });
-            show('Skipped — you can replay from You', { tone: 'soft', anim: 'peace', ms: 1800 });
+            show('Skipped - you can replay from You', { tone: 'soft', anim: 'peace', ms: 1800 });
             navigate('/', { replace: true });
           }}
         >

@@ -19,7 +19,7 @@ export function WidgetScreen() {
       <div className="brand-lockup">
         <div className="brand-left">
           <h1 className="screen-title">Widget</h1>
-          <p className="lede">Home Screen glance — research’s #1 feature. Visual preview only.</p>
+          <p className="lede">Home Screen glance - research’s #1 feature. Visual preview only.</p>
         </div>
         <ToofieSprite anim={ready ? 'ready' : 'idle'} size={72} />
       </div>

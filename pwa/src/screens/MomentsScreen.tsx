@@ -15,7 +15,7 @@ const FEED = [
     where: 'Corner Patisserie',
     when: 'Yesterday',
     treat: '🥐',
-    caption: 'Sharing the good stuff — no guilt, just joy.',
+    caption: 'Sharing the good stuff - no guilt, just joy.',
   },
   {
     id: '3',
@@ -34,7 +34,7 @@ export function MomentsScreen() {
       <div className="brand-lockup">
         <div className="brand-left">
           <h1 className="screen-title">Moments</h1>
-          <p className="lede">Dessert with friends — share the joy, not the judgment.</p>
+          <p className="lede">Dessert with friends - share the joy, not the judgment.</p>
         </div>
         <ToofieSprite anim="heart_eyes" size={84} />
       </div>

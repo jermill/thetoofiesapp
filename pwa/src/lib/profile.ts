@@ -39,7 +39,7 @@ export function saveProfile(patch: Partial<UserProfile>): UserProfile {
   try {
     localStorage.setItem(KEY, JSON.stringify(next));
   } catch {
-    // quota — drop avatar if needed
+    // quota - drop avatar if needed
     try {
       const slim = { ...next, avatarDataUrl: '' };
       localStorage.setItem(KEY, JSON.stringify(slim));

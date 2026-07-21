@@ -54,7 +54,7 @@ export function BuddiesScreen() {
       walkStepsBuddy: Math.max(buddy.walkStepsBuddy, 350),
     });
     setBuddy(next);
-    show('Dessert walk started — enjoy the stroll', {
+    show('Dessert walk started - enjoy the stroll', {
       tone: 'good',
       anim: 'hike',
       ms: 2000,
@@ -70,7 +70,7 @@ export function BuddiesScreen() {
     setBuddy(next);
     const done = next.walkStepsMe + next.walkStepsBuddy >= next.walkGoal;
     show(
-      done ? 'Goal hit — snap the finish!' : '+steps on the walk (mock)',
+      done ? 'Goal hit - snap the finish!' : '+steps on the walk (mock)',
       { tone: done ? 'good' : 'soft', anim: done ? 'celebrate' : 'hike', ms: 1600 },
     );
     if (done) setCaptureOpen(true);
@@ -91,7 +91,7 @@ export function BuddiesScreen() {
       });
       setCardPreview(card);
       setBusyShot(false);
-      show('Looking good — save the memory?', { tone: 'good', anim: 'proud', ms: 1800 });
+      show('Looking good - save the memory?', { tone: 'good', anim: 'proud', ms: 1800 });
     } catch {
       setBusyShot(false);
       show('Couldn’t read that photo', { tone: 'soft', anim: 'shrug', ms: 1600 });
@@ -155,7 +155,7 @@ export function BuddiesScreen() {
       ),
     });
     setBuddy(next);
-    show('Cheer sent — no guilt, just vibes', { tone: 'good', anim: 'wave', ms: 2000 });
+    show('Cheer sent - no guilt, just vibes', { tone: 'good', anim: 'wave', ms: 2000 });
   }
 
   function bumpChallenge(id: string) {
@@ -175,7 +175,7 @@ export function BuddiesScreen() {
         <div className="brand-left">
           <h1 className="screen-title">Buddies</h1>
           <p className="lede">
-            Couples & friends — dessert walks, shared cheers, gamified treats. Never a diet club.
+            Couples & friends - dessert walks, shared cheers, gamified treats. Never a diet club.
           </p>
         </div>
         <ToofieSprite
@@ -245,7 +245,7 @@ export function BuddiesScreen() {
               <section className="card">
                 <p className="eyebrow">Treat check together</p>
                 <p className="title" style={{ fontSize: 17 }}>
-                  Peace-of-mind check — “feeling good about a dessert?”
+                  Peace-of-mind check - “feeling good about a dessert?”
                 </p>
                 <p className="muted">
                   Replaces any calorie talk. You cheer each other’s joy, not restrict it.
@@ -323,7 +323,7 @@ export function BuddiesScreen() {
               <section className="card">
                 <p className="eyebrow">Walk loop</p>
                 <p className="title" style={{ fontSize: 16 }}>
-                  Stroll now, savor later — walks never “pay for” dessert.
+                  Stroll now, savor later - walks never “pay for” dessert.
                 </p>
                 <div className="flow-actions" style={{ marginTop: 12 }}>
                   {!buddy.walkActive ? (
@@ -341,13 +341,13 @@ export function BuddiesScreen() {
                     onClick={() => {
                       if (walkComplete) {
                         setCaptureOpen(true);
-                        show('Walk complete — grab a photo', {
+                        show('Walk complete - grab a photo', {
                           tone: 'good',
                           anim: 'celebrate',
                           ms: 2000,
                         });
                       } else {
-                        show('Keep strolling — no rush', { tone: 'soft', anim: 'hike', ms: 1600 });
+                        show('Keep strolling - no rush', { tone: 'soft', anim: 'hike', ms: 1600 });
                       }
                     }}
                   >
@@ -363,7 +363,7 @@ export function BuddiesScreen() {
                     Snap it or drop a screenshot
                   </p>
                   <p className="muted">
-                    Camera selfie, gallery shot, or a generated share card — stored on this device
+                    Camera selfie, gallery shot, or a generated share card - stored on this device
                     only.
                   </p>
                   <input
@@ -469,7 +469,7 @@ export function BuddiesScreen() {
           <section className="card">
             <p className="eyebrow">Duo quests</p>
             <p className="muted" style={{ margin: 0 }}>
-              Gamified, forgiving, dessert-positive. No calorie counters — ever.
+              Gamified, forgiving, dessert-positive. No calorie counters - ever.
             </p>
           </section>
           {buddy.challenges.map((c) => {

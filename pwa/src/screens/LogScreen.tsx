@@ -42,7 +42,7 @@ export function LogScreen() {
       });
     }
     const name = TREATS[kind].name;
-    show(`${name} logged — enjoy it.`, { tone: 'good', anim: 'logged', ms: 2400 });
+    show(`${name} logged - enjoy it.`, { tone: 'good', anim: 'logged', ms: 2400 });
     setPhase('log_dessert');
   }
 

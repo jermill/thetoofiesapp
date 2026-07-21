@@ -1,4 +1,4 @@
-/** Flat nav icons — stroke, currentColor, no emoji/unicode placeholders. */
+/** Flat nav icons - stroke, currentColor, no emoji/unicode placeholders. */
 
 import type { ReactNode } from 'react';
 

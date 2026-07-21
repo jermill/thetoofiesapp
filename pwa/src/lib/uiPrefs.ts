@@ -12,7 +12,7 @@ export type UiPrefs = {
   economyOptIn: boolean;
   notifyEvening: boolean;
   notifyMilestone: boolean;
-  /** Snarky Toofie nudges — playful roast, never guilt. */
+  /** Snarky Toofie nudges - playful roast, never guilt. */
   notifySnarky: boolean;
   healthConnectedMock: boolean;
   theme: ThemeMode;

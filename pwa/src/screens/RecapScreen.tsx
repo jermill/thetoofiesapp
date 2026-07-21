@@ -38,7 +38,7 @@ export function RecapScreen() {
       <div className="brand-lockup">
         <div className="brand-left">
           <h1 className="screen-title">Day recap</h1>
-          <p className="lede">A gentle close to the day — never a report card.</p>
+          <p className="lede">A gentle close to the day - never a report card.</p>
         </div>
         <ToofieSprite
           anim={MOODS.find((m) => m.id === mood)?.anim ?? 'think'}

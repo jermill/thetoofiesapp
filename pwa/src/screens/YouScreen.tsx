@@ -75,7 +75,7 @@ export function YouScreen() {
             {place ? <span className="you-place">{place}</span> : null}
           </p>
           {profile.bio ? <p className="you-bio">{profile.bio}</p> : (
-            <p className="you-bio muted">Add a tiny bio — guilt-free vibes only.</p>
+            <p className="you-bio muted">Add a tiny bio - guilt-free vibes only.</p>
           )}
           <Link to="/profile" className="you-edit-btn">
             Make it yours →
@@ -139,7 +139,7 @@ export function YouScreen() {
           </Link>
         </div>
         {recent.length === 0 ? (
-          <p className="empty">Nothing yet — your first treat story starts on Log.</p>
+          <p className="empty">Nothing yet - your first treat story starts on Log.</p>
         ) : (
           <ul className="history-list">
             {recent.map((e) => {

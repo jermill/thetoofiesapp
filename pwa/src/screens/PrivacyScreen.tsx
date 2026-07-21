@@ -74,7 +74,7 @@ export function PrivacyScreen() {
           <li>Account email + auth</li>
           <li>Synced log + profile (incl. optional photo)</li>
           <li>Moments / buddy data you choose to share</li>
-          <li>Approximate location labels — not live GPS by default</li>
+          <li>Approximate location labels - not live GPS by default</li>
         </ul>
         <p className="muted">Full privacy policy copy + GDPR/CCPA still to be written.</p>
       </section>

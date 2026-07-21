@@ -38,7 +38,7 @@ function Gate({ children }: { children: React.ReactNode }) {
   const onAuth = loc.pathname === '/auth';
   const onOnboarding = loc.pathname === '/onboarding';
 
-  // Account first, then onboarding — never the reverse.
+  // Account first, then onboarding - never the reverse.
   if (!authGateDone && !onAuth) {
     return <Navigate to="/auth" replace />;
   }

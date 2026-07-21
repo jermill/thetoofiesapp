@@ -37,7 +37,7 @@ export function MoveScreen() {
         <div className="page-header-copy">
           <h1 className="screen-title">Move</h1>
           <p className="lede">
-            Steps add sweetness to your day — never as penance.
+            Steps add sweetness to your day - never as penance.
           </p>
         </div>
         <ToofieSprite
@@ -49,7 +49,7 @@ export function MoveScreen() {
 
       <section className="hero move-hero">
         <p className="eyebrow">Today</p>
-        <h2 className="headline">{connected ? steps.toLocaleString() : '—'}</h2>
+        <h2 className="headline">{connected ? steps.toLocaleString() : '-'}</h2>
         <p className="sub">
           {connected ? `of ${goal.toLocaleString()} quest steps` : 'Connect activity to see steps'}
         </p>
@@ -63,7 +63,7 @@ export function MoveScreen() {
         <p className="title" style={{ fontSize: 18 }}>
           {connected
             ? steps >= goal
-              ? 'Quest complete — nice work'
+              ? 'Quest complete - nice work'
               : 'Keep strolling'
             : 'Quest waits for activity'}
         </p>
@@ -91,7 +91,7 @@ export function MoveScreen() {
       <section className="stat-grid">
         <div className="card stat">
           <p className="eyebrow">This week</p>
-          <p className="stat-num">{connected ? '41.2k' : '—'}</p>
+          <p className="stat-num">{connected ? '41.2k' : '-'}</p>
           <p className="muted">steps</p>
         </div>
         <div className="card stat">

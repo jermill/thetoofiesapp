@@ -1,4 +1,4 @@
-// The Toofies points economy — pure logic, no React, no storage, no UI.
+// The Toofies points economy - pure logic, no React, no storage, no UI.
 //
 // Faithful TypeScript port of the SwiftUI prototype's TreatStore
 // (Toofies/Models/TreatStore.swift). Every function takes `now` explicitly so
@@ -12,7 +12,7 @@
 
 import type { TreatEntry } from './treats';
 
-// —— Economy constants (placeholder/experimental — see note above) ——————————
+// -- Economy constants (placeholder/experimental - see note above) ----------
 
 /** Every completed dessert-free day banks this many points. */
 export const POINTS_PER_CLEAN_DAY = 10;
@@ -27,12 +27,12 @@ export const DEFAULT_QUEST_GOAL = 6_000;
 /** Default dessert price in points (adjustable in settings). */
 export const DEFAULT_DESSERT_COST = 30;
 /**
- * On-plan streak milestones — dense through the first ten days, the
+ * On-plan streak milestones - dense through the first ten days, the
  * habit-formation window where drop-off risk falls.
  */
 export const STREAK_MILESTONES = new Set([3, 7, 10, 14, 21, 30, 50, 75, 100, 150, 200, 365]);
 
-// —— State shape ——————————————————————————————————————————————————————————
+// -- State shape ----------------------------------------------------------
 
 export type EconomyState = {
   /** What one dessert costs, in points. */
@@ -56,7 +56,7 @@ export function initialState(now: Date = new Date()): EconomyState {
   };
 }
 
-// —— Local-time day helpers ——————————————————————————————————————————————
+// -- Local-time day helpers ----------------------------------------------
 // Swift used Calendar.startOfDay in the device's local zone. We mirror that
 // with local getters so day boundaries land at local midnight.
 
@@ -87,7 +87,7 @@ function daysBetween(from: Date, to: Date): number {
   return Math.round(ms / 86_400_000);
 }
 
-// —— Small internal helpers ————————————————————————————————————————————————
+// -- Small internal helpers ------------------------------------------------
 
 function entryDates(s: EconomyState): Date[] {
   return s.entries.map((e) => new Date(e.date));
@@ -104,11 +104,11 @@ function dessertsInRange(s: EconomyState, start: Date, end: Date): TreatEntry[] 
 function earliestDay(s: EconomyState): Date {
   // Earning starts the day the app was installed. An entry dated before install
   // may still debit, but must never mint clean-day credit for days the app never
-  // observed — and a far-past date must not blow up the credit loop.
+  // observed - and a far-past date must not blow up the credit loop.
   return startOfDay(new Date(s.installDate));
 }
 
-// —— Points economy ————————————————————————————————————————————————————————
+// -- Points economy --------------------------------------------------------
 // Earn-and-spend: each completed dessert-free day credits base points at
 // midnight; with Health connected, each completed day also credits step points
 // and any quest bonus. Each dessert debits the price in force when it was
@@ -127,7 +127,7 @@ type LedgerEvent = { date: Date; delta: number };
  * day credits at the following midnight.
  */
 function ledgerEvents(s: EconomyState, now: Date): LedgerEvent[] {
-  // Ignore future-dated desserts — they must not debit the balance as of `now`.
+  // Ignore future-dated desserts - they must not debit the balance as of `now`.
   const events: LedgerEvent[] = s.entries
     .filter((e) => new Date(e.date).getTime() <= now.getTime())
     .map((e) => ({ date: new Date(e.date), delta: -e.pointsSpent }));
@@ -203,8 +203,8 @@ export function todaySteps(s: EconomyState, now: Date = new Date()): number {
   return s.stepsByDay[dayKey(now)] ?? 0;
 }
 
-// —— Daily step quest ——————————————————————————————————————————————————————
-// A capped bonus quest — "walk your goal, bank +5 at midnight". The goal adapts
+// -- Daily step quest ------------------------------------------------------
+// A capped bonus quest - "walk your goal, bank +5 at midnight". The goal adapts
 // gently to the user's own recent week and is deterministic per day.
 
 /**
@@ -236,9 +236,9 @@ export function todayQuestGoal(s: EconomyState, now: Date = new Date()): number 
   return questGoal(s, startOfDay(now));
 }
 
-// —— Streaks & milestones ——————————————————————————————————————————————————
+// -- Streaks & milestones --------------------------------------------------
 // The streak the product celebrates is DAYS ON PLAN: clean days and
-// fully-earned dessert days both count — the earned dessert is the product
+// fully-earned dessert days both count - the earned dessert is the product
 // promise, so enjoying it must never break the streak. Only an over-budget
 // dessert pauses it, and even then: no debt, fresh start.
 
@@ -274,7 +274,7 @@ export function streakMilestoneToday(s: EconomyState, now: Date = new Date()): n
   return STREAK_MILESTONES.has(streak) ? streak : null;
 }
 
-// —— Recency (a first-class surface, works with the economy off) ————————————
+// -- Recency (a first-class surface, works with the economy off) ------------
 
 export function lastDessertDate(s: EconomyState): Date | null {
   const dates = entryDates(s);
@@ -300,7 +300,7 @@ export function nextMidnight(now: Date = new Date()): Date {
   return addDays(startOfDay(now), 1);
 }
 
-// —— Chart data ————————————————————————————————————————————————————————————
+// -- Chart data ------------------------------------------------------------
 
 export type DayBucket = {
   key: string;
