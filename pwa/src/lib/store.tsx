@@ -57,7 +57,8 @@ function demoState(now = new Date()): EconomyState {
 type Store = {
   ready: boolean;
   state: EconomyState;
-  logDessert: (kind: TreatKind, at?: Date) => void;
+  /** Returns the new entry id, or null if the store isn't ready. */
+  logDessert: (kind: TreatKind, at?: Date) => string | null;
   removeEntry: (id: string) => void;
   setDessertCost: (cost: number) => void;
   reset: () => void;
@@ -99,11 +100,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       ready,
       state,
       logDessert: (kind, at = new Date()) => {
-        if (!ready) return;
+        if (!ready) return null;
+        const entry = makeEntry(kind, state.dessertCost, at);
         setState((s) => ({
           ...s,
-          entries: [...s.entries, makeEntry(kind, s.dessertCost, at)],
+          entries: [...s.entries, entry],
         }));
+        return entry.id;
       },
       removeEntry: (id) => {
         if (!ready) return;

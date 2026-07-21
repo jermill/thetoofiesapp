@@ -15,7 +15,11 @@ import { MomentsScreen } from './screens/MomentsScreen';
 import { MoveScreen } from './screens/MoveScreen';
 import { NotificationsScreen } from './screens/NotificationsScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
+import { PrivacyScreen } from './screens/PrivacyScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
+import { RecapScreen } from './screens/RecapScreen';
 import { ResourcesScreen } from './screens/ResourcesScreen';
+import { WidgetScreen } from './screens/WidgetScreen';
 import { YouScreen } from './screens/YouScreen';
 import './styles/app.css';
 
@@ -62,9 +66,13 @@ function ShellRoutes() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/log" element={<LogScreen />} />
             <Route path="/move" element={<MoveScreen />} />
-          <Route path="/buddies" element={<BuddiesScreen />} />
-          <Route path="/moments" element={<MomentsScreen />} />
-          <Route path="/you" element={<YouScreen />} />
+            <Route path="/buddies" element={<BuddiesScreen />} />
+            <Route path="/moments" element={<MomentsScreen />} />
+            <Route path="/you" element={<YouScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/recap" element={<RecapScreen />} />
+            <Route path="/widget" element={<WidgetScreen />} />
+            <Route path="/privacy" element={<PrivacyScreen />} />
             <Route path="/onboarding" element={<OnboardingScreen />} />
             <Route path="/auth" element={<AuthScreen />} />
             <Route path="/notifications" element={<NotificationsScreen />} />

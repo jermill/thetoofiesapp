@@ -56,7 +56,11 @@ Or connect the GitHub repo in the Netlify UI (base directory `pwa` / use root `n
 | `/move` | Steps / quest UI mock |
 | `/buddies` | Buddy pair, dessert walks, duo quests |
 | `/moments` | Social dessert feed UI mock |
-| `/you` | Profile, settings links, history |
+| `/you` | Snapshot, settings links, history |
+| `/profile` | Edit PFP, name, handle, bio, city (local) |
+| `/recap` | Evening day check-in mock |
+| `/widget` | Home Screen widget layout preview |
+| `/privacy` | Privacy stub + delete local data |
 | `/notifications` | Reminder prefs UI |
 | `/resources` | ED / care resources |
 

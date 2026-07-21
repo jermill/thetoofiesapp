@@ -128,6 +128,13 @@ export function HomeScreen() {
         >
           Walk with a buddy →
         </Link>
+        <Link
+          to="/recap"
+          className="ghost-btn"
+          style={{ display: 'block', textAlign: 'center', marginTop: 4 }}
+        >
+          Evening day recap →
+        </Link>
         {state.entries.length === 0 && (
           <p className="muted" style={{ marginTop: 10 }}>
             Tip: this preview starts with a few clean days so the balance is live.

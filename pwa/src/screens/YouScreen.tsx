@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
+import { getLogMeta } from '../lib/logMeta';
+import { loadProfile } from '../lib/profile';
 import { useStore, useToofies } from '../lib/store';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
@@ -23,6 +24,9 @@ export function YouScreen() {
   const t = useToofies(now);
   const recent = [...state.entries].reverse().slice(0, 12);
   const [prefs, setPrefs] = useState(loadUiPrefs);
+  const profile = loadProfile();
+  const name = profile.displayName || prefs.displayName || 'Friend';
+  const initial = name.slice(0, 1).toUpperCase();
 
   return (
     <>
@@ -30,12 +34,18 @@ export function YouScreen() {
         <div className="brand-left">
           <h1 className="screen-title">You</h1>
           <p className="lede">
-            {prefs.signedInMock
-              ? `Signed in (mock) as ${prefs.displayName || 'Friend'}`
-              : 'Local preview · account optional'}
+            {prefs.signedInMock || profile.displayName
+              ? `${name}${profile.locationLabel ? ` · ${profile.locationLabel}` : ''}`
+              : 'Local preview · edit your profile anytime'}
           </p>
         </div>
-        <ToofieSprite anim="proud" size={80} />
+        <Link to="/profile" className="you-pfp" aria-label="Edit profile">
+          {profile.avatarDataUrl ? (
+            <img src={profile.avatarDataUrl} alt="" />
+          ) : (
+            <span>{initial}</span>
+          )}
+        </Link>
       </div>
 
       <section className="card">
@@ -55,10 +65,14 @@ export function YouScreen() {
       <section className="card">
         <p className="eyebrow">Account & sync</p>
         <div className="link-rows">
+          <Link to="/profile">Edit profile (photo, location, bio)</Link>
           <Link to="/auth">{prefs.signedInMock ? 'Account (mock)' : 'Sign in / create account'}</Link>
+          <Link to="/recap">Day recap / evening check-in</Link>
           <Link to="/buddies">Buddies & dessert walks</Link>
           <Link to="/moments">Moments feed</Link>
           <Link to="/notifications">Reminders</Link>
+          <Link to="/widget">Home Screen widget preview</Link>
+          <Link to="/privacy">Privacy & delete data</Link>
           <Link to="/resources">Care & ED resources</Link>
           <Link to="/onboarding">Replay onboarding</Link>
         </div>
@@ -109,20 +123,31 @@ export function YouScreen() {
           <p className="empty">Nothing logged yet. When you enjoy one, it’ll show up here.</p>
         ) : (
           <ul className="history-list">
-            {recent.map((e) => (
-              <li key={e.id}>
-                <div className="left">
-                  <span aria-hidden>{e.emoji}</span>
-                  <div>
-                    <div>{e.name}</div>
-                    <div className="when">{formatWhen(e.date)}</div>
+            {recent.map((e) => {
+              const meta = getLogMeta(e.id);
+              return (
+                <li key={e.id}>
+                  <div className="left">
+                    {meta?.photoDataUrl ? (
+                      <img className="history-thumb" src={meta.photoDataUrl} alt="" />
+                    ) : (
+                      <span aria-hidden>{e.emoji}</span>
+                    )}
+                    <div>
+                      <div>{e.name}</div>
+                      <div className="when">
+                        {formatWhen(e.date)}
+                        {meta?.place ? ` · ${meta.place}` : ''}
+                      </div>
+                      {meta?.note ? <div className="history-note">{meta.note}</div> : null}
+                    </div>
                   </div>
-                </div>
-                <button type="button" className="ghost-btn" onClick={() => removeEntry(e.id)}>
-                  Undo
-                </button>
-              </li>
-            ))}
+                  <button type="button" className="ghost-btn" onClick={() => removeEntry(e.id)}>
+                    Undo
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
