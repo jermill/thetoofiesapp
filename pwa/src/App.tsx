@@ -44,20 +44,36 @@ function BootGate({ children }: { children: React.ReactNode }) {
   const { ready: storeReady } = useStore();
   const [prefsReady, setPrefsReady] = useState(false);
   const [minSplashDone, setMinSplashDone] = useState(false);
+  const [mascotReady, setMascotReady] = useState(false);
 
   useEffect(() => {
     loadUiPrefs();
     setPrefsReady(true);
   }, []);
 
-  // Long enough to actually see Toofie (and flush stale SW shells).
+  // Keep splash up long enough to read — but never dismiss before Toofie paints.
   useEffect(() => {
-    const t = window.setTimeout(() => setMinSplashDone(true), 1600);
+    if (!mascotReady) return;
+    const t = window.setTimeout(() => setMinSplashDone(true), 900);
+    return () => window.clearTimeout(t);
+  }, [mascotReady]);
+
+  // Safety: don't block forever if image fails
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      setMascotReady(true);
+      setMinSplashDone(true);
+    }, 4000);
     return () => window.clearTimeout(t);
   }, []);
 
   if (!storeReady || !prefsReady || !minSplashDone) {
-    return <LoadSplash label="Warming up the bakery…" />;
+    return (
+      <LoadSplash
+        label="Warming up the bakery…"
+        onReady={() => setMascotReady(true)}
+      />
+    );
   }
 
   return <>{children}</>;
