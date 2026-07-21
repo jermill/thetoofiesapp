@@ -103,6 +103,14 @@ ship as a **PWA** (installable web app), then wrap into iOS + Android apps.
   cleanly onto the already-ratified recency-core-vs-economy split.
   **Founder decides. Until then D27 (Expo/RN) stands — do not rebuild in Framer/PWA.**
 
+**Update 2026-07-21 — founder directed: “start with frontend only, design the
+web PWA, no backend yet, mobile-first.”** That maps to synthesis option (3): a
+**frontend-only validation PWA** lives at `pwa/` (Vite + React, localStorage,
+no accounts/API). **D27 (Expo/RN) still stands for the native product**
+(HealthKit / widgets / store). This PWA does **not** replace Expo; it is the
+fast UI + recency/economy loop surface. D28 remains 🔴 until the founder
+explicitly chooses PWA-as-architecture vs PWA-as-prototype.
+
 ### D29 · Developer-account & app ownership 🔴 — NEW
 Collaborator strongly recommends enrolling the **Apple Developer Program under an
 LLC/Corp, not a personal name** (personal enrollment shows your legal name as the
@@ -258,6 +266,14 @@ Process agreed ("both in parallel"): you share Mobbin references + we ground in
 Apple HIG, then decide each one explicitly. A candidate palette/type direction
 exists from an earlier exploration **as options only** — not applied. See
 `DESIGN-SPEC.md`.
+
+**Update 2026-07-21 — provisional apply in `pwa/` only (still 🔴, not ratified):**
+Founder asked to *design* the web PWA. Applied the **OCHA soft-brutalist dessert
+ritual** candidate from `design-library/ocha/teardown.md` as a **working
+prototype** (cream `#fefae7`, matcha `#03563e`, blossom `#ffbad8`, Anton +
+Outfit, rounded cards, Home / Log / You). Banner in-app labels it provisional.
+**Founder must still ratify or reject** before this becomes the product design
+system. Expo/SwiftUI scaffolds stay unstyled.
 
 ---
 

@@ -1,10 +1,10 @@
 # Toofies — Design Spec
 
-**Status: NOTHING DECIDED.** No colors, typography, layout, or visual
-direction have been chosen. This file only records the **open questions** and
-the **process** for deciding them with you — it is not a set of decisions, and
-the app's current look (system blue, iOS system backgrounds, default font) is
-just the untouched prototype default, not an approved design.
+**Status: NOTHING RATIFIED (D11–D15 still 🔴).** No colors, typography, layout,
+or visual direction have been *signed off*. This file records open questions,
+the process, and — as of 2026-07-21 — a **provisional** application in the
+frontend-only `pwa/` so there is something to react to. The Expo/SwiftUI
+scaffolds remain unstyled. Provisional ≠ decided.
 
 ## Ground rules
 
@@ -23,8 +23,26 @@ ink + a bold condensed uppercase display face (Anton-style) + soft rounded cards
 a blossom-pink pop**, "soft brutalism," and a **witty, guilt-free, lifestyle
 voice** (the strongest fit). **Honest caveat for the gate:** matcha *green* as the
 primary reads tea/wellness — for a *dessert* app a warm dessert-led accent may need
-to lead, with green as a secondary (open). Per the gate this is a strong **input**
-to turn into 2–3 concrete options and ratify — **not yet applied.**
+to lead, with green as a secondary (open).
+
+### Provisional apply (2026-07-21) — `pwa/` only
+
+Founder directed a designed, mobile-first web PWA (frontend only). The `pwa/`
+app now uses this candidate so the loop is reviewable:
+
+| Token | Value |
+|---|---|
+| Paper | `#fefae7` |
+| Ink | `#121212` |
+| Matcha | `#03563e` |
+| Blossom | `#ffbad8` |
+| Lime accent | `#c6ff3a` (celebration only) |
+| Display | Anton (uppercase) |
+| Body | Outfit |
+| Shell | Home / Log / You · phone-width · installable PWA |
+
+**Still needs founder ratify** into D11–D15 before any claim that “the design is
+set.” Reject / tweak freely — the PWA is the sketchpad.
 
 ## Open questions (to decide together)
 

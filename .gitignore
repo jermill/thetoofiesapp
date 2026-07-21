@@ -19,3 +19,5 @@ build/
 
 .mobbin-profile/
 node_modules/
+dist/
+*.local
