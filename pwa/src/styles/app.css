@@ -985,8 +985,16 @@ a {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
-  padding: 8px 0 4px;
+  gap: 12px;
+  padding: 12px 0 8px;
+  overflow: visible;
+}
+
+.flow-toofie,
+.flow-hero .toofie-tap {
+  margin-left: -4px;
+  /* Extra room so frosting / limbs never feel clipped by neighbors */
+  filter: drop-shadow(0 8px 14px rgba(18, 18, 18, 0.1));
 }
 
 .flow-title {

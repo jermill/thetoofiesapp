@@ -58,7 +58,8 @@ export function OnboardingScreen() {
       <div className="flow-hero">
         <ToofieSprite
           anim={step.anim}
-          size={120}
+          size={148}
+          className="flow-toofie"
           motion={playing ? 'task' : 'still'}
           loop={false}
           onComplete={() => setPlaying(false)}

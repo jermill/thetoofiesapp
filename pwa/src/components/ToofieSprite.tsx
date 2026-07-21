@@ -32,9 +32,9 @@ type Sheet = (typeof atlas.sheets)[keyof typeof atlas.sheets];
 type AnimDef = (typeof atlas.animations)[ToofieAnimName];
 
 /**
- * Map one atlas cell into a size×size box without stretching.
- * Tall cycle sheets (walk/celebrate/…) are scaled so the character fits;
- * near-square grid sheets use cover.
+ * Map one atlas cell into a size×size box without stretching or chopping
+ * Toofie. Grid sheets use contain (full cell). Tall cycle sheets fit the
+ * character band. Never cover-crop — that was clipping limbs/frosting.
  */
 function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const cols = sheet.cols;
@@ -47,12 +47,11 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const row = Math.floor(cellIndex / cols);
   const tall = ch / cw > 1.5;
 
-  // Tall cells: fit ~42% of cell height (character band) into the box.
-  // Grid cells: zoom past plate margins (~72% of the cell) so mint/cream
-  // gutters at the top/bottom don't show in the square viewport.
+  // Tall cells: fit the ~character band. Grid cells: fit the whole cell
+  // (keyed plates are transparent, so empty margin is fine — cropping is not).
   const scale = tall
     ? Math.min(size / cw, size / (ch * 0.42))
-    : Math.max(size / (cw * 0.72), size / (ch * 0.72));
+    : Math.min(size / cw, size / ch);
 
   const bgW = sheetW * scale;
   const bgH = sheetH * scale;
