@@ -23,8 +23,8 @@
       rel="stylesheet"
     />
     <title>Toofies</title>
-    <!-- cache-bust marker: splash-v9 -->
-    <link rel="preload" as="image" href="/mascot/toofie-splash.png?v=9" />
+    <!-- cache-bust marker: splash-v10 -->
+    <link rel="preload" as="image" href="/mascot/toofie-splash.png?v=10" />
     <style>
       /* First-paint splash — visible before JS; no orbit ring */
       #boot-splash {
@@ -70,7 +70,7 @@
     <script>
       /* One-shot: drop stale SW/caches that still show the dashed orbit */
       (function () {
-        var EPOCH = 'splash-v9';
+        var EPOCH = 'splash-v10';
         try {
           if (localStorage.getItem('toofies-cache-epoch') === EPOCH) return;
           localStorage.setItem('toofies-cache-epoch', EPOCH);
@@ -115,7 +115,7 @@
     <div id="boot-splash" aria-hidden="true">
       <div class="boot-inner">
         <img
-          src="/mascot/toofie-splash.png?v=9"
+          src="/mascot/toofie-splash.png?v=10"
           width="168"
           height="168"
           alt="Toofie"

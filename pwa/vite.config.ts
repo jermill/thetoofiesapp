@@ -21,7 +21,7 @@ export default defineConfig({
         background_color: '#fefae7',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/?v=9',
+        start_url: '/?v=10',
         scope: '/',
         icons: [
           {
@@ -43,7 +43,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        cacheId: 'toofies-v9',
+        cacheId: 'toofies-v10',
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,

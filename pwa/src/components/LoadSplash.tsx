@@ -7,7 +7,7 @@ type Props = {
 };
 
 /** Small cutout — paints fast; never hide behind opacity:0. */
-export const SPLASH_TOOTH = '/mascot/toofie-splash.png?v=9';
+export const SPLASH_TOOTH = '/mascot/toofie-splash.png?v=10';
 
 /**
  * Full-screen boot splash. Static Toofie PNG only — no sprite sheets, no orbit.
