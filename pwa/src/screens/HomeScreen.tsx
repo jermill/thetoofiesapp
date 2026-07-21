@@ -1,8 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { IconBuddies, IconMoon, IconSpark } from '../components/NavIcons';
 import { pickHomeAnim, ToofieSprite } from '../components/ToofieSprite';
 import { useStore, useToofies } from '../lib/store';
+
+function toofieLine(opts: {
+  empty: boolean;
+  ready: boolean;
+  daysSince: number | null;
+  streak: number;
+  loggedToday: boolean;
+}): string {
+  if (opts.empty) return 'Fresh plate. Whenever you’re ready — I’m hyped.';
+  if (opts.ready) return 'Treat window is open. Enjoy it when it sounds good.';
+  if (opts.loggedToday) return 'That looked delicious. Soft accountability only.';
+  if (opts.daysSince != null && opts.daysSince >= 3) {
+    return `${opts.daysSince} days since the last treat. You’re in a nice groove.`;
+  }
+  if (opts.streak >= 7) return `${opts.streak}-day rhythm. Keep it playful.`;
+  return 'Small check-ins. Big peace of mind. Zero guilt.';
+}
 
 export function HomeScreen() {
   const now = useMemo(() => new Date(), []);
@@ -18,75 +36,138 @@ export function HomeScreen() {
     }
   }, [t.streakMilestoneToday]);
 
+  const ready = t.availability.bankedDesserts > 0;
+  const progressPct = Math.round(t.availability.progress * 100);
+  const loggedToday = t.daysSinceLastDessert === 0;
+  const empty = state.entries.length === 0;
+
   const recencyHeadline =
     t.daysSinceLastDessert === null
-      ? 'Fresh start — no desserts logged yet'
-      : t.daysSinceLastDessert === 0
-        ? 'You enjoyed a dessert today'
-        : `It's been ${t.daysSinceLastDessert} day${t.daysSinceLastDessert === 1 ? '' : 's'} since your last treat`;
+      ? 'Your dessert story starts whenever you want'
+      : loggedToday
+        ? 'You treated yourself today'
+        : t.daysSinceLastDessert === 1
+          ? 'One day since your last treat'
+          : `${t.daysSinceLastDessert} days since your last treat`;
 
-  const ready = t.availability.bankedDesserts > 0;
-  const readyCopy = ready
-    ? `Yes — you've banked ${t.availability.bankedDesserts} dessert${t.availability.bankedDesserts === 1 ? '' : 's'}`
-    : `Almost — ${t.availability.pointsNeeded} pts to go · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
+  const readyTitle = ready
+    ? `Dessert unlocked ×${t.availability.bankedDesserts}`
+    : `${t.availability.pointsNeeded} pts to the next treat`;
+
+  const readySub = ready
+    ? 'Banked and ready — enjoy it guilt-free when you want.'
+    : t.pendingPointsToday > 0
+      ? `${t.availability.balance} / ${t.availability.cost} pts · +${t.pendingPointsToday} banks tonight`
+      : `${t.availability.balance} / ${t.availability.cost} pts · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
 
   const anim = pickHomeAnim({
-    empty: state.entries.length === 0,
+    empty,
     ready,
     milestone: showMilestone && !milestoneDone && t.streakMilestoneToday != null,
     streak: t.onPlanStreak,
   });
 
+  const bubble = toofieLine({
+    empty,
+    ready,
+    daysSince: t.daysSinceLastDessert,
+    streak: t.onPlanStreak,
+    loggedToday,
+  });
+
+  const tickerBits = [
+    showMilestone && t.streakMilestoneToday != null
+      ? `${t.streakMilestoneToday} days on plan · keep enjoying`
+      : null,
+    ready ? 'Treat window open · no guilt' : 'Banking sweetness · soft pace',
+    `${t.onPlanStreak} day streak · playful not punishing`,
+    'Log when you enjoy · never when you “should”',
+  ].filter(Boolean) as string[];
+
   return (
-    <>
-      <p className="provisional-banner">OCHA shell provisional · Toofie mascot 🟢 D14</p>
-
-      <header className="brand-lockup">
-        <div className="brand-left">
-          <h1>Toofies</h1>
-          <p className="tag">Dessert, with peace of mind.</p>
-        </div>
-        <ToofieSprite
-          className="toofie-mark"
-          anim={anim}
-          size={88}
-          alt="Toofie"
-          motion={anim === 'milestone' ? 'task' : 'still'}
-          loop={false}
-          onComplete={() => {
-            if (anim === 'milestone') setMilestoneDone(true);
-          }}
-        />
-      </header>
-
-      {showMilestone && t.streakMilestoneToday != null && (
-        <div className="marquee" role="status">
-          <div className="marquee-track">
-            <span>{t.streakMilestoneToday} days on plan · keep enjoying ·</span>
-            <span>{t.streakMilestoneToday} days on plan · keep enjoying ·</span>
-            <span>{t.streakMilestoneToday} days on plan · keep enjoying ·</span>
-            <span>{t.streakMilestoneToday} days on plan · keep enjoying ·</span>
+    <div className="home-fun">
+      <header className="home-stage">
+        <div className="home-stage-bg" aria-hidden />
+        <div className="home-stage-top">
+          <div className="home-brand">
+            <p className="home-kicker">Toofies</p>
+            <h1 className="home-title">Let’s play nice with dessert</h1>
+          </div>
+          <div className="home-toofie-wrap">
+            <ToofieSprite
+              className="home-toofie"
+              anim={anim}
+              size={112}
+              alt="Toofie"
+              motion={anim === 'milestone' ? 'task' : 'still'}
+              loop={false}
+              onComplete={() => {
+                if (anim === 'milestone') setMilestoneDone(true);
+              }}
+            />
           </div>
         </div>
-      )}
-
-      <section className="hero" aria-label="Last dessert">
-        <p className="eyebrow">Last dessert</p>
-        <h2 className="headline">{recencyHeadline}</h2>
-        <p className="sub">
-          {t.cleanSoFarToday ? 'Clean so far today.' : 'Logged one today — still on plan if it was banked.'}
+        <p className="home-bubble" role="status">
+          <span className="home-bubble-label">Toofie</span>
+          {bubble}
         </p>
+      </header>
+
+      <div className="home-marquee" aria-hidden>
+        <div className="home-marquee-track">
+          {[...tickerBits, ...tickerBits].map((bit, i) => (
+            <span key={`${bit}-${i}`}>{bit}</span>
+          ))}
+        </div>
+      </div>
+
+      <section className={`home-pulse${ready ? ' is-ready' : ''}`} aria-label="Dessert readiness">
+        <div className="home-pulse-copy">
+          <p className="eyebrow">{ready ? 'You’re clear' : 'Almost there'}</p>
+          <h2 className="home-pulse-title">{readyTitle}</h2>
+          <p className="home-pulse-sub">{readySub}</p>
+        </div>
+        <div
+          className="home-meter"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={progressPct}
+          aria-label="Progress toward next dessert"
+        >
+          <span className="home-meter-fill" style={{ width: `${progressPct}%` }} />
+          <span className="home-meter-shine" aria-hidden />
+        </div>
+        <div className="home-pulse-stats">
+          <div>
+            <strong>{t.availability.balance}</strong>
+            <span>pts banked</span>
+          </div>
+          <div>
+            <strong>{t.availability.cost}</strong>
+            <span>per treat</span>
+          </div>
+          <div>
+            <strong>{t.availability.bankedDesserts}</strong>
+            <span>unlocked</span>
+          </div>
+        </div>
       </section>
 
-      <section className="card" aria-label="Days on plan">
-        <p className="eyebrow">Days on plan</p>
-        <div style={{ display: 'flex', alignItems: 'end', justifyContent: 'space-between', gap: 12 }}>
-          <p className="streak-num">{t.onPlanStreak}</p>
-          <p className="muted" style={{ textAlign: 'right', maxWidth: '12rem' }}>
-            Clean days and earned desserts both count.
+      <section className="home-streak" aria-label="Days on plan">
+        <div className="home-streak-head">
+          <div>
+            <p className="eyebrow">On-plan streak</p>
+            <p className="home-streak-num">
+              {t.onPlanStreak}
+              <span>days</span>
+            </p>
+          </div>
+          <p className="home-streak-note">
+            Clean days and earned desserts both count. Miss a day? No shame — just keep going.
           </p>
         </div>
-        <div className="streak-row">
+        <div className="streak-row home-streak-row">
           {t.week.map((d) => (
             <div
               key={d.key}
@@ -99,50 +180,34 @@ export function HomeScreen() {
         </div>
       </section>
 
-      <section className="card" aria-label="Dessert readiness">
-        <p className="eyebrow">Am I ready for a dessert?</p>
-        <h3 className={`title ${ready ? 'ready' : 'wait'}`}>{readyCopy}</h3>
-        <p className="muted">
-          {t.availability.balance} / {t.availability.cost} pts toward your next treat
-          {t.pendingPointsToday > 0 ? ` · +${t.pendingPointsToday} banks tonight` : ''}
+      <section className="home-recency" aria-label="Last dessert">
+        <p className="eyebrow">Last dessert</p>
+        <h2 className="home-recency-title">{recencyHeadline}</h2>
+        <p className="home-recency-sub">
+          {t.cleanSoFarToday
+            ? 'Clean so far today — savor that calm.'
+            : 'Logged one today — still on plan if it was banked.'}
         </p>
-        <div className="progress" aria-hidden>
-          <span style={{ width: `${Math.round(t.availability.progress * 100)}%` }} />
-        </div>
       </section>
 
-      <section className="card">
-        <p className="eyebrow">Treat yourself, mindfully</p>
-        <p className="title" style={{ fontSize: 17, marginBottom: 12 }}>
-          Log a dessert when you enjoy one.
-        </p>
-        <Link
-          to="/log"
-          className="primary-btn blossom"
-          style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
-        >
-          Log a dessert
+      <Link to="/log" className="home-cta">
+        <span className="home-cta-glow" aria-hidden />
+        <IconSpark size={22} />
+        <span>Log a dessert</span>
+      </Link>
+
+      <div className="home-quick">
+        <Link to="/buddies" className="home-quick-tile tone-matcha">
+          <IconBuddies size={22} />
+          <strong>Buddy walk</strong>
+          <span>Stroll for fun</span>
         </Link>
-        <Link
-          to="/buddies"
-          className="ghost-btn"
-          style={{ display: 'block', textAlign: 'center', marginTop: 8 }}
-        >
-          Walk with a buddy →
+        <Link to="/recap" className="home-quick-tile tone-blossom">
+          <IconMoon size={22} />
+          <strong>Day recap</strong>
+          <span>Gentle close</span>
         </Link>
-        <Link
-          to="/recap"
-          className="ghost-btn"
-          style={{ display: 'block', textAlign: 'center', marginTop: 4 }}
-        >
-          Evening day recap →
-        </Link>
-        {state.entries.length === 0 && (
-          <p className="muted" style={{ marginTop: 10 }}>
-            Tip: this preview starts with a few clean days so the balance is live.
-          </p>
-        )}
-      </section>
-    </>
+      </div>
+    </div>
   );
 }

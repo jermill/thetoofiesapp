@@ -47,6 +47,9 @@ set.” Reject / tweak freely — the PWA is the sketchpad.
 ## Open questions (to decide together)
 
 1. **Overall vibe** — playful/candy? clean/minimal? something else?
+   - **Founder signal 2026-07-21:** Home felt “sterile/boring”; wants an
+     **addictive / fun** feel (not hardcore levels). Provisional home pass
+     leans playful-sticky within OCHA tokens — still 🔴 until D11 ratifies.
 2. **Color** — keep the current blue, or a warmer/dessert palette, or your own
    brand colors?
 3. **Typography** — system default, system rounded, or a specific typeface?
