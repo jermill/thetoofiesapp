@@ -2,14 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Toofies — points economy demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f6f6f4" />
+<meta name="description" content="Toofies demo — dessert recency tracker (points economy optional)." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Toofies Demo" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<title>Toofies — demo</title>
 <style>
   /*
    * DEMO / PLACEHOLDER VISUALS ONLY.
-   * Color, type, layout, and brand treatment are NOT ratified decisions
-   * (D11–D15 are still OPEN). This page exists to demonstrate the mechanic.
-   * System fonts + neutral greys are scaffolding, not a design direction.
+   * Color, type, layout, and brand treatment are NOT ratified (D11–D15 OPEN).
+   * System fonts + neutral greys = scaffolding, not a design direction.
+   *
+   * Product shape here FOLLOWS ratified rules:
+   *   - Recency tracker is the default core
+   *   - Points economy is an opt-in experiment (D7–D9)
+   *   - LOCKED safeguards: no abstinence-as-virtue, no cost/afford/spend
+   *     food language, no score-drop-as-penalty, no steps-as-penance
    */
   :root {
     --page: #f6f6f4;
@@ -19,9 +30,8 @@
     --border: rgba(0, 0, 0, 0.12);
     --accent: #2a78d6;
     --good: #0a7a0a;
-    --warn: #a15c00;
-    --danger: #b42318;
     --chip: #f0f0ec;
+    --banner: #fffbe6;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,9 +40,9 @@
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     background: var(--page);
     color: var(--text);
-    min-height: 100vh;
-    padding: 20px 16px 72px;
-    line-height: 1.4;
+    min-height: 100dvh;
+    padding: 20px 16px 80px;
+    line-height: 1.45;
   }
 
   .app {
@@ -49,7 +59,7 @@
     padding: 10px 12px;
     font-size: 12px;
     color: var(--muted);
-    background: #fffbe6;
+    background: var(--banner);
   }
 
   header {
@@ -97,6 +107,7 @@
   }
 
   .muted { font-size: 14px; color: var(--muted); }
+  .good { color: var(--good); }
 
   .meter {
     height: 10px;
@@ -111,7 +122,7 @@
     height: 100%;
     background: var(--accent);
     width: 0%;
-    transition: width 0.25s ease;
+    transition: width 0.35s ease;
   }
 
   .row {
@@ -144,12 +155,6 @@
     background: transparent;
     color: var(--muted);
     border-style: dashed;
-  }
-
-  button.danger {
-    background: transparent;
-    color: var(--danger);
-    border-color: color-mix(in srgb, var(--danger) 35%, transparent);
   }
 
   .chips button { font-size: 15px; }
@@ -190,11 +195,7 @@
 
   .history li:last-child { border-bottom: none; }
 
-  .tools {
-    display: grid;
-    gap: 8px;
-  }
-
+  .tools { display: grid; gap: 8px; }
   .tools .row { align-items: center; }
 
   label.toggle {
@@ -207,8 +208,48 @@
 
   input[type="range"] { width: 100%; }
 
-  .status-good { color: var(--good); }
-  .status-wait { color: var(--warn); }
+  .mode-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: var(--chip);
+    padding: 4px;
+    border-radius: 12px;
+  }
+
+  .mode-switch button {
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+
+  .mode-switch button[aria-pressed="true"] {
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  .flash {
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: color-mix(in srgb, var(--good) 12%, white);
+    color: var(--good);
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+  }
+
+  .flash.show { display: block; }
+
+  .ed {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 4px 2px;
+  }
+
+  .ed a { color: inherit; }
 
   footer {
     font-size: 12px;
@@ -222,14 +263,16 @@
     padding: 1px 5px;
     border-radius: 4px;
   }
+
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
   <div class="app">
     <div class="banner">
-      <strong>DEMO PAGE</strong> — interactive points-economy scaffold for walkthroughs.
-      Visuals are placeholders (D11–D15 not ratified). Point values are the experimental
-      defaults (10 / clean day, dessert costs 30). Data stays in this browser only.
+      <strong>DEMO</strong> — walkthrough of the ratified product shape.
+      Default = recency tracker. Points economy is an <em>opt-in experiment</em>.
+      Visuals are placeholders (D11–D15 not ratified). Data stays in this browser.
     </div>
 
     <header>
@@ -240,29 +283,43 @@
       </div>
     </header>
 
+    <section class="card" aria-labelledby="mode-h">
+      <h2 id="mode-h">Mode</h2>
+      <div class="mode-switch" role="group" aria-label="Demo mode">
+        <button type="button" id="mode-recency" aria-pressed="true">Recency only</button>
+        <button type="button" id="mode-economy" aria-pressed="false">Points experiment</button>
+      </div>
+      <p class="muted" id="mode-hint">
+        Just track when you last had a dessert. No points, no ledger.
+      </p>
+    </section>
+
+    <div class="flash" id="enjoy-flash" role="status" aria-live="polite"></div>
+
     <section class="card" aria-labelledby="recency-h">
       <h2 id="recency-h">When did I last have a dessert?</h2>
       <p class="big" id="recency">—</p>
       <p class="muted" id="clean-today">—</p>
     </section>
 
-    <section class="card" aria-labelledby="safe-h">
-      <h2 id="safe-h">Am I safe to have a dessert?</h2>
-      <p class="big" id="safe">—</p>
-      <p class="muted" id="balance-line">—</p>
+    <section class="card" id="economy-card" hidden aria-labelledby="bank-h">
+      <h2 id="bank-h">Treat bank <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:500">(experiment)</span></h2>
+      <p class="big" id="bank-headline">—</p>
+      <p class="muted" id="bank-sub">—</p>
       <div class="meter" aria-hidden="true"><span id="meter-fill"></span></div>
+      <p class="muted" id="activity-line" hidden></p>
     </section>
 
-    <section class="card" aria-labelledby="streak-h">
-      <h2 id="streak-h">Days on plan</h2>
-      <p class="big" id="streak">—</p>
-      <p class="muted" id="milestone" hidden></p>
+    <section class="card" aria-labelledby="rhythm-h">
+      <h2 id="rhythm-h">Your dessert rhythm</h2>
+      <p class="big" id="rhythm">—</p>
+      <p class="muted" id="rhythm-sub">—</p>
     </section>
 
     <section class="card" aria-labelledby="log-h">
       <h2 id="log-h">Log a dessert</h2>
       <div class="row chips" id="treat-chips"></div>
-      <p class="muted">Spending is never blocked. If you can't afford it, balance floors at 0 and the streak pauses that day.</p>
+      <p class="muted">Honest logging is never blocked. Enjoy it — the tracker just remembers.</p>
     </section>
 
     <section class="card" aria-labelledby="week-h">
@@ -279,36 +336,46 @@
 
     <section class="card tools" aria-labelledby="tools-h">
       <h2 id="tools-h">Demo controls</h2>
-      <p class="muted">Jump the simulated clock so clean-day credits bank (they credit at midnight).</p>
+      <p class="muted">Jump the simulated clock so “days since” and midnight banking update.</p>
       <div class="row">
-        <button type="button" class="primary" id="btn-advance-1">+1 day (bank midnight)</button>
-        <button type="button" id="btn-advance-3">+3 clean days</button>
-        <button type="button" id="btn-advance-7">+7 clean days</button>
+        <button type="button" class="primary" id="btn-advance-1">+1 day</button>
+        <button type="button" id="btn-advance-3">+3 days</button>
+        <button type="button" id="btn-advance-7">+7 days</button>
       </div>
-      <label class="toggle">
-        <input type="checkbox" id="health-toggle" />
-        Simulate Apple Health connected
-      </label>
-      <div id="steps-panel" hidden>
-        <label class="muted" for="steps-range">Today's steps: <strong id="steps-label">0</strong></label>
-        <input type="range" id="steps-range" min="0" max="30000" step="500" value="0" />
-        <p class="muted">1,500 steps = +1 pt (cap +15/day). Quest bonus +5 when you hit the goal.</p>
+      <div id="health-block" hidden>
+        <label class="toggle">
+          <input type="checkbox" id="health-toggle" />
+          Simulate activity connected
+        </label>
+        <div id="steps-panel" hidden>
+          <label class="muted" for="steps-range">Today’s steps: <strong id="steps-label">0</strong></label>
+          <input type="range" id="steps-range" min="0" max="30000" step="500" value="0" />
+          <p class="muted">Activity can add to the bank overnight — never framed as “paying for” a treat.</p>
+        </div>
       </div>
       <div class="row">
         <button type="button" class="ghost" id="btn-reset">Reset demo</button>
       </div>
     </section>
 
+    <p class="ed">
+      If food or body thoughts feel heavy, you’re not alone —
+      <a href="https://www.nationaleatingdisorders.org/get-help/" target="_blank" rel="noopener">NEDA resources</a>
+      · helpline 1-800-931-2237.
+    </p>
+
     <footer>
       Economy logic mirrors <code>toofies/src/lib/economy.ts</code>.
       Older weekly-budget prototype: <a href="./index.html">index.html</a>.
+      Installable on phones via Add to Home Screen (<code>manifest.webmanifest</code>).
     </footer>
   </div>
 
 <script>
 /**
- * Self-contained port of toofies/src/lib/{economy,treats}.ts for the demo page.
+ * Self-contained port of toofies/src/lib/{economy,treats}.ts for the demo.
  * Keep behavior aligned with the TypeScript source / economy.test.mjs.
+ * UI copy follows LOCKED behavioral safeguards in .planning/PRODUCT.md.
  */
 (function () {
   'use strict';
@@ -319,8 +386,7 @@
   const QUEST_BONUS_POINTS = 5;
   const DEFAULT_QUEST_GOAL = 6000;
   const DEFAULT_DESSERT_COST = 30;
-  const STREAK_MILESTONES = new Set([3, 7, 10, 14, 21, 30, 50, 75, 100, 150, 200, 365]);
-  const STORAGE_KEY = 'toofies.demo.v1';
+  const STORAGE_KEY = 'toofies.demo.v2';
 
   const TREATS = {
     cookie: { name: 'Cookie', emoji: '🍪' },
@@ -334,34 +400,23 @@
   };
   const QUICK_LOG = ['cookie', 'iceCream', 'cake', 'donut', 'chocolate', 'cupcake'];
 
-  // —— Day helpers (local midnight) ————————————————————————————————————————
-
   function startOfDay(d) {
     const s = new Date(d);
     s.setHours(0, 0, 0, 0);
     return s;
   }
-
   function addDays(d, days) {
     const r = new Date(d);
     r.setDate(r.getDate() + days);
     return r;
   }
-
   function dayKey(d) {
     const s = startOfDay(d);
-    const y = s.getFullYear();
-    const m = String(s.getMonth() + 1).padStart(2, '0');
-    const day = String(s.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
+    return `${s.getFullYear()}-${String(s.getMonth() + 1).padStart(2, '0')}-${String(s.getDate()).padStart(2, '0')}`;
   }
-
   function daysBetween(from, to) {
-    const ms = startOfDay(to).getTime() - startOfDay(from).getTime();
-    return Math.round(ms / 86400000);
+    return Math.round((startOfDay(to) - startOfDay(from)) / 86400000);
   }
-
-  // —— Economy ——————————————————————————————————————————————————————————————
 
   function initialState(now) {
     return {
@@ -379,42 +434,31 @@
       return t >= start.getTime() && t < end.getTime();
     });
   }
-
-  function earliestDay(s) {
-    return startOfDay(new Date(s.installDate));
-  }
-
+  function earliestDay(s) { return startOfDay(new Date(s.installDate)); }
   function activityPoints(steps) {
     return Math.max(0, Math.min(Math.floor(steps / STEPS_PER_ACTIVITY_POINT), MAX_ACTIVITY_POINTS_PER_DAY));
   }
-
   function questGoal(s, dayStart) {
     const samples = [];
     for (let offset = 1; offset <= 7; offset++) {
-      const past = addDays(dayStart, -offset);
-      const steps = s.stepsByDay[dayKey(past)] || 0;
+      const steps = s.stepsByDay[dayKey(addDays(dayStart, -offset))] || 0;
       if (steps > 0) samples.push(steps);
     }
-    if (samples.length === 0) return DEFAULT_QUEST_GOAL;
+    if (!samples.length) return DEFAULT_QUEST_GOAL;
     const sorted = samples.slice().sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
-    const median = sorted.length % 2 === 0
-      ? (sorted[mid - 1] + sorted[mid]) / 2
-      : sorted[mid];
+    const median = sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
     const clamped = Math.min(12000, Math.max(3000, Math.floor(median * 1.05)));
     return Math.floor((clamped + 250) / 500) * 500;
   }
-
   function questCompleted(s, dayStart) {
     if (!s.healthConnected) return false;
     return (s.stepsByDay[dayKey(dayStart)] || 0) >= questGoal(s, dayStart);
   }
-
   function ledgerEvents(s, now) {
     const events = s.entries
       .filter((e) => new Date(e.date).getTime() <= now.getTime())
       .map((e) => ({ date: new Date(e.date), delta: -e.pointsSpent }));
-
     const todayStart = startOfDay(now);
     let day = earliestDay(s);
     while (day.getTime() < todayStart.getTime()) {
@@ -428,14 +472,11 @@
       if (credit > 0) events.push({ date: next, delta: credit });
       day = next;
     }
-
     return events.sort((a, b) => a.date.getTime() - b.date.getTime() || b.delta - a.delta);
   }
-
   function balance(s, now) {
     return ledgerEvents(s, now).reduce((bal, e) => Math.max(0, bal + e.delta), 0);
   }
-
   function availability(s, now) {
     const bal = balance(s, now);
     const cost = s.dessertCost;
@@ -443,23 +484,18 @@
     return {
       balance: bal,
       cost,
-      affordable: bal >= cost,
-      bankedDesserts: cost > 0 ? Math.floor(bal / cost) : 0,
+      ready: bal >= cost,
+      bankedTreats: cost > 0 ? Math.floor(bal / cost) : 0,
       pointsNeeded,
-      cleanDaysNeeded: pointsNeeded > 0 ? Math.ceil(pointsNeeded / POINTS_PER_CLEAN_DAY) : 0,
+      daysTowardNext: pointsNeeded > 0 ? Math.ceil(pointsNeeded / POINTS_PER_CLEAN_DAY) : 0,
       progress: cost > 0 ? Math.min(1, bal / cost) : 1,
     };
   }
-
   function isCleanSoFarToday(s, now) {
     const todayStart = startOfDay(now);
     return dessertsInRange(s, todayStart, addDays(todayStart, 1)).length === 0;
   }
-
-  function todaySteps(s, now) {
-    return s.stepsByDay[dayKey(now)] || 0;
-  }
-
+  function todaySteps(s, now) { return s.stepsByDay[dayKey(now)] || 0; }
   function pendingPointsToday(s, now) {
     let pending = isCleanSoFarToday(s, now) ? POINTS_PER_CLEAN_DAY : 0;
     if (s.healthConnected) {
@@ -468,7 +504,6 @@
     }
     return pending;
   }
-
   function overspentDays(s, now) {
     let bal = 0;
     const days = new Set();
@@ -479,8 +514,8 @@
     }
     return days;
   }
-
-  function onPlanStreak(s, now) {
+  /** Days in a row of thoughtful desserting (clean OR fully banked treat). */
+  function rhythmDays(s, now) {
     const overspent = overspentDays(s, now);
     const firstDay = earliestDay(s);
     let streak = 0;
@@ -491,18 +526,11 @@
     }
     return streak;
   }
-
-  function streakMilestoneToday(s, now) {
-    const streak = onPlanStreak(s, now);
-    return STREAK_MILESTONES.has(streak) ? streak : null;
-  }
-
   function daysSinceLastDessert(s, now) {
     if (!s.entries.length) return null;
     const last = Math.max(...s.entries.map((e) => new Date(e.date).getTime()));
     return Math.max(0, daysBetween(new Date(last), now));
   }
-
   function lastSevenDays(s, now) {
     const todayStart = startOfDay(now);
     const buckets = [];
@@ -517,7 +545,6 @@
     }
     return buckets;
   }
-
   function makeEntry(kind, pointsSpent, date) {
     const t = TREATS[kind];
     return {
@@ -529,10 +556,13 @@
     };
   }
 
-  // —— Demo state (persisted locally) ——————————————————————————————————————
+  // —— Demo state ——————————————————————————————————————————————————————————
 
   let now = new Date();
   let state = initialState(now);
+  /** 'recency' | 'economy' — default recency (ratified core). */
+  let mode = 'recency';
+  let flashTimer = null;
 
   function load() {
     try {
@@ -542,36 +572,61 @@
       if (parsed && parsed.state && parsed.now) {
         state = parsed.state;
         now = new Date(parsed.now);
+        if (parsed.mode === 'economy' || parsed.mode === 'recency') mode = parsed.mode;
       }
-    } catch (_) { /* ignore corrupt storage */ }
+    } catch (_) { /* ignore */ }
   }
-
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       now: now.toISOString(),
       state,
+      mode,
     }));
   }
-
   function resetDemo() {
     now = new Date();
     state = initialState(now);
+    mode = 'recency';
     save();
     syncControls();
     render();
   }
 
-  // —— Actions ——————————————————————————————————————————————————————————————
+  function showEnjoyFlash(text) {
+    const el = document.getElementById('enjoy-flash');
+    el.textContent = text;
+    el.classList.add('show');
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  function setMode(next) {
+    mode = next;
+    save();
+    syncControls();
+    render();
+  }
 
   function logDessert(kind) {
-    state.entries = [makeEntry(kind, state.dessertCost, now), ...state.entries];
+    const before = mode === 'economy' ? availability(state, now) : null;
+    const points = mode === 'economy' ? state.dessertCost : 0;
+    state.entries = [makeEntry(kind, points, now), ...state.entries];
     save();
+
+    // Safeguard: celebrate enjoyment — never a red "you spent / can't afford" hit.
+    if (mode === 'economy' && before) {
+      if (before.ready) {
+        showEnjoyFlash(`${TREATS[kind].emoji} Enjoy — that one was fully banked.`);
+      } else {
+        showEnjoyFlash(`${TREATS[kind].emoji} Logged. No guilt — the bank just keeps going.`);
+      }
+    } else {
+      showEnjoyFlash(`${TREATS[kind].emoji} Logged. Nice one.`);
+    }
     render();
   }
 
   function advanceDays(n) {
-    // Carry today's steps into the day being closed, then land at noon next days
-    // so clean-day credits from completed midnights are visible immediately.
     for (let i = 0; i < n; i++) {
       const key = dayKey(now);
       if (state.healthConnected && state.stepsByDay[key] == null) {
@@ -579,8 +634,6 @@
       }
       now = addDays(startOfDay(now), 1);
       now.setHours(12, 0, 0, 0);
-      // Fresh day: clear today's step slider unless we want continuity — keep value
-      // but write it under the new day key only when the user adjusts / advances again.
       if (state.healthConnected) {
         state.stepsByDay[dayKey(now)] = Number(document.getElementById('steps-range').value) || 0;
       }
@@ -591,23 +644,28 @@
 
   function setHealthConnected(on) {
     state.healthConnected = on;
-    if (on) {
-      state.stepsByDay[dayKey(now)] = Number(document.getElementById('steps-range').value) || 0;
-    }
+    if (on) state.stepsByDay[dayKey(now)] = Number(document.getElementById('steps-range').value) || 0;
     save();
     syncControls();
     render();
   }
-
   function setTodaySteps(steps) {
     state.stepsByDay[dayKey(now)] = steps;
     save();
     render();
   }
 
-  // —— Render ——————————————————————————————————————————————————————————————
-
   function syncControls() {
+    const recencyBtn = document.getElementById('mode-recency');
+    const economyBtn = document.getElementById('mode-economy');
+    recencyBtn.setAttribute('aria-pressed', mode === 'recency' ? 'true' : 'false');
+    economyBtn.setAttribute('aria-pressed', mode === 'economy' ? 'true' : 'false');
+    document.getElementById('mode-hint').textContent = mode === 'recency'
+      ? 'Just track when you last had a dessert. No points, no ledger.'
+      : 'Opt-in experiment: quiet days and activity gently refill a treat bank overnight.';
+    document.getElementById('economy-card').hidden = mode !== 'economy';
+    document.getElementById('health-block').hidden = mode !== 'economy';
+
     const health = document.getElementById('health-toggle');
     const panel = document.getElementById('steps-panel');
     const range = document.getElementById('steps-range');
@@ -619,12 +677,9 @@
   }
 
   function render() {
-    const av = availability(state, now);
     const since = daysSinceLastDessert(state, now);
     const clean = isCleanSoFarToday(state, now);
-    const streak = onPlanStreak(state, now);
-    const milestone = streakMilestoneToday(state, now);
-    const pending = pendingPointsToday(state, now);
+    const rhythm = rhythmDays(state, now);
 
     document.getElementById('sim-date').textContent = now.toLocaleString(undefined, {
       weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
@@ -633,36 +688,49 @@
     let recency;
     if (since === null) recency = 'No desserts logged yet.';
     else if (since === 0) recency = 'You had a dessert today.';
-    else recency = `It's been ${since} day${since === 1 ? '' : 's'} since your last dessert.`;
+    else if (since === 1) recency = "It's been 1 day since your last dessert.";
+    else recency = `It's been ${since} days since your last dessert.`;
     document.getElementById('recency').textContent = recency;
     document.getElementById('clean-today').textContent = clean
-      ? 'Clean so far today.'
-      : 'Logged one today.';
+      ? 'Nothing logged today yet.'
+      : 'Logged one today — savor it.';
 
-    const safeEl = document.getElementById('safe');
-    if (av.affordable) {
-      safeEl.textContent = `Yes — you've banked ${av.bankedDesserts} dessert${av.bankedDesserts === 1 ? '' : 's'}.`;
-      safeEl.className = 'big status-good';
-    } else {
-      safeEl.textContent = `Not yet — ${av.pointsNeeded} more points (about ${av.cleanDaysNeeded} clean day${av.cleanDaysNeeded === 1 ? '' : 's'}).`;
-      safeEl.className = 'big status-wait';
+    // Rhythm: balance/enjoyment framing — not "dessert-free days as virtue".
+    document.getElementById('rhythm').textContent = `${rhythm} day${rhythm === 1 ? '' : 's'}`;
+    document.getElementById('rhythm-sub').textContent = mode === 'economy'
+      ? 'A stretch of desserts that fit your bank — or quiet days. Overdoing it just pauses; never debt.'
+      : 'Days you’ve been checking in with yourself about desserts.';
+
+    if (mode === 'economy') {
+      const av = availability(state, now);
+      const pending = pendingPointsToday(state, now);
+      const bankEl = document.getElementById('bank-headline');
+      if (av.ready) {
+        bankEl.textContent = av.bankedTreats === 1
+          ? 'You’ve got a treat banked.'
+          : `You’ve got ${av.bankedTreats} treats banked.`;
+        bankEl.className = 'big good';
+      } else {
+        bankEl.textContent = 'Building toward your next treat.';
+        bankEl.className = 'big';
+      }
+      // No "cost / afford / spend" language; progress without penalty framing.
+      document.getElementById('bank-sub').textContent =
+        `${av.balance} of ${av.cost} toward next · ~${pending} may land tonight`;
+      document.getElementById('meter-fill').style.width = `${Math.round(av.progress * 100)}%`;
+
+      const act = document.getElementById('activity-line');
+      if (state.healthConnected) {
+        const steps = todaySteps(state, now);
+        const pts = activityPoints(steps);
+        act.hidden = false;
+        act.textContent = `Activity today: ${steps.toLocaleString()} steps → +${pts} overnight (cap +${MAX_ACTIVITY_POINTS_PER_DAY}).`;
+      } else {
+        act.hidden = true;
+      }
     }
 
-    document.getElementById('balance-line').textContent =
-      `Balance ${av.balance} / ${av.cost} pts · +${pending} banks tonight`;
-    document.getElementById('meter-fill').style.width = `${Math.round(av.progress * 100)}%`;
-
-    document.getElementById('streak').textContent = String(streak);
-    const ms = document.getElementById('milestone');
-    if (milestone !== null) {
-      ms.hidden = false;
-      ms.textContent = `Milestone: ${milestone} days 🦷`;
-    } else {
-      ms.hidden = true;
-    }
-
-    const week = document.getElementById('week');
-    week.innerHTML = lastSevenDays(state, now).map((d) => `
+    document.getElementById('week').innerHTML = lastSevenDays(state, now).map((d) => `
       <div class="day${d.count ? ' has' : ''}" title="${d.key}">
         <span class="count">${d.count > 0 ? d.count : '·'}</span>
         <span class="label">${d.label.slice(0, 3)}</span>
@@ -678,15 +746,14 @@
         const when = new Date(e.date).toLocaleString(undefined, {
           month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
         });
-        return `<li><span>${e.emoji} ${e.name}</span><span class="muted">−${e.pointsSpent} · ${when}</span></li>`;
+        // History lists the treat — not a debit / penalty amount.
+        return `<li><span>${e.emoji} ${e.name}</span><span class="muted">${when}</span></li>`;
       }).join('');
     }
 
     document.getElementById('steps-label').textContent =
       todaySteps(state, now).toLocaleString();
   }
-
-  // —— Wire UI ————————————————————————————————————————————————————————————
 
   function initChips() {
     const host = document.getElementById('treat-chips');
@@ -701,18 +768,22 @@
     });
   }
 
+  document.getElementById('mode-recency').addEventListener('click', () => setMode('recency'));
+  document.getElementById('mode-economy').addEventListener('click', () => setMode('economy'));
   document.getElementById('btn-advance-1').addEventListener('click', () => advanceDays(1));
   document.getElementById('btn-advance-3').addEventListener('click', () => advanceDays(3));
   document.getElementById('btn-advance-7').addEventListener('click', () => advanceDays(7));
   document.getElementById('btn-reset').addEventListener('click', resetDemo);
-  document.getElementById('health-toggle').addEventListener('change', (e) => {
-    setHealthConnected(e.target.checked);
-  });
+  document.getElementById('health-toggle').addEventListener('change', (e) => setHealthConnected(e.target.checked));
   document.getElementById('steps-range').addEventListener('input', (e) => {
     const steps = Number(e.target.value) || 0;
     document.getElementById('steps-label').textContent = steps.toLocaleString();
     if (state.healthConnected) setTodaySteps(steps);
   });
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => { /* demo-only; ignore */ });
+  }
 
   initChips();
   load();

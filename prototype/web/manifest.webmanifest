@@ -1,0 +1,18 @@
+{
+  "name": "Toofies Demo",
+  "short_name": "Toofies",
+  "description": "Interactive demo of the Toofies dessert recency tracker (points economy optional).",
+  "start_url": "./demo.html",
+  "display": "standalone",
+  "background_color": "#f6f6f4",
+  "theme_color": "#f6f6f4",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

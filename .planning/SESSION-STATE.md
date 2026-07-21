@@ -1,65 +1,52 @@
 # Toofies — Session State / Handoff
 
-**Updated:** 2026-07-13
+**Updated:** 2026-07-21
 
 Read this first in a new session, alongside `CLAUDE.md` and `.planning/`.
 
 ## Where the product stands (ratified)
 
-- **v1 = a careful-consumption + recency dessert tracker.** On-device only, no
-  accounts, no paywall. See `DECISION-REGISTER.md` → "🟢 RATIFIED 2026-07-13".
-- Points economy = an **opt-in experiment to validate**, not the core. Ship a
-  "just track recency, no points" mode. Behavioral safeguards are LOCKED
+- **D27 · Stack = Expo / React Native (TypeScript)** under `toofies/`. Cloud-runnable
+  via `npx expo start --web`. Native SwiftUI at repo root is reference only
+  (macOS/Xcode — cannot build in the Linux cloud).
+- **D7–D9 · Points economy = opt-in experiment**, not the foundation. Ship a
+  “just track recency, no points” mode. Behavioral safeguards are LOCKED
   (`PRODUCT.md`): no celebrating abstinence, no cost/afford/spend language, no
-  score-drop-as-penalty, don't frame steps as paying for dessert, ED-resource
+  score-drop-as-penalty, don’t frame steps as paying for dessert, ED-resource
   signposting. An ED-specialist review is a required gate before any earn/spend
   food mechanic ships (`ED-REVIEW-BRIEF.md`).
-- Social sharing + dessert-place discovery + national directory = later layers
-  (`VISION.md`), all still 🔴 OPEN. Disney was only an example, not a strategy
-  (R7 closed).
-- Design (colors/type/mascot/layout) = still 🔴 OPEN. A draft onboarding
-  prototype exists at `prototype/onboarding/index.html` (patisserie palette +
-  "Toofie" tooth character) — a proposal to react to, NOT decided.
+- **D4 · 🟢 RATIFIED 2026-07-15 — accounts + social in v1** (collects data for
+  sharing, sync, analytics, marketing). This **supersedes** the 2026-07-13
+  on-device / “Data Not Collected” posture. Spawns still-OPEN: **D30** backend,
+  **D31** auth, **D32** moderation, **D33** minimum social v1 scope. Until those
+  are decided, do **not** invent a backend.
+- **D28 · Framer/PWA delivery 🔴 OPEN.** Rec (🟡): Framer/Mobbin/Dribbble for
+  *design*; keep Expo/RN as the build target. Do not rebuild the app as a Framer
+  PWA until the founder decides. A static HTML demo for walkthroughs is fine.
+- Design (D11–D15) = still 🔴 OPEN. Draft onboarding at
+  `prototype/onboarding/index.html` and moodboard refs = proposals, not decisions.
 
-## The current build vs ratified direction
+## Demo available now
 
-The SwiftUI app (`Toofies/`) still leads with the economy and celebrates
-"days on plan" (dessert-free days) — this **deviates** from the ratified
-direction and is a tracked **reshape** item. Do not treat the built app as
-final. It has never been compiled (no Mac/Xcode in the cloud sandbox).
+- **`prototype/web/demo.html`** — interactive HTML demo for stakeholder
+  walkthroughs. Defaults to **recency-only**; points economy behind an opt-in
+  toggle; copy follows LOCKED safeguards; `+N days` controls for midnight
+  banking; optional activity simulation; light PWA install
+  (`manifest.webmanifest` + `sw.js`). Placeholder visuals only.
+- Older weekly-budget prototype: `prototype/web/index.html` (pre-points-economy).
+- Expo scaffold: `toofies/` (economy ported + tested; UI still unstyled scaffolding;
+  still leads with economy copy — tracked reshape).
 
-## Immediate next task (where we stopped)
+## Highest-value next steps that need the founder
 
-**Pulling Strava reference screens from Mobbin for the activity/health UI.**
-- Founder set network access to **Full**. Simple requests now work (`curl`
-  reaches mobbin.com = 200). BUT **all browser pixel-capture paths are blocked
-  by this environment's TLS-terminating proxy**, verified 2026-07-13:
-  - Browserbase MCP (`navigate`/`extract`) works (routes via Anthropic), but
-    has NO screenshot tool, and `extract` only reads DOM text — Mobbin screens
-    are images, so it returns generic page text, not the Strava designs.
-  - Playwright→Browserbase CDP bridge: the proxy won't carry the WebSocket
-    (ECONNRESET); direct connect is egress-blocked.
-  - Local Chromium in the sandbox via the proxy: `ERR_CONNECTION_RESET` — the
-    proxy carries curl but resets browser traffic.
-  - Plus Mobbin **login-gates** the screens; a signed-out browser sees a
-    generic view regardless.
-- **Conclusion: capturing Mobbin/Strava pixels is NOT possible from this
-  cloud environment.** Reliable path = founder screenshots on their Mac (where
-  they're logged into Mobbin) and drops the images into chat for analysis.
-- We DO already have Strava's activity-screen *patterns* from public sources
-  (see the chat / research): hero + big headline metrics, recessive secondary
-  stat grid, splits, pace-over-elevation chart, 3-metric Lock Screen, and the
-  "don't overcrowd" lesson. The activity-screen design can proceed on those
-  without the Mobbin pixels.
-
-## Highest-value next steps (only the founder can do)
-
-1. Run a few Wave 0 interviews (`WAVE-0-INTERVIEW-KIT.md`).
-2. Find an ED specialist to review the mechanic (`ED-REVIEW-BRIEF.md`).
-3. First Xcode build on a Mac (the app has never compiled).
+1. Decide **D28** (keep Expo vs Framer-PWA path) and **D30–D33** (backend/auth/
+   moderation/social-v1 scope) if accounts+social v1 stays.
+2. Wave 0 interviews (`WAVE-0-INTERVIEW-KIT.md`).
+3. ED specialist review (`ED-REVIEW-BRIEF.md`).
+4. First real device pass (Expo Go on a phone, or Xcode for the archived SwiftUI).
 
 ## Tooling notes
 
-GSD installed in-repo (`.claude/`); plugin marketplaces + Playwright MCP in
-`.claude/settings.json` / `.mcp.json`. Cross-model code review via Codex is a
-required gate but runs locally (no Codex in the sandbox).
+GSD installed in-repo (`.claude/`). Cross-model code review via Codex is a
+required gate but runs locally (no Codex in the cloud sandbox). See `AGENTS.md`
+when present for Cursor Cloud run notes.
