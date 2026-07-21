@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import {
+  IconBell,
+  IconBuddies,
+  IconCamera,
+  IconHeart,
+  IconMoon,
+  IconShield,
+  IconSpark,
+  IconWidget,
+} from '../components/NavIcons';
+import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
 import { getLogMeta } from '../lib/logMeta';
 import { loadProfile } from '../lib/profile';
@@ -17,111 +28,118 @@ function formatWhen(iso: string): string {
   });
 }
 
+const SHORTCUTS = [
+  { to: '/buddies', label: 'Buddies', blurb: 'Walks & cheers', Icon: IconBuddies, tone: 'matcha' },
+  { to: '/moments', label: 'Moments', blurb: 'Dessert share', Icon: IconCamera, tone: 'blossom' },
+  { to: '/recap', label: 'Day recap', blurb: 'Gentle check-in', Icon: IconMoon, tone: 'ink' },
+  { to: '/notifications', label: 'Reminders', blurb: 'Soft nudges', Icon: IconBell, tone: 'lime' },
+] as const;
+
 export function YouScreen() {
   const { state, setDessertCost, reset, removeEntry } = useStore();
   const { show } = useToast();
   const now = new Date();
   const t = useToofies(now);
-  const recent = [...state.entries].reverse().slice(0, 12);
+  const recent = [...state.entries].reverse().slice(0, 8);
   const [prefs, setPrefs] = useState(loadUiPrefs);
+  const [showMore, setShowMore] = useState(false);
   const profile = loadProfile();
   const place = profile.locationLabel || profile.city;
-  const name = profile.displayName || prefs.displayName || 'Friend';
+  const name = profile.displayName || prefs.displayName || 'Dessert friend';
   const initial = name.slice(0, 1).toUpperCase();
+  const handle = profile.handle ? `@${profile.handle}` : 'tap to personalize';
+  const ready = t.availability.bankedDesserts > 0;
 
   return (
     <>
-      <div className="brand-lockup">
-        <div className="brand-left">
-          <h1 className="screen-title">You</h1>
-          <p className="lede">
-            {prefs.signedInMock || profile.displayName
-              ? `${name}${place ? ` · ${place}` : ''}`
-              : 'Local preview · edit your profile anytime'}
+      <section className="you-hero">
+        <div className="you-hero-glow" aria-hidden />
+        <div className="you-hero-top">
+          <Link to="/profile" className="you-avatar-wrap" aria-label="Edit profile photo">
+            <span className="you-avatar">
+              {profile.avatarDataUrl ? (
+                <img src={profile.avatarDataUrl} alt="" />
+              ) : (
+                <span>{initial}</span>
+              )}
+            </span>
+            <span className="you-avatar-edit">Edit</span>
+          </Link>
+          <ToofieSprite anim={ready ? 'ready' : 'wave'} size={88} className="you-hero-toofie" />
+        </div>
+        <div className="you-hero-copy">
+          <p className="you-kicker">Your dessert passport</p>
+          <h1 className="you-name">{name}</h1>
+          <p className="you-meta">
+            <span>{handle}</span>
+            {place ? <span className="you-place">{place}</span> : null}
           </p>
-        </div>
-        <Link to="/profile" className="you-pfp" aria-label="Edit profile">
-          {profile.avatarDataUrl ? (
-            <img src={profile.avatarDataUrl} alt="" />
-          ) : (
-            <span>{initial}</span>
+          {profile.bio ? <p className="you-bio">{profile.bio}</p> : (
+            <p className="you-bio muted">Add a tiny bio — guilt-free vibes only.</p>
           )}
-        </Link>
-      </div>
-
-      <section className="card">
-        <p className="eyebrow">Snapshot</p>
-        <p className="title" style={{ fontSize: 18 }}>
-          {t.onPlanStreak} days on plan · {t.availability.balance} pts banked
-        </p>
-        <p className="muted">
-          {t.daysSinceLastDessert === null
-            ? 'No desserts logged yet.'
-            : t.daysSinceLastDessert === 0
-              ? 'Last dessert: today'
-              : `Last dessert: ${t.daysSinceLastDessert} day${t.daysSinceLastDessert === 1 ? '' : 's'} ago`}
-        </p>
-      </section>
-
-      <section className="card">
-        <p className="eyebrow">Account & sync</p>
-        <div className="link-rows">
-          <Link to="/profile">Edit profile (photo, location, bio)</Link>
-          <Link to="/auth">{prefs.signedInMock ? 'Account (mock)' : 'Sign in / create account'}</Link>
-          <Link to="/recap">Day recap / evening check-in</Link>
-          <Link to="/buddies">Buddies & dessert walks</Link>
-          <Link to="/moments">Moments feed</Link>
-          <Link to="/notifications">Reminders</Link>
-          <Link to="/widget">Home Screen widget preview</Link>
-          <Link to="/privacy">Privacy & delete data</Link>
-          <Link to="/resources">Care & ED resources</Link>
-          <Link to="/onboarding">Replay onboarding</Link>
+          <Link to="/profile" className="you-edit-btn">
+            Make it yours →
+          </Link>
         </div>
-        {prefs.signedInMock && (
-          <button
-            type="button"
-            className="ghost-btn"
-            onClick={() => setPrefs(saveUiPrefs({ signedInMock: false, displayName: '' }))}
-          >
-            Sign out (mock)
-          </button>
-        )}
       </section>
 
-      <section className="card">
-        <p className="eyebrow">Points per dessert</p>
-        <div className="settings-row">
-          <label htmlFor="cost">Threshold (placeholder)</label>
-          <strong>{state.dessertCost}</strong>
+      <section className="you-stats" aria-label="Your rhythm">
+        <div className="you-stat">
+          <strong>{t.onPlanStreak}</strong>
+          <span>days on plan</span>
         </div>
-        <input
-          id="cost"
-          type="range"
-          min={10}
-          max={100}
-          step={5}
-          value={state.dessertCost}
-          onChange={(e) => setDessertCost(Number(e.target.value))}
-          aria-valuetext={`${state.dessertCost} points`}
-          style={{ width: '100%' }}
-        />
-        <label className="toggle-row" style={{ marginTop: 10 }}>
-          <span>
-            <strong>Points economy</strong>
-            <span className="muted">Opt-in experiment (D7–D9).</span>
-          </span>
-          <input
-            type="checkbox"
-            checked={prefs.economyOptIn}
-            onChange={() => setPrefs(saveUiPrefs({ economyOptIn: !prefs.economyOptIn }))}
-          />
-        </label>
+        <div className="you-stat">
+          <strong>{t.availability.balance}</strong>
+          <span>pts banked</span>
+        </div>
+        <div className="you-stat">
+          <strong>{state.entries.length}</strong>
+          <span>treats logged</span>
+        </div>
       </section>
 
-      <section className="card">
-        <p className="eyebrow">Recent desserts</p>
+      <section className="you-week card" aria-label="This week">
+        <div className="you-week-head">
+          <p className="eyebrow">This week</p>
+          <IconSpark size={18} />
+        </div>
+        <div className="streak-row">
+          {t.week.map((d) => (
+            <div
+              key={d.key}
+              className={`streak-day${d.count > 0 ? ' logged' : ' clean'}${d.label === 'Today' ? ' today' : ''}`}
+            >
+              <div className="dot">{d.count > 0 ? d.count : '·'}</div>
+              <span className="lbl">{d.label.slice(0, 3)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section aria-label="Shortcuts">
+        <p className="eyebrow you-section-label">Jump in</p>
+        <div className="you-tiles">
+          {SHORTCUTS.map(({ to, label, blurb, Icon, tone }) => (
+            <Link key={to} to={to} className={`you-tile tone-${tone}`}>
+              <Icon size={22} />
+              <div>
+                <strong>{label}</strong>
+                <span>{blurb}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="card you-history">
+        <div className="you-week-head">
+          <p className="eyebrow">Recent treats</p>
+          <Link to="/log" className="you-mini-link">
+            Log one
+          </Link>
+        </div>
         {recent.length === 0 ? (
-          <p className="empty">Nothing logged yet. When you enjoy one, it’ll show up here.</p>
+          <p className="empty">Nothing yet — your first treat story starts on Log.</p>
         ) : (
           <ul className="history-list">
             {recent.map((e) => {
@@ -153,21 +171,84 @@ export function YouScreen() {
         )}
       </section>
 
-      <section className="card">
-        <p className="eyebrow">Data</p>
+      <section className="you-more">
         <button
           type="button"
-          className="ghost-btn"
-          onClick={() => {
-            reset();
-            show('Local data cleared', { tone: 'soft', anim: 'sit', ms: 1800 });
-          }}
+          className="you-more-toggle"
+          onClick={() => setShowMore((v) => !v)}
+          aria-expanded={showMore}
         >
-          Reset local preview data
+          {showMore ? 'Hide extras' : 'Settings & extras'}
         </button>
-        <p className="muted" style={{ marginTop: 8 }}>
-          Screens beyond Home/Log/You are UI shells — no sync or push yet.
-        </p>
+        {showMore && (
+          <div className="you-more-panel">
+            <div className="you-extra-links">
+              <Link to="/widget">
+                <IconWidget size={18} /> Widget preview
+              </Link>
+              <Link to="/privacy">
+                <IconShield size={18} /> Privacy
+              </Link>
+              <Link to="/resources">
+                <IconHeart size={18} /> Care resources
+              </Link>
+              <Link to="/auth">{prefs.signedInMock ? 'Account' : 'Sign in'}</Link>
+              <Link to="/onboarding">Replay intro</Link>
+            </div>
+
+            <div className="card" style={{ marginTop: 12 }}>
+              <p className="eyebrow">Points per dessert</p>
+              <div className="settings-row">
+                <label htmlFor="cost">Threshold (placeholder)</label>
+                <strong>{state.dessertCost}</strong>
+              </div>
+              <input
+                id="cost"
+                type="range"
+                min={10}
+                max={100}
+                step={5}
+                value={state.dessertCost}
+                onChange={(e) => setDessertCost(Number(e.target.value))}
+                aria-valuetext={`${state.dessertCost} points`}
+                style={{ width: '100%' }}
+              />
+              <label className="toggle-row" style={{ marginTop: 10 }}>
+                <span>
+                  <strong>Points economy</strong>
+                  <span className="muted">Opt-in experiment (D7–D9).</span>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={prefs.economyOptIn}
+                  onChange={() => setPrefs(saveUiPrefs({ economyOptIn: !prefs.economyOptIn }))}
+                />
+              </label>
+            </div>
+
+            <div className="you-danger-row">
+              {prefs.signedInMock && (
+                <button
+                  type="button"
+                  className="ghost-btn"
+                  onClick={() => setPrefs(saveUiPrefs({ signedInMock: false, displayName: '' }))}
+                >
+                  Sign out (mock)
+                </button>
+              )}
+              <button
+                type="button"
+                className="ghost-btn"
+                onClick={() => {
+                  reset();
+                  show('Local data cleared', { tone: 'soft', anim: 'sit', ms: 1800 });
+                }}
+              >
+                Reset preview data
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </>
   );

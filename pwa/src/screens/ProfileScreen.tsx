@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { IconCamera, IconPin } from '../components/NavIcons';
 import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
 import { fileToDataUrl, loadProfile, saveProfile, type UserProfile } from '../lib/profile';
@@ -20,7 +21,7 @@ export function ProfileScreen() {
       const avatarDataUrl = await fileToDataUrl(file, 480);
       const next = saveProfile({ avatarDataUrl });
       setProfile(next);
-      show('Photo updated (on this device)', { tone: 'good', anim: 'wave', ms: 1800 });
+      show('Looking good', { tone: 'good', anim: 'wave', ms: 1800 });
     } catch {
       show('Couldn’t read that photo', { tone: 'soft', anim: 'shrug', ms: 1800 });
     } finally {
@@ -36,38 +37,36 @@ export function ProfileScreen() {
     const next = saveProfile(patched);
     setProfile(next);
     if (next.displayName) saveUiPrefs({ displayName: next.displayName, signedInMock: true });
-    show('Profile saved locally', { tone: 'good', anim: 'proud', ms: 2200 });
+    show('Passport updated', { tone: 'good', anim: 'proud', ms: 2200 });
     setJustSaved(true);
     window.setTimeout(() => setJustSaved(false), 2200);
   }
 
   const initial = (profile.displayName || 'T').slice(0, 1).toUpperCase();
+  const previewName = profile.displayName.trim() || 'Your name';
+  const previewHandle = profile.handle ? `@${profile.handle}` : '@your_handle';
+  const previewPlace = profile.locationLabel || profile.city;
 
   return (
     <>
-      <p className="ui-only-chip">UI only · stored on-device · not synced yet</p>
-      <div className="brand-lockup">
-        <div className="brand-left">
-          <h1 className="screen-title">Profile</h1>
-          <p className="lede">Yes — you can update your photo, name, location, and bio here.</p>
-        </div>
-        <ToofieSprite anim="proud" size={72} />
-      </div>
-
-      <section className="card profile-hero-card">
+      <section className="profile-stage">
+        <div className="profile-stage-bg" aria-hidden />
+        <ToofieSprite anim="proud" size={64} className="profile-stage-toofie" />
         <button
           type="button"
-          className="pfp-btn"
+          className="profile-avatar-btn"
           onClick={() => fileRef.current?.click()}
           disabled={busy}
           aria-label="Change profile photo"
         >
           {profile.avatarDataUrl ? (
-            <img src={profile.avatarDataUrl} alt="" className="pfp-img" />
+            <img src={profile.avatarDataUrl} alt="" />
           ) : (
-            <span className="pfp-fallback">{initial}</span>
+            <span>{initial}</span>
           )}
-          <span className="pfp-edit">Edit</span>
+          <span className="profile-avatar-cam">
+            <IconCamera size={16} />
+          </span>
         </button>
         <input
           ref={fileRef}
@@ -76,18 +75,16 @@ export function ProfileScreen() {
           hidden
           onChange={(e) => void onAvatar(e.target.files?.[0] ?? null)}
         />
-        <div>
-          <p className="title" style={{ fontSize: 18, margin: 0 }}>
-            {profile.displayName || 'Your name'}
-          </p>
-          <p className="muted" style={{ margin: 0 }}>
-            {profile.handle ? `@${profile.handle}` : 'Add a handle'}
-            {profile.locationLabel ? ` · ${profile.locationLabel}` : ''}
-          </p>
-        </div>
+        <h1 className="profile-stage-name">{previewName}</h1>
+        <p className="profile-stage-sub">
+          {previewHandle}
+          {previewPlace ? ` · ${previewPlace}` : ''}
+        </p>
+        <p className="profile-stage-hint">On this device only — make it cute.</p>
       </section>
 
-      <section className="card stack-form">
+      <section className="card profile-form">
+        <p className="eyebrow">The fun bits</p>
         <label className="field">
           <span>Display name</span>
           <input
@@ -108,12 +105,20 @@ export function ProfileScreen() {
         </label>
         <label className="field">
           <span>Bio</span>
-          <input
+          <textarea
+            className="profile-bio"
+            rows={2}
             value={profile.bio}
             onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-            placeholder="Dessert walker. Guilt-free."
+            placeholder="Dessert walker. Soft accountability. Zero guilt."
           />
         </label>
+      </section>
+
+      <section className="card profile-form">
+        <p className="eyebrow">
+          <IconPin size={14} /> Where you’re at
+        </p>
         <label className="field">
           <span>City / area</span>
           <input
@@ -123,7 +128,7 @@ export function ProfileScreen() {
           />
         </label>
         <label className="field">
-          <span>Location label (shown on Moments)</span>
+          <span>Shown on Moments</span>
           <input
             value={profile.locationLabel}
             onChange={(e) => setProfile({ ...profile, locationLabel: e.target.value })}
@@ -132,8 +137,8 @@ export function ProfileScreen() {
         </label>
         <label className="toggle-row">
           <span>
-            <strong>Approximate location only</strong>
-            <span className="muted">Never share a precise pin by default.</span>
+            <strong>Keep it approximate</strong>
+            <span className="muted">A vibe, not a pin drop.</span>
           </span>
           <input
             type="checkbox"
@@ -141,27 +146,29 @@ export function ProfileScreen() {
             onChange={(e) => setProfile({ ...profile, locationApprox: e.target.checked })}
           />
         </label>
-        <button type="button" className="primary-btn" onClick={save} disabled={busy}>
-          {justSaved ? 'Saved ✓' : 'Save profile'}
-        </button>
-        {profile.avatarDataUrl && (
-          <button
-            type="button"
-            className="ghost-btn"
-            onClick={() => {
-              const next = saveProfile({ avatarDataUrl: '' });
-              setProfile(next);
-              show('Photo removed', { tone: 'soft', anim: 'sit', ms: 1500 });
-            }}
-          >
-            Remove photo
-          </button>
-        )}
       </section>
 
+      <button type="button" className="primary-btn blossom profile-save" onClick={save} disabled={busy}>
+        {justSaved ? 'Saved ✓' : 'Save my vibe'}
+      </button>
+      {profile.avatarDataUrl && (
+        <button
+          type="button"
+          className="ghost-btn"
+          style={{ width: '100%', marginTop: 8 }}
+          onClick={() => {
+            const next = saveProfile({ avatarDataUrl: '' });
+            setProfile(next);
+            show('Photo removed', { tone: 'soft', anim: 'sit', ms: 1500 });
+          }}
+        >
+          Remove photo
+        </button>
+      )}
+
       <p className="fineprint">
-        Location here is a <strong>label you type</strong> — not live GPS. Live location sharing is a
-        separate, high-sensitivity decision (D23). <Link to="/privacy">Privacy</Link>
+        Location is a label you type — not live GPS.{' '}
+        <Link to="/privacy">Privacy</Link>
       </p>
     </>
   );

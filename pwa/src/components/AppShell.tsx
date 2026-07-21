@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
+import { IconBuddies, IconHome, IconLog, IconMove, IconYou } from './NavIcons';
+
 const HIDE_NAV = new Set(['/onboarding', '/auth']);
 
 export function AppShell({ children, path }: { children: ReactNode; path: string }) {
@@ -12,15 +14,11 @@ export function AppShell({ children, path }: { children: ReactNode; path: string
       {!hideNav && (
         <nav className="bottom-nav bottom-nav-5" aria-label="Primary">
           <NavLink to="/" end className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-            <span className="icon" aria-hidden>
-              ⌂
-            </span>
+            <IconHome className="nav-ico" />
             Home
           </NavLink>
           <NavLink to="/move" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-            <span className="icon" aria-hidden>
-              ✦
-            </span>
+            <IconMove className="nav-ico" />
             Move
           </NavLink>
           <NavLink
@@ -28,7 +26,7 @@ export function AppShell({ children, path }: { children: ReactNode; path: string
             className={({ isActive }) => `nav-item center${isActive ? ' active' : ''}`}
           >
             <span className="fab" aria-hidden>
-              +
+              <IconLog size={26} />
             </span>
             Log
           </NavLink>
@@ -36,15 +34,11 @@ export function AppShell({ children, path }: { children: ReactNode; path: string
             to="/buddies"
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
           >
-            <span className="icon" aria-hidden>
-              ◇
-            </span>
+            <IconBuddies className="nav-ico" />
             Buddies
           </NavLink>
           <NavLink to="/you" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
-            <span className="icon" aria-hidden>
-              ●
-            </span>
+            <IconYou className="nav-ico" />
             You
           </NavLink>
         </nav>
