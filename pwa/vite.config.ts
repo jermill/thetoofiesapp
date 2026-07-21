@@ -12,6 +12,7 @@ export default defineConfig({
         'icons/icon-192.png',
         'icons/icon-512.png',
         'mascot/toofie-splash.png',
+        'mascot/toofie-sprite-walk-cycle.png',
       ],
       manifest: {
         name: 'Toofies',
@@ -21,7 +22,7 @@ export default defineConfig({
         background_color: '#fefae7',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/?v=10',
+        start_url: '/?v=11',
         scope: '/',
         icons: [
           {
@@ -43,7 +44,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        cacheId: 'toofies-v10',
+        cacheId: 'toofies-v11',
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
