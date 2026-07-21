@@ -38,12 +38,13 @@ export function IconHome(props: IconProps) {
 export function IconMove(props: IconProps) {
   return (
     <Svg {...props}>
-      <circle cx="8" cy="5.5" r="2" />
-      <path d="M10.2 8.2 8.4 12.5l2.8 1.6-1.2 5.4" />
-      <path d="M8.4 12.5 5.2 14.2" />
-      <circle cx="16.2" cy="5.8" r="2" />
-      <path d="M14.6 8.6 16.5 12l-2.4 2 1.6 4.8" />
-      <path d="M16.5 12 19.4 13.4" />
+      {/* footsteps */}
+      <ellipse cx="8.2" cy="7.2" rx="2.4" ry="3.2" transform="rotate(-18 8.2 7.2)" />
+      <circle cx="7.1" cy="12.2" r="1.05" />
+      <circle cx="9.5" cy="12.6" r="0.85" />
+      <ellipse cx="15.6" cy="13.4" rx="2.4" ry="3.2" transform="rotate(16 15.6 13.4)" />
+      <circle cx="14.4" cy="18.3" r="1.05" />
+      <circle cx="16.9" cy="18.6" r="0.85" />
     </Svg>
   );
 }
