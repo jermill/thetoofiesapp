@@ -1,29 +1,46 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { TREAT_KINDS, TREATS, type TreatKind } from '../lib/treats';
+import { ToofieSprite } from '../components/ToofieSprite';
 import { useStore } from '../lib/store';
+import { TREAT_KINDS, TREATS, type TreatKind } from '../lib/treats';
 
 export function LogScreen() {
   const { logDessert, ready } = useStore();
   const navigate = useNavigate();
   const [toast, setToast] = useState<string | null>(null);
+  const [phase, setPhase] = useState<'pick' | 'log_dessert' | 'logged'>('pick');
 
   function onLog(kind: TreatKind) {
-    if (!ready) return;
+    if (!ready || phase !== 'pick') return;
     logDessert(kind);
     const name = TREATS[kind].name;
     setToast(`${name} logged — enjoy it.`);
-    window.setTimeout(() => {
-      setToast(null);
-      navigate('/');
-    }, 1100);
+    setPhase('log_dessert');
   }
 
   return (
     <>
-      <h1 className="screen-title">Log it</h1>
-      <p className="lede">Pick what you enjoyed. Honest logging is always welcome.</p>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div>
+          <h1 className="screen-title">Log it</h1>
+          <p className="lede">Pick what you enjoyed. Honest logging is always welcome.</p>
+        </div>
+        <ToofieSprite
+          anim={phase === 'pick' ? 'munch' : phase === 'log_dessert' ? 'log_dessert' : 'logged'}
+          size={92}
+          alt="Toofie reacting to your log"
+          onComplete={() => {
+            if (phase === 'log_dessert') {
+              setPhase('logged');
+              window.setTimeout(() => {
+                setToast(null);
+                navigate('/');
+              }, 700);
+            }
+          }}
+        />
+      </div>
 
       <section className="card" style={{ marginTop: 8 }}>
         <p className="eyebrow">What did you have?</p>
@@ -34,6 +51,7 @@ export function LogScreen() {
               type="button"
               className="treat-btn"
               onClick={() => onLog(kind)}
+              disabled={phase !== 'pick'}
               aria-label={`Log ${TREATS[kind].name}`}
             >
               <span className="glyph" aria-hidden>

@@ -1,0 +1,362 @@
+export const atlas = {
+  "version": 1,
+  "character": "toofie",
+  "look": {
+    "body": "walking molar tooth",
+    "hair": "chocolate frosting with jimmies",
+    "glasses": "black frames",
+    "accessory": "bright hot-pink fanny pack",
+    "decision": "D14"
+  },
+  "sheets": {
+    "actions": {
+      "src": "/mascot/toofie-sprite-sheet-actions.png",
+      "cols": 4,
+      "rows": 3,
+      "frames": [
+        "idle",
+        "walk_l",
+        "walk_r",
+        "wave",
+        "celebrate",
+        "cheer",
+        "cookie",
+        "thumbs_up",
+        "peek",
+        "sit",
+        "dance",
+        "wink"
+      ]
+    },
+    "moods": {
+      "src": "/mascot/toofie-sprite-sheet-moods.png",
+      "cols": 4,
+      "rows": 3,
+      "frames": [
+        "welcome",
+        "point",
+        "shrug",
+        "think",
+        "ready",
+        "ice_cream",
+        "cake",
+        "munch",
+        "heart_eyes",
+        "proud",
+        "sleepy",
+        "stretch"
+      ]
+    },
+    "app": {
+      "src": "/mascot/toofie-sprite-sheet-app.png",
+      "cols": 4,
+      "rows": 3,
+      "frames": [
+        "empty",
+        "logging",
+        "logged",
+        "banked",
+        "almost",
+        "success",
+        "not_yet",
+        "high_five",
+        "hike",
+        "midnight",
+        "surprise",
+        "peace"
+      ]
+    },
+    "walk_cycle": {
+      "src": "/mascot/toofie-sprite-walk-cycle.png",
+      "cols": 8,
+      "rows": 1,
+      "frames": [
+        "w0",
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "w7"
+      ]
+    },
+    "celebrate_cycle": {
+      "src": "/mascot/toofie-sprite-celebrate-cycle.png",
+      "cols": 6,
+      "rows": 1,
+      "frames": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5"
+      ]
+    },
+    "milestone_cycle": {
+      "src": "/mascot/toofie-sprite-milestone-cycle.png",
+      "cols": 8,
+      "rows": 1,
+      "frames": [
+        "m0",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7"
+      ]
+    },
+    "log_cycle": {
+      "src": "/mascot/toofie-sprite-log-cycle.png",
+      "cols": 6,
+      "rows": 1,
+      "frames": [
+        "l0",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5"
+      ]
+    }
+  },
+  "animations": {
+    "idle": {
+      "sheet": "actions",
+      "frames": [
+        "idle"
+      ],
+      "fps": 1,
+      "loop": true
+    },
+    "wave": {
+      "sheet": "actions",
+      "frames": [
+        "wave",
+        "wink",
+        "wave",
+        "thumbs_up"
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "walk": {
+      "sheet": "walk_cycle",
+      "frames": [
+        "w0",
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "w7"
+      ],
+      "fps": 10,
+      "loop": true
+    },
+    "celebrate": {
+      "sheet": "celebrate_cycle",
+      "frames": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5"
+      ],
+      "fps": 8,
+      "loop": true
+    },
+    "milestone": {
+      "sheet": "milestone_cycle",
+      "frames": [
+        "m0",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5",
+        "m6",
+        "m7"
+      ],
+      "fps": 9,
+      "loop": false
+    },
+    "log_dessert": {
+      "sheet": "log_cycle",
+      "frames": [
+        "l0",
+        "l1",
+        "l2",
+        "l3",
+        "l4",
+        "l5"
+      ],
+      "fps": 7,
+      "loop": false
+    },
+    "ready": {
+      "sheet": "moods",
+      "frames": [
+        "ready",
+        "heart_eyes",
+        "ready",
+        "point"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "almost": {
+      "sheet": "app",
+      "frames": [
+        "almost",
+        "logging",
+        "almost"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "not_yet": {
+      "sheet": "app",
+      "frames": [
+        "not_yet",
+        "almost",
+        "not_yet"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "empty": {
+      "sheet": "app",
+      "frames": [
+        "empty",
+        "peace",
+        "empty"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "welcome": {
+      "sheet": "moods",
+      "frames": [
+        "welcome",
+        "stretch",
+        "welcome"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "logged": {
+      "sheet": "app",
+      "frames": [
+        "logged",
+        "success",
+        "high_five",
+        "banked"
+      ],
+      "fps": 3,
+      "loop": false
+    },
+    "proud": {
+      "sheet": "moods",
+      "frames": [
+        "proud",
+        "stretch",
+        "proud"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "sleepy": {
+      "sheet": "moods",
+      "frames": [
+        "sleepy",
+        "think",
+        "sleepy"
+      ],
+      "fps": 1,
+      "loop": true
+    },
+    "banked": {
+      "sheet": "app",
+      "frames": [
+        "banked",
+        "midnight",
+        "success"
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "hike": {
+      "sheet": "app",
+      "frames": [
+        "hike",
+        "surprise",
+        "hike"
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "munch": {
+      "sheet": "moods",
+      "frames": [
+        "munch",
+        "ice_cream",
+        "cake",
+        "heart_eyes"
+      ],
+      "fps": 3,
+      "loop": true
+    },
+    "cheer": {
+      "sheet": "actions",
+      "frames": [
+        "cheer",
+        "celebrate",
+        "dance",
+        "wink"
+      ],
+      "fps": 4,
+      "loop": true
+    },
+    "think": {
+      "sheet": "moods",
+      "frames": [
+        "think",
+        "shrug",
+        "think"
+      ],
+      "fps": 2,
+      "loop": true
+    },
+    "sit": {
+      "sheet": "actions",
+      "frames": [
+        "sit",
+        "peek",
+        "sit"
+      ],
+      "fps": 2,
+      "loop": true
+    }
+  },
+  "appBindings": {
+    "home.default": "idle",
+    "home.ready": "ready",
+    "home.almost": "almost",
+    "home.empty": "empty",
+    "home.milestone": "milestone",
+    "home.proud": "proud",
+    "log.playing": "log_dessert",
+    "log.done": "logged",
+    "activity.steps": "hike",
+    "evening.checkin": "sleepy",
+    "points.banked": "banked"
+  }
+} as const;
+export type Atlas = typeof atlas;
+export type ToofieAnimName = keyof typeof atlas.animations;

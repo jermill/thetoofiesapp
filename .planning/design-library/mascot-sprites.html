@@ -2,174 +2,108 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Toofie — action sprite sheet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Toofie — sprite atlas</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --paper: #fefae7; --ink: #121212; --soft: #4a4a44; --matcha: #03563e;
-    --blossom: #ffbad8; --lime: #c6ff3a; --surface: #fffdf5; --line: rgba(18,18,18,.12);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: Outfit, system-ui, sans-serif; color: var(--ink);
-    background:
-      radial-gradient(700px 300px at 8% -8%, color-mix(in oklab, var(--blossom) 26%, transparent), transparent 55%),
-      var(--paper);
-  }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 80px; }
-  .banner {
-    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em;
-    text-transform: uppercase; background: var(--lime); color: var(--ink);
-    border-radius: 999px; padding: 7px 12px; margin-bottom: 12px;
-  }
-  h1 {
-    font-family: Anton, sans-serif; text-transform: uppercase;
-    font-size: clamp(32px, 7vw, 48px); line-height: .95; margin: 0 0 8px;
-  }
-  .lede { color: var(--soft); max-width: 58ch; margin: 0 0 22px; }
-  section {
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 18px; padding: 14px; margin-bottom: 16px;
-  }
-  section h2 {
-    margin: 0 0 10px; font-size: 13px; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--soft);
-  }
-  .sheet {
-    width: 100%; border-radius: 12px; display: block;
-    border: 1px solid var(--line); background: #e8efe3;
-  }
-  .actions {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px; margin-top: 12px;
-  }
-  .action {
-    border: 1px solid var(--line); border-radius: 12px; padding: 8px;
-    background: var(--paper); text-align: center;
-  }
-  .action .label { font-size: 11px; font-weight: 700; margin-top: 6px; color: var(--soft); }
-  .cell {
-    width: 100%; aspect-ratio: 1; border-radius: 8px;
-    background-image: url('mascot/toofie-sprite-sheet-actions.png');
-    background-repeat: no-repeat; background-size: 400% 300%;
-    image-rendering: auto; border: 1px solid var(--line);
-  }
-  .play-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
-  }
-  @media (max-width: 640px) { .play-row { grid-template-columns: 1fr; } }
-  .player {
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    padding: 12px; border: 1px dashed var(--line); border-radius: 14px;
-  }
-  .stage {
-    width: min(180px, 46vw); aspect-ratio: 1; border-radius: 16px;
-    border: 2px solid var(--ink); background: #e8efe3;
-    background-repeat: no-repeat; image-rendering: auto;
-  }
-  .walk {
-    background-image: url('mascot/toofie-sprite-walk-cycle.png');
-    background-size: 800% 100%;
-    animation: walk 0.85s steps(8) infinite;
-  }
-  .celebrate {
-    background-image: url('mascot/toofie-sprite-celebrate-cycle.png');
-    background-size: 600% 100%;
-    animation: celeb 0.9s steps(6) infinite;
-  }
-  @keyframes walk {
-    from { background-position: 0% 0; }
-    to { background-position: 100% 0; }
-  }
-  @keyframes celeb {
-    from { background-position: 0% 0; }
-    to { background-position: 100% 0; }
-  }
-  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  button {
-    appearance: none; border: none; cursor: pointer;
-    background: var(--ink); color: var(--paper); font-weight: 700;
-    font-size: 12px; border-radius: 999px; padding: 8px 12px;
-  }
-  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .paused .walk, .paused .celebrate { animation-play-state: paused; }
-  .note { font-size: 12.5px; color: var(--soft); margin: 8px 0 0; }
-  a.back {
-    display: inline-block; margin-top: 8px; color: var(--matcha); font-weight: 700; font-size: 14px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .walk, .celebrate { animation: none; background-position: 0 0; }
-  }
+  :root { --paper:#fefae7; --ink:#121212; --soft:#4a4a44; --matcha:#03563e; --lime:#c6ff3a; --line:rgba(18,18,18,.12); --surface:#fffdf5; }
+  body { margin:0; font-family:Outfit,system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+  .wrap { max-width:1000px; margin:0 auto; padding:24px 16px 90px; }
+  h1 { font-family:Anton,sans-serif; text-transform:uppercase; font-size:clamp(32px,7vw,48px); line-height:.95; margin:0 0 8px; }
+  .lede { color:var(--soft); margin:0 0 18px; max-width:60ch; }
+  .banner { display:inline-block; background:var(--lime); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; border-radius:999px; padding:7px 12px; margin-bottom:12px; }
+  section { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; }
+  h2 { margin:0 0 10px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); }
+  img.sheet { width:100%; border-radius:10px; border:1px solid var(--line); display:block; background:#e8efe3; }
+  .anims { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .anims button { appearance:none; border:1px solid var(--line); background:var(--paper); border-radius:999px; padding:8px 12px; font-weight:700; font-size:12px; cursor:pointer; }
+  .anims button.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .player { display:flex; align-items:center; gap:16px; margin-top:12px; flex-wrap:wrap; }
+  .stage { width:140px; height:140px; border-radius:22px; border:2px solid var(--ink); background:#e8efe3; background-repeat:no-repeat; }
+  code { font-size:12px; background:#f3edd4; padding:2px 6px; border-radius:6px; }
+  a { color:var(--matcha); font-weight:700; }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="banner">D14 · Sprite sheet</div>
-    <h1>Toofie actions</h1>
-    <p class="lede">Locked look: chocolate frosting + jimmies, black glasses, bright pink fanny. Full sheet + playable walk / celebrate cycles.</p>
+<div class="wrap">
+  <div class="banner">Atlas · wired to PWA</div>
+  <h1>Toofie sprite atlas</h1>
+  <p class="lede">All sheets + named animations from <code>/mascot/atlas.json</code>. Used by <code>ToofieSprite</code> in the app (home + log).</p>
 
-    <section>
-      <h2>Master sheet · 4×3</h2>
-      <img class="sheet" src="mascot/toofie-sprite-sheet-actions.png" alt="Toofie 12-action sprite sheet" />
-      <div class="actions" id="cells"></div>
-      <p class="note">Idle · Walk L · Walk R · Wave · Celebrate · Cheer · Cookie · Thumbs-up · Peek · Sit · Dance · Wink</p>
-    </section>
-
-    <section>
-      <h2>Playable cycles</h2>
-      <div class="play-row" id="players">
-        <div class="player">
-          <div class="stage walk" id="walkStage" aria-label="Walk cycle animation"></div>
-          <div class="controls">
-            <button type="button" data-target="walkStage" data-anim="walk">Play walk</button>
-            <button type="button" class="ghost" data-pause="walkStage">Pause</button>
-          </div>
-          <p class="note">8-frame walk cycle</p>
-        </div>
-        <div class="player">
-          <div class="stage celebrate" id="celebStage" aria-label="Celebrate cycle animation"></div>
-          <div class="controls">
-            <button type="button" data-target="celebStage" data-anim="celebrate">Play celebrate</button>
-            <button type="button" class="ghost" data-pause="celebStage">Pause</button>
-          </div>
-          <p class="note">6-frame celebrate cycle</p>
-        </div>
+  <section>
+    <h2>Play animation</h2>
+    <div class="anims" id="animBtns"></div>
+    <div class="player">
+      <div class="stage" id="stage"></div>
+      <div>
+        <div><strong id="animName">idle</strong></div>
+        <div style="color:var(--soft);font-size:13px" id="animMeta"></div>
       </div>
-      <img class="sheet" style="margin-top:12px" src="mascot/toofie-sprite-walk-cycle.png" alt="Walk cycle strip" />
-      <img class="sheet" style="margin-top:10px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="Celebrate cycle strip" />
-    </section>
+    </div>
+  </section>
 
-    <a class="back" href="/mascot-locked.html">← Locked mascot</a>
-  </div>
+  <section>
+    <h2>actions · 4×3</h2>
+    <img class="sheet" src="mascot/toofie-sprite-sheet-actions.png" alt="actions sheet" />
+  </section>
+  <section>
+    <h2>moods · 4×3</h2>
+    <img class="sheet" src="mascot/toofie-sprite-sheet-moods.png" alt="moods sheet" />
+  </section>
+  <section>
+    <h2>app moments · 4×3</h2>
+    <img class="sheet" src="mascot/toofie-sprite-sheet-app.png" alt="app sheet" />
+  </section>
+  <section>
+    <h2>cycles</h2>
+    <img class="sheet" src="mascot/toofie-sprite-walk-cycle.png" alt="walk" />
+    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="celebrate" />
+    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-milestone-cycle.png" alt="milestone" />
+    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-log-cycle.png" alt="log" />
+  </section>
 
+  <p><a href="/">Open app</a> · <a href="/mascot-locked.html">Locked mascot</a></p>
+</div>
 <script>
-const labels = [
-  'Idle','Walk L','Walk R','Wave',
-  'Celebrate','Cheer','Cookie','Thumbs-up',
-  'Peek','Sit','Dance','Wink'
-];
-const cells = document.getElementById('cells');
-cells.innerHTML = labels.map((label, i) => {
-  const col = i % 4;
-  const row = Math.floor(i / 4);
-  const x = (col / 3) * 100;
-  const y = (row / 2) * 100;
-  return `<div class="action"><div class="cell" style="background-position:${x}% ${y}%"></div><div class="label">${label}</div></div>`;
-}).join('');
+let atlas, timer, frame = 0, current = 'idle';
+const stage = document.getElementById('stage');
 
-document.querySelectorAll('[data-target]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const el = document.getElementById(btn.dataset.target);
-    el.classList.remove('walk', 'celebrate', 'paused');
-    void el.offsetWidth;
-    el.classList.add(btn.dataset.anim);
-  });
-});
-document.querySelectorAll('[data-pause]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.getElementById(btn.dataset.pause).classList.toggle('paused');
-  });
+function paint() {
+  const def = atlas.animations[current];
+  const sheet = atlas.sheets[def.sheet];
+  const name = def.frames[frame % def.frames.length];
+  const idx = sheet.frames.indexOf(name);
+  const col = idx % sheet.cols;
+  const row = Math.floor(idx / sheet.cols);
+  const x = sheet.cols === 1 ? 0 : (col / (sheet.cols - 1)) * 100;
+  const y = sheet.rows === 1 ? 0 : (row / (sheet.rows - 1)) * 100;
+  stage.style.backgroundImage = `url(${sheet.src})`;
+  stage.style.backgroundSize = `${sheet.cols * 100}% ${sheet.rows * 100}%`;
+  stage.style.backgroundPosition = `${x}% ${y}%`;
+  document.getElementById('animName').textContent = current;
+  document.getElementById('animMeta').textContent = `${def.sheet} · ${def.frames.length} frames · ${def.fps} fps · loop=${def.loop}`;
+}
+
+function play(name) {
+  current = name; frame = 0;
+  document.querySelectorAll('.anims button').forEach(b => b.classList.toggle('on', b.dataset.anim === name));
+  if (timer) clearInterval(timer);
+  paint();
+  const def = atlas.animations[current];
+  if (def.frames.length <= 1) return;
+  timer = setInterval(() => {
+    frame++;
+    if (!def.loop && frame >= def.frames.length) { clearInterval(timer); frame = def.frames.length - 1; }
+    paint();
+  }, 1000 / Math.max(1, def.fps));
+}
+
+fetch('/mascot/atlas.json').then(r => r.json()).then(a => {
+  atlas = a;
+  const box = document.getElementById('animBtns');
+  box.innerHTML = Object.keys(a.animations).map(k => `<button type="button" data-anim="${k}">${k}</button>`).join('');
+  box.onclick = e => { const b = e.target.closest('button'); if (b) play(b.dataset.anim); };
+  play('idle');
 });
 </script>
 </body>

@@ -127,14 +127,7 @@ a {
 }
 
 .toofie-mark {
-  width: 88px;
-  height: 88px;
-  object-fit: cover;
-  border-radius: 22px;
-  border: 2px solid var(--ink);
-  background: #dfe8d8;
   flex: 0 0 auto;
-  box-shadow: var(--shadow-soft);
   animation: rise 0.55s ease both;
 }
 

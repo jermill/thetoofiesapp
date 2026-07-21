@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { pickHomeAnim, ToofieSprite } from '../components/ToofieSprite';
 import { useStore, useToofies } from '../lib/store';
 
 export function HomeScreen() {
@@ -8,9 +9,13 @@ export function HomeScreen() {
   const t = useToofies(now);
   const { state } = useStore();
   const [showMilestone, setShowMilestone] = useState(false);
+  const [milestoneDone, setMilestoneDone] = useState(false);
 
   useEffect(() => {
-    if (t.streakMilestoneToday != null) setShowMilestone(true);
+    if (t.streakMilestoneToday != null) {
+      setShowMilestone(true);
+      setMilestoneDone(false);
+    }
   }, [t.streakMilestoneToday]);
 
   const recencyHeadline =
@@ -25,6 +30,13 @@ export function HomeScreen() {
     ? `Yes — you've banked ${t.availability.bankedDesserts} dessert${t.availability.bankedDesserts === 1 ? '' : 's'}`
     : `Almost — ${t.availability.pointsNeeded} pts to go · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
 
+  const anim = pickHomeAnim({
+    empty: state.entries.length === 0,
+    ready,
+    milestone: showMilestone && !milestoneDone && t.streakMilestoneToday != null,
+    streak: t.onPlanStreak,
+  });
+
   return (
     <>
       <p className="provisional-banner">OCHA shell provisional · Toofie mascot 🟢 D14</p>
@@ -34,12 +46,14 @@ export function HomeScreen() {
           <h1>Toofies</h1>
           <p className="tag">Dessert, with peace of mind.</p>
         </div>
-        <img
+        <ToofieSprite
           className="toofie-mark"
-          src="/mascot/toofie-g5-hero-black-glasses.png"
-          alt="Toofie — walking tooth with frosting hair, black glasses, and a fanny pack"
-          width={88}
-          height={88}
+          anim={anim}
+          size={88}
+          alt="Toofie"
+          onComplete={() => {
+            if (anim === 'milestone') setMilestoneDone(true);
+          }}
         />
       </header>
 
@@ -100,7 +114,11 @@ export function HomeScreen() {
         <p className="title" style={{ fontSize: 17, marginBottom: 12 }}>
           Log a dessert when you enjoy one.
         </p>
-        <Link to="/log" className="primary-btn blossom" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+        <Link
+          to="/log"
+          className="primary-btn blossom"
+          style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+        >
           Log a dessert
         </Link>
         {state.entries.length === 0 && (
