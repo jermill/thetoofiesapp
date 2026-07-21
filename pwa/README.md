@@ -28,6 +28,20 @@ npm run build
 npm run preview
 ```
 
+## Deploy (Netlify)
+
+Config is in the repo root `netlify.toml` (build base = `pwa`).
+
+**One-shot CLI deploy** (needs a Netlify personal access token):
+
+```bash
+cd pwa
+npm ci && npm run build
+NETLIFY_AUTH_TOKEN=… npx netlify-cli deploy --prod --dir=dist --message "Toofies PWA demo"
+```
+
+Or connect the GitHub repo in the Netlify UI (base directory `pwa` / use root `netlify.toml`).
+
 ## Screens
 
 | Route | Purpose |
