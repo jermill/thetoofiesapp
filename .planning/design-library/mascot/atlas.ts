@@ -10,7 +10,7 @@ export const atlas = {
   },
   "sheets": {
     "actions": {
-      "src": "/mascot/toofie-sprite-sheet-actions.png?v=3",
+      "src": "/mascot/toofie-sprite-sheet-actions.png?v=6",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -26,10 +26,12 @@ export const atlas = {
         "sit",
         "dance",
         "wink"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "moods": {
-      "src": "/mascot/toofie-sprite-sheet-moods.png?v=3",
+      "src": "/mascot/toofie-sprite-sheet-moods.png?v=6",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -45,10 +47,12 @@ export const atlas = {
         "proud",
         "sleepy",
         "stretch"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "app": {
-      "src": "/mascot/toofie-sprite-sheet-app.png?v=3",
+      "src": "/mascot/toofie-sprite-sheet-app.png?v=6",
       "cols": 4,
       "rows": 3,
       "frames": [
@@ -64,10 +68,12 @@ export const atlas = {
         "midnight",
         "surprise",
         "peace"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "walk_cycle": {
-      "src": "/mascot/toofie-sprite-walk-cycle.png?v=3",
+      "src": "/mascot/toofie-sprite-walk-cycle.png?v=6",
       "cols": 8,
       "rows": 1,
       "frames": [
@@ -79,10 +85,12 @@ export const atlas = {
         "w5",
         "w6",
         "w7"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "celebrate_cycle": {
-      "src": "/mascot/toofie-sprite-celebrate-cycle.png?v=3",
+      "src": "/mascot/toofie-sprite-celebrate-cycle.png?v=6",
       "cols": 6,
       "rows": 1,
       "frames": [
@@ -92,10 +100,12 @@ export const atlas = {
         "c3",
         "c4",
         "c5"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "milestone_cycle": {
-      "src": "/mascot/toofie-sprite-milestone-cycle.png?v=3",
+      "src": "/mascot/toofie-sprite-milestone-cycle.png?v=6",
       "cols": 8,
       "rows": 1,
       "frames": [
@@ -107,10 +117,12 @@ export const atlas = {
         "m5",
         "m6",
         "m7"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     },
     "log_cycle": {
-      "src": "/mascot/toofie-sprite-log-cycle.png?v=3",
+      "src": "/mascot/toofie-sprite-log-cycle.png?v=6",
       "cols": 6,
       "rows": 1,
       "frames": [
@@ -120,7 +132,9 @@ export const atlas = {
         "l3",
         "l4",
         "l5"
-      ]
+      ],
+      "width": 1536,
+      "height": 1024
     }
   },
   "animations": {
@@ -358,5 +372,6 @@ export const atlas = {
     "points.banked": "banked"
   }
 } as const;
+
 export type Atlas = typeof atlas;
 export type ToofieAnimName = keyof typeof atlas.animations;
