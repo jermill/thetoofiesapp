@@ -59,10 +59,10 @@ function BootGate({ children }: { children: React.ReactNode }) {
     setPrefsReady(true);
   }, []);
 
-  // Keep splash up long enough to read — but never dismiss before Toofie paints.
+  // Hold splash long enough to see Toofie walk (~2 cycles at 10fps).
   useEffect(() => {
     if (!mascotReady) return;
-    const t = window.setTimeout(() => setMinSplashDone(true), 900);
+    const t = window.setTimeout(() => setMinSplashDone(true), 1600);
     return () => window.clearTimeout(t);
   }, [mascotReady]);
 

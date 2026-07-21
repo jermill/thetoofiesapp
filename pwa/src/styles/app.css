@@ -702,12 +702,19 @@ a {
   background: transparent !important;
   box-shadow: none !important;
   opacity: 1;
-  transform: translateY(0) scale(1);
-  animation: bob-load 1.1s ease-in-out infinite;
 }
 
-.load-mascot-img.is-in {
-  opacity: 1;
+.load-mascot-walk {
+  width: 168px;
+  height: 168px;
+  display: grid;
+  place-items: center;
+  /* Subtle stroll across the splash — walk frames do the legwork */
+  animation: load-stroll 1.6s ease-in-out infinite;
+}
+
+.load-mascot-walk .toofie-sprite {
+  filter: drop-shadow(0 10px 16px rgba(18, 18, 18, 0.12));
 }
 
 /* Kill any leftover orbit from stale cached bundles */
@@ -862,6 +869,11 @@ a {
 @keyframes bob-load {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
+}
+
+@keyframes load-stroll {
+  0%, 100% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
 }
 
 @keyframes load-slide {
@@ -2245,7 +2257,8 @@ a {
   .home-meter-shine,
   .home-cta,
   .home-cta-glow,
-  .home-marquee-track {
+  .home-marquee-track,
+  .load-mascot-walk {
     animation: none !important;
   }
 }

@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
 
+import { atlas } from '../mascot/atlas';
+import { ToofieSprite } from './ToofieSprite';
+
 type Props = {
   label?: string;
-  /** Fires once the mascot image is ready (or fails / times out). */
+  /** Fires once the walk sheet is ready (or fails / times out). */
   onReady?: () => void;
 };
 
-/** Small cutout — paints fast; never hide behind opacity:0. */
-export const SPLASH_TOOTH = '/mascot/toofie-splash.png?v=10';
+const WALK_SRC = atlas.sheets.walk_cycle.src;
 
 /**
- * Full-screen boot splash. Static Toofie PNG only — no sprite sheets, no orbit.
+ * Full-screen boot splash. Toofie walks while the app warms up.
+ * No orbit ring. Splash is a loading moment — walk is intentional motion.
  */
 export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
   useEffect(() => {
@@ -27,25 +30,26 @@ export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
     const img = new Image();
     img.onload = finish;
     img.onerror = finish;
-    img.src = SPLASH_TOOTH;
+    img.src = WALK_SRC;
     if (img.complete) finish();
 
-    const fallback = window.setTimeout(finish, 800);
+    const fallback = window.setTimeout(finish, 1200);
     return () => window.clearTimeout(fallback);
   }, [onReady]);
 
   return (
     <div className="load-splash" role="status" aria-busy="true" aria-live="polite">
       <div className="load-splash-inner">
-        <img
-          src={SPLASH_TOOTH}
-          alt="Toofie"
-          className="load-mascot-img is-in"
-          width={168}
-          height={168}
-          decoding="async"
-          fetchPriority="high"
-        />
+        <div className="load-mascot-walk">
+          <ToofieSprite
+            anim="walk"
+            size={168}
+            alt="Toofie walking"
+            motion="task"
+            loop
+            tappable={false}
+          />
+        </div>
         <p className="load-brand">Toofies</p>
         <p className="load-label">{label}</p>
         <div className="load-bar" aria-hidden>
