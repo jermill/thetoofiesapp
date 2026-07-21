@@ -286,6 +286,7 @@ Founder: **"LETS GO G5 WITH FANNIE PACE AND BLACK FRAME GLASSES"**
 - **Assets:** `pwa/public/mascot/toofie-g5-*.png` +
   `.planning/design-library/mascot/toofie-g5-*.png`
 - **Live lock page:** https://toofies-demo.netlify.app/mascot-locked.html
+- **Sprite sheet:** `pwa/public/mascot/toofie-sprite-*.png` · preview https://toofies-demo.netlify.app/mascot-sprites.html (12-action master + walk/celebrate cycles)
 
 Applied on the PWA home as the brand mascot mark. Further polish (exact line
 weight, prop set per screen) can iterate inside this lock.

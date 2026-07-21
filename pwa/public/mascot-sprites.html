@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Toofie — action sprite sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #fefae7; --ink: #121212; --soft: #4a4a44; --matcha: #03563e;
+    --blossom: #ffbad8; --lime: #c6ff3a; --surface: #fffdf5; --line: rgba(18,18,18,.12);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Outfit, system-ui, sans-serif; color: var(--ink);
+    background:
+      radial-gradient(700px 300px at 8% -8%, color-mix(in oklab, var(--blossom) 26%, transparent), transparent 55%),
+      var(--paper);
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 80px; }
+  .banner {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; background: var(--lime); color: var(--ink);
+    border-radius: 999px; padding: 7px 12px; margin-bottom: 12px;
+  }
+  h1 {
+    font-family: Anton, sans-serif; text-transform: uppercase;
+    font-size: clamp(32px, 7vw, 48px); line-height: .95; margin: 0 0 8px;
+  }
+  .lede { color: var(--soft); max-width: 58ch; margin: 0 0 22px; }
+  section {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 14px; margin-bottom: 16px;
+  }
+  section h2 {
+    margin: 0 0 10px; font-size: 13px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--soft);
+  }
+  .sheet {
+    width: 100%; border-radius: 12px; display: block;
+    border: 1px solid var(--line); background: #e8efe3;
+  }
+  .actions {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px; margin-top: 12px;
+  }
+  .action {
+    border: 1px solid var(--line); border-radius: 12px; padding: 8px;
+    background: var(--paper); text-align: center;
+  }
+  .action .label { font-size: 11px; font-weight: 700; margin-top: 6px; color: var(--soft); }
+  .cell {
+    width: 100%; aspect-ratio: 1; border-radius: 8px;
+    background-image: url('mascot/toofie-sprite-sheet-actions.png');
+    background-repeat: no-repeat; background-size: 400% 300%;
+    image-rendering: auto; border: 1px solid var(--line);
+  }
+  .play-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
+  }
+  @media (max-width: 640px) { .play-row { grid-template-columns: 1fr; } }
+  .player {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 12px; border: 1px dashed var(--line); border-radius: 14px;
+  }
+  .stage {
+    width: min(180px, 46vw); aspect-ratio: 1; border-radius: 16px;
+    border: 2px solid var(--ink); background-color: #e8efe3;
+    background-repeat: no-repeat; image-rendering: auto;
+  }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  button {
+    appearance: none; border: none; cursor: pointer;
+    background: var(--ink); color: var(--paper); font-weight: 700;
+    font-size: 12px; border-radius: 999px; padding: 8px 12px;
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .note { font-size: 12.5px; color: var(--soft); margin: 8px 0 0; }
+  a.back {
+    display: inline-block; margin-top: 8px; color: var(--matcha); font-weight: 700; font-size: 14px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stage { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="banner">D14 · Sprite sheet</div>
+    <h1>Toofie actions</h1>
+    <p class="lede">Locked look: chocolate frosting + jimmies, black glasses, bright pink fanny. Full sheet + playable walk / celebrate cycles.</p>
+
+    <section>
+      <h2>Master sheet · 4×3</h2>
+      <img class="sheet" src="mascot/toofie-sprite-sheet-actions.png" alt="Toofie 12-action sprite sheet" />
+      <div class="actions" id="cells"></div>
+      <p class="note">Idle · Walk L · Walk R · Wave · Celebrate · Cheer · Cookie · Thumbs-up · Peek · Sit · Dance · Wink</p>
+    </section>
+
+    <section>
+      <h2>Playable cycles</h2>
+      <div class="play-row">
+        <div class="player">
+          <div class="stage" id="walkStage" aria-label="Walk cycle animation"></div>
+          <div class="controls">
+            <button type="button" id="walkPlay">Play walk</button>
+            <button type="button" class="ghost" id="walkPause">Pause</button>
+          </div>
+          <p class="note">8-frame walk cycle</p>
+        </div>
+        <div class="player">
+          <div class="stage" id="celebStage" aria-label="Celebrate cycle animation"></div>
+          <div class="controls">
+            <button type="button" id="celebPlay">Play celebrate</button>
+            <button type="button" class="ghost" id="celebPause">Pause</button>
+          </div>
+          <p class="note">6-frame celebrate cycle</p>
+        </div>
+      </div>
+      <img class="sheet" style="margin-top:12px" src="mascot/toofie-sprite-walk-cycle.png" alt="Walk cycle strip" />
+      <img class="sheet" style="margin-top:10px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="Celebrate cycle strip" />
+    </section>
+
+    <a class="back" href="/mascot-locked.html">← Locked mascot</a>
+  </div>
+
+<script>
+const labels = [
+  'Idle','Walk L','Walk R','Wave',
+  'Celebrate','Cheer','Cookie','Thumbs-up',
+  'Peek','Sit','Dance','Wink'
+];
+const cells = document.getElementById('cells');
+cells.innerHTML = labels.map((label, i) => {
+  const col = i % 4;
+  const row = Math.floor(i / 4);
+  const x = col === 0 ? 0 : (col / 3) * 100;
+  const y = row === 0 ? 0 : (row / 2) * 100;
+  return `<div class="action"><div class="cell" style="background-position:${x}% ${y}%"></div><div class="label">${label}</div></div>`;
+}).join('');
+
+function makeStripPlayer(el, src, frames, fps) {
+  let frame = 0;
+  let timer = null;
+  el.style.backgroundImage = `url('${src}')`;
+  el.style.backgroundSize = `${frames * 100}% 100%`;
+  function paint() {
+    const pct = frames === 1 ? 0 : (frame / (frames - 1)) * 100;
+    el.style.backgroundPosition = `${pct}% 0%`;
+  }
+  function play() {
+    stop();
+    timer = setInterval(() => {
+      frame = (frame + 1) % frames;
+      paint();
+    }, 1000 / fps);
+  }
+  function stop() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+  function toggle() {
+    if (timer) stop();
+    else play();
+  }
+  paint();
+  play();
+  return { play, stop, toggle };
+}
+
+const walk = makeStripPlayer(document.getElementById('walkStage'), 'mascot/toofie-sprite-walk-cycle.png', 8, 10);
+const celeb = makeStripPlayer(document.getElementById('celebStage'), 'mascot/toofie-sprite-celebrate-cycle.png', 6, 8);
+document.getElementById('walkPlay').onclick = () => walk.play();
+document.getElementById('walkPause').onclick = () => walk.toggle();
+document.getElementById('celebPlay').onclick = () => celeb.play();
+document.getElementById('celebPause').onclick = () => celeb.toggle();
+</script>
+</body>
+</html>
