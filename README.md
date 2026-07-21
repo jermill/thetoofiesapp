@@ -68,6 +68,7 @@ your provisioning setup.
 | `.planning/PRODUCT.md` | Product vision & framing rules |
 | `.planning/research/` | Verified market/design research reports |
 | `prototype/web/index.html` | The original weekly-budget web prototype (pre-points-economy; kept for reference) |
+| `prototype/web/demo.html` | Interactive **points-economy** HTML demo (placeholder visuals; day-advance controls for walkthroughs) |
 
 ## How the balance works
 
