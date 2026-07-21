@@ -1,38 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 type Props = {
   label?: string;
-  /** Fires once the mascot image is ready (or fails). */
+  /** Fires once the mascot image is ready (or fails / times out). */
   onReady?: () => void;
 };
 
-const TOOTH =
-  '/mascot/toofie-choc-jimmies-icon.png?v=7';
+/** Small cutout — paints fast; never hide behind opacity:0. */
+export const SPLASH_TOOTH = '/mascot/toofie-splash.png?v=9';
 
 /**
- * Full-screen boot splash. Uses a preloaded static Toofie PNG so the character
- * is visible even before sprite sheets hydrate. No orbit ring.
+ * Full-screen boot splash. Static Toofie PNG only — no sprite sheets, no orbit.
  */
 export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
-  const [loaded, setLoaded] = useState(false);
-
   useEffect(() => {
+    // Remove the pre-React HTML splash once React owns the screen.
+    document.getElementById('boot-splash')?.remove();
+
     let done = false;
     const finish = () => {
       if (done) return;
       done = true;
-      setLoaded(true);
       onReady?.();
     };
 
     const img = new Image();
     img.onload = finish;
     img.onerror = finish;
-    img.src = TOOTH;
-    // If already cached, complete on next tick
+    img.src = SPLASH_TOOTH;
     if (img.complete) finish();
 
-    const fallback = window.setTimeout(finish, 1200);
+    const fallback = window.setTimeout(finish, 800);
     return () => window.clearTimeout(fallback);
   }, [onReady]);
 
@@ -40,9 +38,9 @@ export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
     <div className="load-splash" role="status" aria-busy="true" aria-live="polite">
       <div className="load-splash-inner">
         <img
-          src={TOOTH}
+          src={SPLASH_TOOTH}
           alt="Toofie"
-          className={`load-mascot-img${loaded ? ' is-in' : ''}`}
+          className="load-mascot-img is-in"
           width={168}
           height={168}
           decoding="async"
