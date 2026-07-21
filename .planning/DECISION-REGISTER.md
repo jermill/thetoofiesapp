@@ -314,6 +314,19 @@ functionality so we can have desserts with friends, or recommend amazing
 places to try new desserts."* This is a substantial, exciting expansion — and
 a major one. Captured here; **not** assumed into any version.
 
+### D31 · Buddy system (couples / friends) 🟡 PROPOSED 2026-07-21
+Founder ask: buddy system for couples/friends — connect, dessert walks, something
+fun/gamified; mentioned “calorie check.”
+
+**Framing lock:** calorie / diet / weight language is **rejected** (PRODUCT.md).
+Buddy features must use **treat-check / peace-of-mind cheers**, shared walks as
+*joy not penance*, and duo quests — never calorie counters.
+
+**UI prototype (not ratified product):** `/buddies` in the PWA — pair via code,
+dessert walks (combined steps), duo streak, treat-check cheers, duo challenges.
+No backend yet. **Founder to ratify scope** (pair model, walk goals, whether
+buddies ship in v1 with D4 social).
+
 ### D22 · Community / social ("desserts with friends") 🔴 — *forces D4=accounts, D5=backend*
 Friends, shared dessert moments, maybe a feed. Aligns with Persona A and the
 transcript's "social media just about sharing your desserts." **Implications:**

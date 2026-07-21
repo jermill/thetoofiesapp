@@ -121,6 +121,13 @@ export function HomeScreen() {
         >
           Log a dessert
         </Link>
+        <Link
+          to="/buddies"
+          className="ghost-btn"
+          style={{ display: 'block', textAlign: 'center', marginTop: 8 }}
+        >
+          Walk with a buddy →
+        </Link>
         {state.entries.length === 0 && (
           <p className="muted" style={{ marginTop: 10 }}>
             Tip: this preview starts with a few clean days so the balance is live.

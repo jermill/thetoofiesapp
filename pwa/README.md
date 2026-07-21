@@ -54,6 +54,7 @@ Or connect the GitHub repo in the Netlify UI (base directory `pwa` / use root `n
 | `/` | Home — recency, streak, readiness, CTA |
 | `/log` | Log a dessert + Toofie anim |
 | `/move` | Steps / quest UI mock |
+| `/buddies` | Buddy pair, dessert walks, duo quests |
 | `/moments` | Social dessert feed UI mock |
 | `/you` | Profile, settings links, history |
 | `/notifications` | Reminder prefs UI |

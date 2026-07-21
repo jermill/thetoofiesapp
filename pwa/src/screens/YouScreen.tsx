@@ -56,6 +56,8 @@ export function YouScreen() {
         <p className="eyebrow">Account & sync</p>
         <div className="link-rows">
           <Link to="/auth">{prefs.signedInMock ? 'Account (mock)' : 'Sign in / create account'}</Link>
+          <Link to="/buddies">Buddies & dessert walks</Link>
+          <Link to="/moments">Moments feed</Link>
           <Link to="/notifications">Reminders</Link>
           <Link to="/resources">Care & ED resources</Link>
           <Link to="/onboarding">Replay onboarding</Link>

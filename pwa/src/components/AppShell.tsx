@@ -33,13 +33,13 @@ export function AppShell({ children, path }: { children: ReactNode; path: string
             Log
           </NavLink>
           <NavLink
-            to="/moments"
+            to="/buddies"
             className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
           >
             <span className="icon" aria-hidden>
               ◇
             </span>
-            Moments
+            Buddies
           </NavLink>
           <NavLink to="/you" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
             <span className="icon" aria-hidden>

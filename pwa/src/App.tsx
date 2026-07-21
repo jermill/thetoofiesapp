@@ -8,6 +8,7 @@ import { ToastProvider } from './components/Toast';
 import { StoreProvider, useStore } from './lib/store';
 import { loadUiPrefs } from './lib/uiPrefs';
 import { AuthScreen } from './screens/AuthScreen';
+import { BuddiesScreen } from './screens/BuddiesScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { LogScreen } from './screens/LogScreen';
 import { MomentsScreen } from './screens/MomentsScreen';
@@ -61,8 +62,9 @@ function ShellRoutes() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/log" element={<LogScreen />} />
             <Route path="/move" element={<MoveScreen />} />
-            <Route path="/moments" element={<MomentsScreen />} />
-            <Route path="/you" element={<YouScreen />} />
+          <Route path="/buddies" element={<BuddiesScreen />} />
+          <Route path="/moments" element={<MomentsScreen />} />
+          <Route path="/you" element={<YouScreen />} />
             <Route path="/onboarding" element={<OnboardingScreen />} />
             <Route path="/auth" element={<AuthScreen />} />
             <Route path="/notifications" element={<NotificationsScreen />} />
