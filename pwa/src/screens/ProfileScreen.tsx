@@ -10,6 +10,7 @@ export function ProfileScreen() {
   const { show } = useToast();
   const [profile, setProfile] = useState<UserProfile>(loadProfile);
   const [busy, setBusy] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   async function onAvatar(file: File | null) {
@@ -28,10 +29,16 @@ export function ProfileScreen() {
   }
 
   function save() {
-    const next = saveProfile(profile);
+    const patched = {
+      ...profile,
+      locationLabel: profile.locationLabel.trim() || profile.city.trim(),
+    };
+    const next = saveProfile(patched);
     setProfile(next);
     if (next.displayName) saveUiPrefs({ displayName: next.displayName, signedInMock: true });
-    show('Profile saved locally', { tone: 'good', anim: 'proud', ms: 1800 });
+    show('Profile saved locally', { tone: 'good', anim: 'proud', ms: 2200 });
+    setJustSaved(true);
+    window.setTimeout(() => setJustSaved(false), 2200);
   }
 
   const initial = (profile.displayName || 'T').slice(0, 1).toUpperCase();
@@ -135,7 +142,7 @@ export function ProfileScreen() {
           />
         </label>
         <button type="button" className="primary-btn" onClick={save} disabled={busy}>
-          Save profile
+          {justSaved ? 'Saved ✓' : 'Save profile'}
         </button>
         {profile.avatarDataUrl && (
           <button

@@ -25,6 +25,7 @@ export function YouScreen() {
   const recent = [...state.entries].reverse().slice(0, 12);
   const [prefs, setPrefs] = useState(loadUiPrefs);
   const profile = loadProfile();
+  const place = profile.locationLabel || profile.city;
   const name = profile.displayName || prefs.displayName || 'Friend';
   const initial = name.slice(0, 1).toUpperCase();
 
@@ -35,7 +36,7 @@ export function YouScreen() {
           <h1 className="screen-title">You</h1>
           <p className="lede">
             {prefs.signedInMock || profile.displayName
-              ? `${name}${profile.locationLabel ? ` · ${profile.locationLabel}` : ''}`
+              ? `${name}${place ? ` · ${place}` : ''}`
               : 'Local preview · edit your profile anytime'}
           </p>
         </div>
