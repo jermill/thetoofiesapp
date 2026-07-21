@@ -54,9 +54,11 @@ export function LogScreen() {
           <p className="lede">Pick what you enjoyed. Add a photo if you want.</p>
         </div>
         <ToofieSprite
-          anim={phase === 'pick' ? 'munch' : phase === 'log_dessert' ? 'log_dessert' : 'logged'}
+          anim={phase === 'pick' ? 'idle' : phase === 'log_dessert' ? 'log_dessert' : 'logged'}
           size={92}
           alt="Toofie reacting to your log"
+          motion={phase === 'pick' ? 'still' : 'task'}
+          loop={false}
           onComplete={() => {
             if (phase === 'log_dessert') {
               setPhase('logged');

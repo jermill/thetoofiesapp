@@ -51,6 +51,8 @@ export function HomeScreen() {
           anim={anim}
           size={88}
           alt="Toofie"
+          motion={anim === 'milestone' ? 'task' : 'still'}
+          loop={false}
           onComplete={() => {
             if (anim === 'milestone') setMilestoneDone(true);
           }}

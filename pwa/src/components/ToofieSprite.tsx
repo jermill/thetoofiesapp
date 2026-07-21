@@ -4,11 +4,23 @@ import { atlas, type ToofieAnimName } from '../mascot/atlas';
 
 export type ToofieAnim = ToofieAnimName;
 
+/**
+ * still — ambient UI: one pose, no motion while the screen is idle.
+ * task — reaction to something the user just did (log, toast, milestone,
+ *        active walk). Plays frames; loops only when the atlas (or override)
+ *        says the task is ongoing.
+ */
+export type ToofieMotion = 'still' | 'task';
+
 type Props = {
   anim: ToofieAnim | string;
   size?: number;
   className?: string;
   alt?: string;
+  /** Default `still` so Toofie never fidgets on a static screen. */
+  motion?: ToofieMotion;
+  /** Override atlas loop when `motion="task"`. */
+  loop?: boolean;
   onComplete?: () => void;
 };
 
@@ -58,6 +70,8 @@ export function ToofieSprite({
   size = 96,
   className,
   alt = 'Toofie',
+  motion = 'still',
+  loop: loopOverride,
   onComplete,
 }: Props) {
   const def =
@@ -74,19 +88,22 @@ export function ToofieSprite({
     [cellIndex, sheet, size],
   );
 
-  useEffect(() => {
-    setFrameIdx(0);
-  }, [anim]);
+  const shouldPlay = motion === 'task' && def.frames.length > 1;
+  const shouldLoop = loopOverride ?? def.loop;
 
   useEffect(() => {
-    if (def.frames.length <= 1) return;
+    setFrameIdx(0);
+  }, [anim, motion]);
+
+  useEffect(() => {
+    if (!shouldPlay) return;
     const ms = Math.max(40, Math.round(1000 / Math.max(1, def.fps)));
     let finished = false;
     const id = window.setInterval(() => {
       setFrameIdx((i) => {
         const next = i + 1;
         if (next >= def.frames.length) {
-          if (def.loop) return 0;
+          if (shouldLoop) return 0;
           if (!finished) {
             finished = true;
             window.clearInterval(id);
@@ -98,7 +115,7 @@ export function ToofieSprite({
       });
     }, ms);
     return () => window.clearInterval(id);
-  }, [anim, def.fps, def.frames.length, def.loop, onComplete]);
+  }, [anim, shouldPlay, shouldLoop, def.fps, def.frames.length, onComplete]);
 
   return (
     <div

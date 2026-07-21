@@ -19,6 +19,7 @@ export function RecapScreen() {
   const t = useToofies(new Date());
   const todayCount = t.week[t.week.length - 1]?.count ?? 0;
   const [mood, setMood] = useState<(typeof MOODS)[number]['id'] | null>(null);
+  const [moodPlaying, setMoodPlaying] = useState(false);
   const [hadDessert, setHadDessert] = useState<boolean | null>(todayCount > 0 ? true : null);
   const [note, setNote] = useState('');
 
@@ -42,6 +43,9 @@ export function RecapScreen() {
         <ToofieSprite
           anim={MOODS.find((m) => m.id === mood)?.anim ?? 'think'}
           size={84}
+          motion={moodPlaying ? 'task' : 'still'}
+          loop={false}
+          onComplete={() => setMoodPlaying(false)}
         />
       </div>
 
@@ -91,7 +95,10 @@ export function RecapScreen() {
               key={m.id}
               type="button"
               className={`mood-chip${mood === m.id ? ' on' : ''}`}
-              onClick={() => setMood(m.id)}
+              onClick={() => {
+                setMood(m.id);
+                setMoodPlaying(true);
+              }}
             >
               {m.label}
             </button>

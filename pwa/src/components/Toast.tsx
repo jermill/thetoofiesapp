@@ -61,7 +61,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className={`toast toast-${t.tone}${t.leaving ? ' toast-out' : ''}${t.anim ? ' toast-with-mascot' : ''}`}
             role="status"
           >
-            {t.anim && <ToofieSprite anim={t.anim} size={44} className="toast-mascot" />}
+            {t.anim && (
+              <ToofieSprite
+                anim={t.anim}
+                size={44}
+                className="toast-mascot"
+                motion="task"
+                loop={false}
+              />
+            )}
             <span>{t.message}</span>
           </div>
         ))}

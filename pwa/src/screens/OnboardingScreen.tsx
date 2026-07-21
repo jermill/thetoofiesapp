@@ -37,6 +37,7 @@ export function OnboardingScreen() {
   const { show } = useToast();
   const [i, setI] = useState(0);
   const [economy, setEconomy] = useState(true);
+  const [playing, setPlaying] = useState(true);
   const step = STEPS[i];
   const last = i === STEPS.length - 1;
   const progress = useMemo(() => ((i + 1) / STEPS.length) * 100, [i]);
@@ -55,7 +56,13 @@ export function OnboardingScreen() {
       </div>
 
       <div className="flow-hero">
-        <ToofieSprite anim={step.anim} size={120} />
+        <ToofieSprite
+          anim={step.anim}
+          size={120}
+          motion={playing ? 'task' : 'still'}
+          loop={false}
+          onComplete={() => setPlaying(false)}
+        />
         <p className="eyebrow">{step.eyebrow}</p>
         <h1 className="flow-title">{step.title}</h1>
         <p className="lede">{step.body}</p>
@@ -80,7 +87,14 @@ export function OnboardingScreen() {
 
       <div className="flow-actions">
         {!last ? (
-          <button type="button" className="primary-btn" onClick={() => setI((n) => n + 1)}>
+          <button
+            type="button"
+            className="primary-btn"
+            onClick={() => {
+              setPlaying(true);
+              setI((n) => n + 1);
+            }}
+          >
             Continue
           </button>
         ) : (

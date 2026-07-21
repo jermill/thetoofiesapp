@@ -95,7 +95,12 @@ export function BuddiesScreen() {
             Couples & friends — dessert walks, shared cheers, gamified treats. Never a diet club.
           </p>
         </div>
-        <ToofieSprite anim={heroAnim} size={84} />
+        <ToofieSprite
+          anim={buddy.walkActive && tab === 'walk' ? 'walk' : heroAnim}
+          size={84}
+          motion={buddy.walkActive && tab === 'walk' ? 'task' : 'still'}
+          loop={buddy.walkActive && tab === 'walk'}
+        />
       </div>
 
       <div className="seg buddy-tabs">
