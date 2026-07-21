@@ -14,19 +14,28 @@ type Props = {
 
 type Sheet = (typeof atlas.sheets)[keyof typeof atlas.sheets];
 
-/** Uniform cover crop — never stretches non-square cycle cells into a square. */
+/**
+ * Map one atlas cell into a size×size box without stretching.
+ * Tall cycle sheets (walk/celebrate/…) are scaled so the character fits;
+ * near-square grid sheets use cover.
+ */
 function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const cols = sheet.cols;
   const rows = sheet.rows;
-  const sheetW = 'width' in sheet ? Number(sheet.width) : cols * 256;
-  const sheetH = 'height' in sheet ? Number(sheet.height) : rows * 256;
+  const sheetW = Number(sheet.width);
+  const sheetH = Number(sheet.height);
   const cw = sheetW / cols;
   const ch = sheetH / rows;
   const col = cellIndex % cols;
   const row = Math.floor(cellIndex / cols);
+  const tall = ch / cw > 1.5;
 
-  // Cover the size×size box without distortion; center the cell.
-  const scale = Math.max(size / cw, size / ch);
+  // Tall cells: fit ~42% of cell height (character band) into the box.
+  // Square-ish cells: cover the box.
+  const scale = tall
+    ? Math.min(size / cw, size / (ch * 0.42))
+    : Math.max(size / cw, size / ch);
+
   const bgW = sheetW * scale;
   const bgH = sheetH * scale;
   const x = -(col * cw * scale) - (cw * scale - size) / 2;

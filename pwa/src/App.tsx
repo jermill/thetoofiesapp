@@ -25,28 +25,12 @@ import './styles/app.css';
 
 function Gate({ children }: { children: React.ReactNode }) {
   const loc = useLocation();
-  const { ready: storeReady } = useStore();
-  const [prefsReady, setPrefsReady] = useState(false);
   const [onboardingDone, setOnboardingDone] = useState(true);
-  const [minSplashDone, setMinSplashDone] = useState(false);
 
   useEffect(() => {
     const p = loadUiPrefs();
     setOnboardingDone(p.onboardingDone);
-    setPrefsReady(true);
   }, [loc.pathname]);
-
-  // Keep splash visible briefly so the load animation can read (not a flash).
-  useEffect(() => {
-    const t = window.setTimeout(() => setMinSplashDone(true), 900);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  const booting = !storeReady || !prefsReady || !minSplashDone;
-
-  if (booting) {
-    return <LoadSplash label="Warming up the bakery…" />;
-  }
 
   const bypass = loc.pathname === '/onboarding' || loc.pathname === '/auth';
   if (!onboardingDone && !bypass) {
@@ -56,32 +40,57 @@ function Gate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function BootGate({ children }: { children: React.ReactNode }) {
+  const { ready: storeReady } = useStore();
+  const [prefsReady, setPrefsReady] = useState(false);
+  const [minSplashDone, setMinSplashDone] = useState(false);
+
+  useEffect(() => {
+    loadUiPrefs();
+    setPrefsReady(true);
+  }, []);
+
+  // Long enough to actually see Toofie (and flush stale SW shells).
+  useEffect(() => {
+    const t = window.setTimeout(() => setMinSplashDone(true), 1600);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  if (!storeReady || !prefsReady || !minSplashDone) {
+    return <LoadSplash label="Warming up the bakery…" />;
+  }
+
+  return <>{children}</>;
+}
+
 function ShellRoutes() {
   const loc = useLocation();
   return (
-    <AppShell path={loc.pathname}>
-      <Gate>
-        <PageTransition>
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/log" element={<LogScreen />} />
-            <Route path="/move" element={<MoveScreen />} />
-            <Route path="/buddies" element={<BuddiesScreen />} />
-            <Route path="/moments" element={<MomentsScreen />} />
-            <Route path="/you" element={<YouScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="/recap" element={<RecapScreen />} />
-            <Route path="/widget" element={<WidgetScreen />} />
-            <Route path="/privacy" element={<PrivacyScreen />} />
-            <Route path="/onboarding" element={<OnboardingScreen />} />
-            <Route path="/auth" element={<AuthScreen />} />
-            <Route path="/notifications" element={<NotificationsScreen />} />
-            <Route path="/resources" element={<ResourcesScreen />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </PageTransition>
-      </Gate>
-    </AppShell>
+    <BootGate>
+      <AppShell path={loc.pathname}>
+        <Gate>
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/log" element={<LogScreen />} />
+              <Route path="/move" element={<MoveScreen />} />
+              <Route path="/buddies" element={<BuddiesScreen />} />
+              <Route path="/moments" element={<MomentsScreen />} />
+              <Route path="/you" element={<YouScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
+              <Route path="/recap" element={<RecapScreen />} />
+              <Route path="/widget" element={<WidgetScreen />} />
+              <Route path="/privacy" element={<PrivacyScreen />} />
+              <Route path="/onboarding" element={<OnboardingScreen />} />
+              <Route path="/auth" element={<AuthScreen />} />
+              <Route path="/notifications" element={<NotificationsScreen />} />
+              <Route path="/resources" element={<ResourcesScreen />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </PageTransition>
+        </Gate>
+      </AppShell>
+    </BootGate>
   );
 }
 

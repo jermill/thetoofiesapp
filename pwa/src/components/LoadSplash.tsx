@@ -4,12 +4,15 @@ type Props = {
   label?: string;
 };
 
-/** Full-screen load splash while the store / gate hydrates. */
+/**
+ * Full-screen boot splash. Uses a square-sheet wave anim (not tall walk-cycle
+ * cells) so Toofie is never cropped/squashed. No orbit ring.
+ */
 export function LoadSplash({ label = 'Loading Toofies…' }: Props) {
   return (
     <div className="load-splash" role="status" aria-busy="true" aria-live="polite">
       <div className="load-splash-inner">
-        <ToofieSprite anim="walk" size={132} className="load-mascot" alt="" />
+        <ToofieSprite anim="wave" size={148} className="load-mascot" alt="Toofie" />
         <p className="load-brand">Toofies</p>
         <p className="load-label">{label}</p>
         <div className="load-bar" aria-hidden>
