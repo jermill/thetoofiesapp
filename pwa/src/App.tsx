@@ -9,6 +9,7 @@ import { StoreProvider, useStore } from './lib/store';
 import { loadUiPrefs } from './lib/uiPrefs';
 import { AuthScreen } from './screens/AuthScreen';
 import { BuddiesScreen } from './screens/BuddiesScreen';
+import { DessertMapScreen } from './screens/DessertMapScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { LogScreen } from './screens/LogScreen';
 import { MomentsScreen } from './screens/MomentsScreen';
@@ -108,6 +109,7 @@ function ShellRoutes() {
               <Route path="/onboarding" element={<OnboardingScreen />} />
               <Route path="/auth" element={<AuthScreen />} />
               <Route path="/notifications" element={<NotificationsScreen />} />
+              <Route path="/explore" element={<DessertMapScreen />} />
               <Route path="/resources" element={<ResourcesScreen />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

@@ -424,6 +424,14 @@ reckoned with, not assumed away.
 - **R8 · First-run order (PWA mock):** founder directed 2026-07-21 — **Create
   account → Onboarding → Home** (not onboarding-first). Auth remains a mock
   stub until D31 ships; “continue without account” still satisfies the gate.
+- **R9 · Snarky nudges vs “never guilt”:** founder asked for sarcastic Toofie
+  nudges (2026-07-21). Provisional copy is roast/hype only — never
+  “you failed / don’t break the streak.” Needs ratify under D18 if it stays.
+- **R10 · Dessert map (Google Maps):** provisional Explore screen uses place
+  search embeds/links (not live location). Touches D23 — keep place-check-in
+  posture; no Always/live tracking in the mock.
+- **R11 · Dark mode:** founder-requested toggle in PWA (provisional). Still
+  sits under open design gate D11–D15 until ratified.
 - **R7 · Disney — CLOSED. It was only an illustrative example, never a
   strategy** (clarified 2026-07-13: *"This isn't about Disney at all — I live in
   Orlando and am referencing them as a place people go to try new desserts and

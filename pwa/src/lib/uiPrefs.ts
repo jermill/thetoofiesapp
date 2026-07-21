@@ -1,4 +1,6 @@
 /** Tiny UI-only prefs for prototype screens (no backend). */
+import { applyTheme, type ThemeMode } from './theme';
+
 const KEY = 'toofies.pwa.ui';
 
 export type UiPrefs = {
@@ -10,7 +12,10 @@ export type UiPrefs = {
   economyOptIn: boolean;
   notifyEvening: boolean;
   notifyMilestone: boolean;
+  /** Snarky Toofie nudges — playful roast, never guilt. */
+  notifySnarky: boolean;
   healthConnectedMock: boolean;
+  theme: ThemeMode;
 };
 
 const defaults: UiPrefs = {
@@ -21,7 +26,9 @@ const defaults: UiPrefs = {
   economyOptIn: true,
   notifyEvening: false,
   notifyMilestone: true,
+  notifySnarky: true,
   healthConnectedMock: false,
+  theme: 'light',
 };
 
 export function loadUiPrefs(): UiPrefs {
@@ -34,6 +41,7 @@ export function loadUiPrefs(): UiPrefs {
     if (next.onboardingDone && parsed.authGateDone === undefined) {
       next.authGateDone = true;
     }
+    if (next.theme !== 'light' && next.theme !== 'dark') next.theme = 'light';
     return next;
   } catch {
     return { ...defaults };
@@ -47,5 +55,10 @@ export function saveUiPrefs(patch: Partial<UiPrefs>): UiPrefs {
   } catch {
     // ignore
   }
+  if (patch.theme) applyTheme(next.theme);
   return next;
+}
+
+export function hydrateThemeFromPrefs() {
+  applyTheme(loadUiPrefs().theme);
 }

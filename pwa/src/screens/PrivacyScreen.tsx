@@ -28,7 +28,9 @@ export function PrivacyScreen() {
       economyOptIn: true,
       notifyEvening: false,
       notifyMilestone: true,
+      notifySnarky: true,
       healthConnectedMock: false,
+      theme: 'light',
     });
     saveProfile({
       displayName: '',

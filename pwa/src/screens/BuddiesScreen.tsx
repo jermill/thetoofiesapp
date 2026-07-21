@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
@@ -10,15 +10,24 @@ import {
   saveBuddy,
   type BuddyState,
 } from '../lib/buddy';
+import { fileToDataUrl } from '../lib/profile';
+import { composeWalkMemoryCard } from '../lib/walkMemory';
 
 export function BuddiesScreen() {
   const { show } = useToast();
   const [buddy, setBuddy] = useState<BuddyState>(loadBuddy);
   const [codeIn, setCodeIn] = useState('');
   const [tab, setTab] = useState<'home' | 'walk' | 'play'>('home');
+  const [captureOpen, setCaptureOpen] = useState(false);
+  const [draftPhoto, setDraftPhoto] = useState('');
+  const [cardPreview, setCardPreview] = useState('');
+  const [busyShot, setBusyShot] = useState(false);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
 
   const combined = buddy.walkStepsMe + buddy.walkStepsBuddy;
   const walkPct = Math.min(100, Math.round((combined / buddy.walkGoal) * 100));
+  const walkComplete = combined >= buddy.walkGoal;
 
   const heroAnim = useMemo(() => {
     if (!buddy.paired) return 'welcome';
@@ -59,7 +68,81 @@ export function BuddiesScreen() {
       walkStepsBuddy: buddy.walkStepsBuddy + 420,
     });
     setBuddy(next);
-    show('+steps on the walk (mock)', { tone: 'soft', anim: 'hike', ms: 1500 });
+    const done = next.walkStepsMe + next.walkStepsBuddy >= next.walkGoal;
+    show(
+      done ? 'Goal hit — snap the finish!' : '+steps on the walk (mock)',
+      { tone: done ? 'good' : 'soft', anim: done ? 'celebrate' : 'hike', ms: 1600 },
+    );
+    if (done) setCaptureOpen(true);
+  }
+
+  async function onWalkPhoto(file: File | null) {
+    if (!file) return;
+    try {
+      const data = await fileToDataUrl(file, 1200);
+      setDraftPhoto(data);
+      setBusyShot(true);
+      const card = await composeWalkMemoryCard(data, {
+        combined,
+        goal: buddy.walkGoal,
+        buddyName: buddy.buddyName,
+        meSteps: buddy.walkStepsMe,
+        buddySteps: buddy.walkStepsBuddy,
+      });
+      setCardPreview(card);
+      setBusyShot(false);
+      show('Looking good — save the memory?', { tone: 'good', anim: 'proud', ms: 1800 });
+    } catch {
+      setBusyShot(false);
+      show('Couldn’t read that photo', { tone: 'soft', anim: 'shrug', ms: 1600 });
+    }
+  }
+
+  async function saveWalkMemory() {
+    if (!cardPreview) {
+      show('Add a photo or screenshot first', { tone: 'soft', anim: 'think', ms: 1600 });
+      return;
+    }
+    const memory = {
+      id: `wm-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      photoDataUrl: draftPhoto || cardPreview,
+      cardDataUrl: cardPreview,
+      combinedSteps: combined,
+    };
+    const next = saveBuddy({
+      walkActive: false,
+      walkMemories: [memory, ...(buddy.walkMemories ?? [])].slice(0, 12),
+      challenges: buddy.challenges.map((c) =>
+        c.id === 'walk-treat'
+          ? { ...c, progress: Math.min(c.goal, Math.max(c.progress, c.goal)) }
+          : c,
+      ),
+    });
+    setBuddy(next);
+    setCaptureOpen(false);
+    setDraftPhoto('');
+    setCardPreview('');
+    show('Walk memory saved on-device', { tone: 'good', anim: 'celebrate', ms: 2200 });
+  }
+
+  async function screenshotOnly() {
+    setBusyShot(true);
+    try {
+      const card = await composeWalkMemoryCard(draftPhoto || null, {
+        combined,
+        goal: buddy.walkGoal,
+        buddyName: buddy.buddyName,
+        meSteps: buddy.walkStepsMe,
+        buddySteps: buddy.walkStepsBuddy,
+      });
+      setCardPreview(card);
+      show('Screenshot card ready', { tone: 'soft', anim: 'wave', ms: 1500 });
+    } catch {
+      show('Couldn’t build screenshot', { tone: 'soft', anim: 'shrug', ms: 1600 });
+    } finally {
+      setBusyShot(false);
+    }
   }
 
   function sendCheer() {
@@ -254,23 +337,128 @@ export function BuddiesScreen() {
                   )}
                   <button
                     type="button"
-                    className="ghost-btn"
+                    className={walkComplete ? 'primary-btn blossom' : 'ghost-btn'}
                     onClick={() => {
-                      if (combined >= buddy.walkGoal) {
-                        show('Walk complete — treat-check unlocked', {
+                      if (walkComplete) {
+                        setCaptureOpen(true);
+                        show('Walk complete — grab a photo', {
                           tone: 'good',
                           anim: 'celebrate',
-                          ms: 2200,
+                          ms: 2000,
                         });
                       } else {
                         show('Keep strolling — no rush', { tone: 'soft', anim: 'hike', ms: 1600 });
                       }
                     }}
                   >
-                    Finish / cheer
+                    {walkComplete ? 'Finish · take a photo' : 'Finish / cheer'}
                   </button>
                 </div>
               </section>
+
+              {captureOpen && walkComplete && (
+                <section className="card walk-capture" id="walk-capture">
+                  <p className="eyebrow">Finish line</p>
+                  <p className="title" style={{ fontSize: 18 }}>
+                    Snap it or drop a screenshot
+                  </p>
+                  <p className="muted">
+                    Camera selfie, gallery shot, or a generated share card — stored on this device
+                    only.
+                  </p>
+                  <input
+                    ref={cameraRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                    onChange={(e) => void onWalkPhoto(e.target.files?.[0] ?? null)}
+                  />
+                  <input
+                    ref={galleryRef}
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => void onWalkPhoto(e.target.files?.[0] ?? null)}
+                  />
+                  <div className="walk-capture-actions">
+                    <button
+                      type="button"
+                      className="primary-btn"
+                      disabled={busyShot}
+                      onClick={() => cameraRef.current?.click()}
+                    >
+                      Take photo
+                    </button>
+                    <button
+                      type="button"
+                      className="primary-btn blossom"
+                      disabled={busyShot}
+                      onClick={() => galleryRef.current?.click()}
+                    >
+                      Upload screenshot
+                    </button>
+                    <button
+                      type="button"
+                      className="ghost-btn"
+                      disabled={busyShot}
+                      onClick={() => void screenshotOnly()}
+                    >
+                      Build share card
+                    </button>
+                  </div>
+                  {(draftPhoto || cardPreview) && (
+                    <div className="walk-capture-preview">
+                      <img src={cardPreview || draftPhoto} alt="Walk memory preview" />
+                      <button
+                        type="button"
+                        className="primary-btn"
+                        disabled={busyShot || !cardPreview}
+                        onClick={() => void saveWalkMemory()}
+                      >
+                        Save memory
+                      </button>
+                      {cardPreview && (
+                        <a
+                          className="ghost-btn"
+                          href={cardPreview}
+                          download={`toofies-walk-${Date.now()}.jpg`}
+                        >
+                          Download screenshot
+                        </a>
+                      )}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="ghost-btn"
+                    onClick={() => {
+                      setCaptureOpen(false);
+                      setDraftPhoto('');
+                      setCardPreview('');
+                    }}
+                  >
+                    Not now
+                  </button>
+                </section>
+              )}
+
+              {(buddy.walkMemories?.length ?? 0) > 0 && (
+                <section className="card">
+                  <p className="eyebrow">Walk memories</p>
+                  <div className="walk-memory-grid">
+                    {buddy.walkMemories.map((m) => (
+                      <figure key={m.id} className="walk-memory-tile">
+                        <img src={m.cardDataUrl || m.photoDataUrl} alt="Saved walk" />
+                        <figcaption>
+                          {m.combinedSteps.toLocaleString()} steps ·{' '}
+                          {new Date(m.createdAt).toLocaleDateString()}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </section>
+              )}
             </>
           )}
         </>

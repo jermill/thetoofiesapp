@@ -30,9 +30,9 @@ function formatWhen(iso: string): string {
 
 const SHORTCUTS = [
   { to: '/buddies', label: 'Buddies', blurb: 'Walks & cheers', Icon: IconBuddies, tone: 'matcha' },
-  { to: '/moments', label: 'Moments', blurb: 'Dessert share', Icon: IconCamera, tone: 'blossom' },
+  { to: '/explore', label: 'Dessert map', blurb: 'Google Maps', Icon: IconSpark, tone: 'blossom' },
   { to: '/recap', label: 'Day recap', blurb: 'Gentle check-in', Icon: IconMoon, tone: 'ink' },
-  { to: '/notifications', label: 'Reminders', blurb: 'Soft nudges', Icon: IconBell, tone: 'lime' },
+  { to: '/notifications', label: 'Nudges', blurb: 'Snarky Toofie', Icon: IconBell, tone: 'lime' },
 ] as const;
 
 export function YouScreen() {
@@ -183,6 +183,12 @@ export function YouScreen() {
         {showMore && (
           <div className="you-more-panel">
             <div className="you-extra-links">
+              <Link to="/explore">
+                <IconSpark size={18} /> Dessert map
+              </Link>
+              <Link to="/moments">
+                <IconCamera size={18} /> Moments
+              </Link>
               <Link to="/widget">
                 <IconWidget size={18} /> Widget preview
               </Link>
@@ -194,6 +200,29 @@ export function YouScreen() {
               </Link>
               <Link to="/auth">{prefs.signedInMock ? 'Account' : 'Sign in'}</Link>
               <Link to="/onboarding">Replay intro</Link>
+            </div>
+
+            <div className="card" style={{ marginTop: 12 }}>
+              <p className="eyebrow">Appearance</p>
+              <label className="toggle-row">
+                <span>
+                  <strong>Dark mode</strong>
+                  <span className="muted">Provisional · toggle anytime.</span>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={prefs.theme === 'dark'}
+                  onChange={() => {
+                    const theme = prefs.theme === 'dark' ? 'light' : 'dark';
+                    setPrefs(saveUiPrefs({ theme }));
+                    show(theme === 'dark' ? 'Dark mode on' : 'Light mode on', {
+                      tone: 'soft',
+                      anim: theme === 'dark' ? 'sleepy' : 'wave',
+                      ms: 1400,
+                    });
+                  }}
+                />
+              </label>
             </div>
 
             <div className="card" style={{ marginTop: 12 }}>

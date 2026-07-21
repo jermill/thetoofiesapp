@@ -12,6 +12,14 @@ export type BuddyChallenge = {
   reward: string;
 };
 
+export type WalkMemory = {
+  id: string;
+  createdAt: string;
+  photoDataUrl: string;
+  cardDataUrl: string;
+  combinedSteps: number;
+};
+
 export type BuddyState = {
   paired: boolean;
   buddyName: string;
@@ -24,6 +32,8 @@ export type BuddyState = {
   walkGoal: number;
   lastCheer: string;
   challenges: BuddyChallenge[];
+  /** Photos / screenshot cards from completed dessert walks. */
+  walkMemories: WalkMemory[];
 };
 
 const defaultChallenges = (): BuddyChallenge[] => [
@@ -76,6 +86,7 @@ export function defaultBuddyState(): BuddyState {
     walkGoal: 8000,
     lastCheer: '',
     challenges: defaultChallenges(),
+    walkMemories: [],
   };
 }
 
@@ -90,6 +101,7 @@ export function loadBuddy(): BuddyState {
       ...parsed,
       challenges: parsed.challenges?.length ? parsed.challenges : base.challenges,
       myCode: parsed.myCode || base.myCode,
+      walkMemories: parsed.walkMemories ?? base.walkMemories,
     };
   } catch {
     return defaultBuddyState();
