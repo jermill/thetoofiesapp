@@ -14,12 +14,17 @@
   .banner { display:inline-block; background:var(--lime); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; border-radius:999px; padding:7px 12px; margin-bottom:12px; }
   section { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; }
   h2 { margin:0 0 10px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); }
-  img.sheet { width:100%; border-radius:10px; border:1px solid var(--line); display:block; background:#e8efe3; }
+  .check {
+    background-color:#ddd;
+    background-image:linear-gradient(45deg,#bbb 25%,transparent 25%),linear-gradient(-45deg,#bbb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#bbb 75%),linear-gradient(-45deg,transparent 75%,#bbb 75%);
+    background-size:16px 16px; background-position:0 0,0 8px,8px -8px,-8px 0;
+  }
+  img.sheet { width:100%; border-radius:10px; border:1px solid var(--line); display:block; }
   .anims { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
   .anims button { appearance:none; border:1px solid var(--line); background:var(--paper); border-radius:999px; padding:8px 12px; font-weight:700; font-size:12px; cursor:pointer; }
   .anims button.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
   .player { display:flex; align-items:center; gap:16px; margin-top:12px; flex-wrap:wrap; }
-  .stage { width:140px; height:140px; border-radius:22px; border:2px solid var(--ink); background:#e8efe3; background-repeat:no-repeat; }
+  .stage { width:140px; height:140px; border:none; border-radius:0; background-color:transparent; background-repeat:no-repeat; }
   code { font-size:12px; background:#f3edd4; padding:2px 6px; border-radius:6px; }
   a { color:var(--matcha); font-weight:700; }
 </style>
@@ -28,13 +33,13 @@
 <div class="wrap">
   <div class="banner">Atlas · wired to PWA</div>
   <h1>Toofie sprite atlas</h1>
-  <p class="lede">All sheets + named animations from <code>/mascot/atlas.json</code>. Used by <code>ToofieSprite</code> in the app (home + log).</p>
+  <p class="lede">Transparent (keyed) sheets from <code>/mascot/atlas.json</code>. Chroma-green edit plates live in <code>mascot-plates/green-screen/</code> (not served). No frame / plate behind the character in-app.</p>
 
   <section>
     <h2>Play animation</h2>
     <div class="anims" id="animBtns"></div>
     <div class="player">
-      <div class="stage" id="stage"></div>
+      <div class="stage check" id="stage"></div>
       <div>
         <div><strong id="animName">idle</strong></div>
         <div style="color:var(--soft);font-size:13px" id="animMeta"></div>
@@ -44,24 +49,23 @@
 
   <section>
     <h2>actions · 4×3</h2>
-    <img class="sheet" src="mascot/toofie-sprite-sheet-actions.png" alt="actions sheet" />
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-actions.png" alt="actions sheet" />
   </section>
   <section>
     <h2>moods · 4×3</h2>
-    <img class="sheet" src="mascot/toofie-sprite-sheet-moods.png" alt="moods sheet" />
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-moods.png" alt="moods sheet" />
   </section>
   <section>
     <h2>app moments · 4×3</h2>
-    <img class="sheet" src="mascot/toofie-sprite-sheet-app.png" alt="app sheet" />
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-app.png" alt="app sheet" />
   </section>
   <section>
     <h2>cycles</h2>
-    <img class="sheet" src="mascot/toofie-sprite-walk-cycle.png" alt="walk" />
-    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="celebrate" />
-    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-milestone-cycle.png" alt="milestone" />
-    <img class="sheet" style="margin-top:8px" src="mascot/toofie-sprite-log-cycle.png" alt="log" />
+    <img class="sheet check" src="mascot/toofie-sprite-walk-cycle.png" alt="walk" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="celebrate" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-milestone-cycle.png" alt="milestone" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-log-cycle.png" alt="log" />
   </section>
-
   <p><a href="/">Open app</a> · <a href="/mascot-locked.html">Locked mascot</a></p>
 </div>
 <script>

@@ -72,16 +72,12 @@ export function ToofieSprite({
 
   return (
     <div
-      className={className}
+      className={['toofie-sprite', className].filter(Boolean).join(' ')}
       role="img"
       aria-label={alt}
       style={{
         width: size,
         height: size,
-        borderRadius: Math.round(size * 0.22),
-        border: '2px solid #121212',
-        backgroundColor: '#e8efe3',
-        boxShadow: '0 10px 28px -18px rgba(18,18,18,.35)',
         flex: '0 0 auto',
         ...bg,
       }}

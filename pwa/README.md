@@ -64,6 +64,23 @@ Or connect the GitHub repo in the Netlify UI (base directory `pwa` / use root `n
 | `/notifications` | Reminder prefs UI |
 | `/resources` | ED / care resources |
 
+## Mascot sprites
+
+Atlas sheets under `public/mascot/toofie-sprite-*.png` are **transparent RGBA**
+(mint/cream plates keyed out). Source plates + pure chroma (`#00FF00`) modules
+live outside the web root so they are not shipped in the PWA bundle:
+
+- `mascot-plates/raw/` — original unkeyed sheets
+- `mascot-plates/green-screen/` — character on chroma green for edits
+
+Regenerate after replacing a plate:
+
+```bash
+python3 scripts/key-mascot-sheets.py
+```
+
+`ToofieSprite` renders with no border / plate background.
+
 ## Notes
 
 - Point values are **placeholders** (D7).

@@ -126,6 +126,15 @@ a {
   max-width: 11rem;
 }
 
+.toofie-sprite {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  /* Sheets are green-screen keyed → transparent PNGs */
+  image-rendering: auto;
+}
+
 .toofie-mark {
   flex: 0 0 auto;
   animation: rise 0.55s ease both;
@@ -595,8 +604,6 @@ a {
 }
 
 .toast-mascot {
-  border-width: 1.5px !important;
-  box-shadow: none !important;
   flex: 0 0 auto;
 }
 
