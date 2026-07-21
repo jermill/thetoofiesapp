@@ -279,7 +279,7 @@ Founder: **"LETS GO G5 WITH FANNIE PACE AND BLACK FRAME GLASSES"**
 
 **Locked direction:**
 - **Form:** walking tooth (molar crown + root-legs) — not a marshmallow blob
-- **Hair:** pink frosting swirl on the crown (no cap)
+- **Hair:** **chocolate brown frosting** with colorful **jimmies/sprinkles** on the crown (no cap; updated 2026-07-21)
 - **Glasses:** **black frames** (not gold)
 - **Accessory:** **bright hot-pink fanny pack** on the waist (updated 2026-07-21 — was grey; founder asked for bright color)
 - **Pose system:** G5 sheet energy — walk / wave / celebrate

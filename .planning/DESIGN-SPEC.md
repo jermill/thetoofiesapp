@@ -50,8 +50,8 @@ set.” Reject / tweak freely — the PWA is the sketchpad.
 2. **Color** — keep the current blue, or a warmer/dessert palette, or your own
    brand colors?
 3. **Typography** — system default, system rounded, or a specific typeface?
-4. **Mascot** — 🟢 **RATIFIED 2026-07-21 (D14):** G5 walking tooth + pink
-   frosting hair + **black-frame glasses** + **fanny pack**. Assets in
+4. **Mascot** — 🟢 **RATIFIED 2026-07-21 (D14):** G5 walking tooth + **chocolate frosting with jimmies** +
+   **black-frame glasses** + **bright hot-pink fanny pack**. Assets in
    `pwa/public/mascot/toofie-g5-*.png`. Lock page:
    https://toofies-demo.netlify.app/mascot-locked.html
 5. **Layout** — keep the scrolling card dashboard, or a different structure?
