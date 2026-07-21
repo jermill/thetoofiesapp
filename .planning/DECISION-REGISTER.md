@@ -281,6 +281,12 @@ pick: **A Classic Toofie** · **B Frosted Toofie** · **C Editorial Outline** ·
 **D Sweet Blob** · **E The Toofies (pair)** · **F Mark only**. Nothing applied
 to the PWA until ratified.
 
+**Update 2026-07-21 — D14 image mockups (founder brief):** founder shared a
+blob-mascot reference and asked for a **walking tooth** with **gold glasses**
+and **frosting as hair** (no cap). Generated mockups + HTML picker:
+`pwa/public/mascot-walk-mockups.html` / live at
+https://toofies-demo.netlify.app/mascot-walk-mockups.html (G1–G5). Still 🔴.
+
 ---
 
 ## Tier 5 — Platform & feature scope

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Toofies — Walking Frosted Toofie mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #fefae7;
+    --ink: #121212;
+    --ink-soft: #4a4a44;
+    --ink-faint: #8a8a82;
+    --line: rgba(18,18,18,.12);
+    --matcha: #03563e;
+    --blossom: #ffbad8;
+    --lime: #c6ff3a;
+    --surface: #fffdf5;
+    --font-d: 'Anton', Impact, sans-serif;
+    --font-b: 'Outfit', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-b);
+    color: var(--ink);
+    background:
+      radial-gradient(800px 360px at 8% -5%, color-mix(in oklab, var(--blossom) 28%, transparent), transparent 55%),
+      radial-gradient(700px 320px at 100% 0%, color-mix(in oklab, var(--matcha) 10%, transparent), transparent 50%),
+      var(--paper);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 18px 110px; }
+  .banner {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-faint); border: 1px dashed var(--line);
+    border-radius: 999px; padding: 7px 12px; margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--font-d); font-size: clamp(34px, 7vw, 52px);
+    letter-spacing: .02em; text-transform: uppercase; line-height: .95; margin: 0 0 10px;
+  }
+  .lede { max-width: 60ch; color: var(--ink-soft); margin: 0 0 8px; }
+  .brief {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px 16px; margin: 18px 0 26px; font-size: 14px; color: var(--ink-soft);
+  }
+  .brief b { color: var(--ink); }
+  .brief ul { margin: 8px 0 0; padding-left: 1.1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface); border: 2px solid var(--line); border-radius: 20px;
+    overflow: hidden; cursor: pointer; transition: border-color .15s, transform .12s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--matcha) 40%, var(--line)); }
+  .card.selected {
+    border-color: var(--matcha);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--lime) 55%, transparent);
+  }
+  .card input { position: absolute; opacity: 0; pointer-events: none; }
+  .card img {
+    width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
+    background: #dfe8d8;
+  }
+  .card.wide { grid-column: 1 / -1; }
+  .card.wide img { aspect-ratio: 16/9; object-fit: contain; background: #dfe8d8; }
+  .meta { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .letter { font-family: var(--font-d); font-size: 22px; color: var(--matcha); letter-spacing: .04em; }
+  .name { margin: 0; font-size: 16px; font-weight: 700; }
+  .blurb { margin: 0; font-size: 13px; color: var(--ink-soft); }
+  .dock {
+    position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+    width: min(900px, calc(100% - 20px));
+    background: #121212; color: var(--paper); border-radius: 16px;
+    padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    z-index: 10;
+  }
+  .dock strong { color: var(--lime); }
+  .dock a, .dock button {
+    appearance: none; border: none; text-decoration: none; cursor: pointer;
+    background: #f08bb8; color: #121212; font-weight: 700; font-size: 13px;
+    border-radius: 999px; padding: 10px 14px;
+  }
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,.72); display: none;
+    align-items: center; justify-content: center; z-index: 30; padding: 20px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: min(920px, 100%); max-height: 90vh; border-radius: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">D14 · Walking frosted Toofie · image mockups</div>
+  <h1>Walking tooth + glasses + frosting hair</h1>
+  <p class="lede">Generated from your blob reference — rebuilt as a walking tooth with gold aviators and frosting as hair (no cap).</p>
+  <div class="brief">
+    <b>Brief locked for these mockups:</b>
+    <ul>
+      <li>Body = walking tooth (molar / roots as legs) — not a marshmallow blob</li>
+      <li>Keep gold aviator glasses</li>
+      <li>Replace red cap with pink frosting as hair</li>
+      <li>Optional props from your ref: backpack, fanny pack, apple, drink</li>
+    </ul>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="dock">
+  <div id="dockText">Tap a mockup to select · tap again to enlarge</div>
+  <a href="/mascot-options.html">Back to SVG options</a>
+</div>
+<div class="lightbox" id="lb"><img alt="" id="lbImg" /></div>
+
+<script>
+const ITEMS = [
+  {
+    id: 'v3',
+    letter: 'G1',
+    name: 'Molar walk (strongest tooth read)',
+    blurb: 'Clearest molar silhouette — crown + root-legs, frosting hair, glasses, full props.',
+    src: 'mascot/toofie-walk-frosting-v3-molar.png',
+    rec: true,
+  },
+  {
+    id: 'v1',
+    letter: 'G2',
+    name: 'Street walk (closest to your ref)',
+    blurb: 'Same vibe as your upload — backpack, apple, purple drink — frosting instead of the red cap.',
+    src: 'mascot/toofie-walk-frosting-v1.png',
+  },
+  {
+    id: 'v2',
+    letter: 'G3',
+    name: 'Brand three-quarter',
+    blurb: 'Cream paper, matcha backpack, cherry on frosting — good for home/hero art.',
+    src: 'mascot/toofie-walk-frosting-v2.png',
+  },
+  {
+    id: 'icon',
+    letter: 'G4',
+    name: 'App icon crop',
+    blurb: 'Head-focused for icon / avatar / streak badge.',
+    src: 'mascot/toofie-walk-frosting-icon.png',
+  },
+  {
+    id: 'poses',
+    letter: 'G5',
+    name: 'Pose sheet',
+    blurb: 'Walk · wave · celebrate — useful if we lock this direction.',
+    src: 'mascot/toofie-walk-frosting-poses.png',
+    wide: true,
+  },
+];
+
+let selected = null;
+const grid = document.getElementById('grid');
+const dock = document.getElementById('dockText');
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+
+function render() {
+  grid.innerHTML = ITEMS.map((it) => `
+    <label class="card${it.wide ? ' wide' : ''}${selected === it.id ? ' selected' : ''}" data-id="${it.id}" data-src="${it.src}">
+      <input type="radio" name="mock" value="${it.id}" ${selected === it.id ? 'checked' : ''} />
+      <img src="${it.src}" alt="${it.name}" loading="lazy" />
+      <div class="meta">
+        <span class="letter">${it.letter}${it.rec ? ' · REC' : ''}</span>
+        <h2 class="name">${it.name}</h2>
+        <p class="blurb">${it.blurb}</p>
+      </div>
+    </label>
+  `).join('');
+  if (!selected) dock.textContent = 'Tap a mockup to select · double-tap / enlarge to inspect';
+  else {
+    const it = ITEMS.find((x) => x.id === selected);
+    dock.innerHTML = `Selected: <strong>${it.letter} — ${it.name}</strong>`;
+    try { localStorage.setItem('toofies.mascot.genPick', JSON.stringify({ id: it.id, name: it.name, at: new Date().toISOString() })); } catch {}
+  }
+}
+
+grid.addEventListener('click', (e) => {
+  const card = e.target.closest('.card');
+  if (!card) return;
+  const id = card.dataset.id;
+  if (selected === id && e.detail >= 2) {
+    lbImg.src = card.dataset.src;
+    lb.classList.add('open');
+    return;
+  }
+  if (selected === id) {
+    lbImg.src = card.dataset.src;
+    lb.classList.add('open');
+  }
+  selected = id;
+  render();
+});
+
+lb.addEventListener('click', () => lb.classList.remove('open'));
+render();
+</script>
+</body>
+</html>
