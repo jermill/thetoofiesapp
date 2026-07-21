@@ -281,7 +281,7 @@ Founder: **"LETS GO G5 WITH FANNIE PACE AND BLACK FRAME GLASSES"**
 - **Form:** walking tooth (molar crown + root-legs) — not a marshmallow blob
 - **Hair:** pink frosting swirl on the crown (no cap)
 - **Glasses:** **black frames** (not gold)
-- **Accessory:** **fanny pack** on the waist
+- **Accessory:** **bright hot-pink fanny pack** on the waist (updated 2026-07-21 — was grey; founder asked for bright color)
 - **Pose system:** G5 sheet energy — walk / wave / celebrate
 - **Assets:** `pwa/public/mascot/toofie-g5-*.png` +
   `.planning/design-library/mascot/toofie-g5-*.png`
