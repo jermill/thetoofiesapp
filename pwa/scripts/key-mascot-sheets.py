@@ -153,7 +153,7 @@ def key_sheet(path: Path, cols: int, rows: int) -> Image.Image:
         for x in range(w):
             ap[x, y] = 0 if mask[y][x] else 255
 
-    alpha_soft = alpha.filter(ImageFilter.GaussianBlur(radius=0.7))
+    alpha_soft = alpha.filter(ImageFilter.GaussianBlur(radius=0.35))
     out = Image.new("RGBA", (w, h))
     op = out.load()
     asp = alpha_soft.load()
@@ -161,12 +161,12 @@ def key_sheet(path: Path, cols: int, rows: int) -> Image.Image:
         for x in range(w):
             r, g, b = px[x, y]
             a = asp[x, y]
-            if a < 28:
+            if a < 48:
+                op[x, y] = (0, 0, 0, 0)
+            elif a < 200 and (is_mint_like((r, g, b)) or is_cream_like((r, g, b)) or is_gray_frame((r, g, b))):
                 op[x, y] = (0, 0, 0, 0)
             else:
-                if a < 220 and (is_mint_like((r, g, b)) or is_cream_like((r, g, b))):
-                    a = max(0, a - 80)
-                op[x, y] = (r, g, b, a)
+                op[x, y] = (r, g, b, 255 if a > 200 else a)
     return out
 
 
