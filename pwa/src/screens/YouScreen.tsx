@@ -121,7 +121,7 @@ export function YouScreen() {
               key={d.key}
               className={`streak-day${d.count > 0 ? ' logged' : ' clean'}${d.label === 'Today' ? ' today' : ''}`}
             >
-              <div className="dot">{d.count > 0 ? d.count : '·'}</div>
+              <div className="dot">{d.count > 0 ? d.count : '✓'}</div>
               <span className="lbl">{d.label.slice(0, 3)}</span>
             </div>
           ))}

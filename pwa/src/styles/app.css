@@ -310,48 +310,74 @@ a {
   margin-top: 12px;
 }
 
+/* Day capsules: label on top, state chip below */
 .streak-day {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  padding: 9px 3px 8px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  transition: transform 0.15s ease;
 }
 
 .streak-day .dot {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1.5px solid var(--line-strong);
+  border: none;
   display: grid;
   place-items: center;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
-  background: var(--paper);
+  line-height: 1;
+  background: color-mix(in oklab, var(--matcha) 14%, var(--surface));
+  color: var(--matcha);
+}
+
+.streak-day.logged {
+  background: color-mix(in oklab, var(--blossom) 24%, var(--surface));
+  border-color: color-mix(in oklab, var(--blossom-deep) 40%, transparent);
 }
 
 .streak-day.logged .dot {
-  background: var(--blossom);
-  border-color: color-mix(in oklab, var(--blossom-deep) 70%, black);
+  background: var(--blossom-deep);
+  color: #121212;
 }
 
-.streak-day.clean .dot {
-  background: color-mix(in oklab, var(--matcha) 14%, white);
-  border-color: var(--matcha);
-  color: var(--matcha);
+.streak-day.today {
+  background: var(--surface);
+  border: 1.5px solid color-mix(in oklab, var(--matcha) 55%, transparent);
+  box-shadow: 0 4px 12px -6px color-mix(in oklab, var(--matcha) 45%, transparent);
+  transform: translateY(-2px);
+}
+
+.streak-day.today .dot {
+  background: var(--matcha);
+  color: var(--paper);
+}
+
+.streak-day.today.logged .dot {
+  background: var(--blossom-deep);
+  color: #121212;
 }
 
 .streak-day.today .lbl {
   color: var(--ink);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .streak-day .lbl {
-  font-size: 10px;
+  order: -1;
+  font-size: 9.5px;
+  font-weight: 700;
   color: var(--ink-faint);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .streak-num {
@@ -3131,8 +3157,7 @@ html[data-theme='dark'] .hh-ready-badge,
 html[data-theme='dark'] .hh-bubble-label,
 html[data-theme='dark'] .hh-cta,
 html[data-theme='dark'] .side-log,
-html[data-theme='dark'] .streak-day.logged .dot,
-html[data-theme='dark'] .streak-day.clean .dot {
+html[data-theme='dark'] .streak-day.logged .dot {
   color: #121212;
 }
 
@@ -3166,13 +3191,8 @@ html[data-theme='dark'] .you-tile.tone-lime {
   background: color-mix(in oklab, var(--lime) 16%, var(--surface));
 }
 
-html[data-theme='dark'] .streak-day.clean .dot {
-  background: color-mix(in oklab, var(--matcha) 30%, var(--surface));
-  color: var(--ink);
-}
-
-html[data-theme='dark'] .streak-day.logged .dot {
-  border-color: color-mix(in oklab, var(--blossom-deep) 60%, black);
+html[data-theme='dark'] .streak-day.today .dot {
+  color: #121212;
 }
 
 html[data-theme='dark'] .buddy-quest-state.is-done {
