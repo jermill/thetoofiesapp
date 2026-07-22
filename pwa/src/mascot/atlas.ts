@@ -73,7 +73,7 @@ export const atlas = {
       "height": 1024
     },
     "walk_cycle": {
-      "src": "/mascot/toofie-sprite-walk-cycle.png?v=9",
+      "src": "/mascot/toofie-sprite-walk-cycle.png?v=10",
       "cols": 8,
       "rows": 1,
       "frames": [

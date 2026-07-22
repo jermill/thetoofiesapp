@@ -58,8 +58,11 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number): FrameBox {
   const tall = ch / cw > 1.5;
 
   if (tall) {
+    // One column wide so neighbors never leak. Vertically center on the
+    // cell midpoint - keyed walk/celebrate plates put Toofie around 50%
+    // height; the old top-band crop showed empty transparency.
     const scale = size / cw;
-    const band = ch * 0.42;
+    const midY = row * ch + ch / 2;
     return {
       width: size,
       height: size,
@@ -67,7 +70,7 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number): FrameBox {
       backgroundImage: `url(${sheet.src})`,
       backgroundSize: `${sheetW * scale}px ${sheetH * scale}px`,
       backgroundPosition: `${-(col * cw * scale)}px ${
-        -(row * ch * scale) - (band * scale - size) / 2
+        -midY * scale + size / 2
       }px`,
       backgroundRepeat: 'no-repeat',
     };
