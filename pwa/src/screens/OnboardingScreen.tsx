@@ -187,6 +187,20 @@ export function OnboardingScreen() {
         </section>
       )}
 
+      <ol className="flow-path-rail" aria-label="Onboarding path">
+        {STEPS.map((s, idx) => (
+          <li
+            key={s.eyebrow}
+            className={
+              idx === i ? 'is-now' : idx < i ? 'is-done' : 'is-next'
+            }
+          >
+            <span className="flow-path-num">{idx + 1}</span>
+            <span className="flow-path-label">{s.eyebrow}</span>
+          </li>
+        ))}
+      </ol>
+
       {!last && (
         <section className="flow-preview-strip" aria-hidden>
           <div className="flow-preview-tile">
@@ -197,10 +211,28 @@ export function OnboardingScreen() {
           <div className="flow-preview-tile muted-tile">
             <span className="flow-preview-kicker">Then</span>
             <strong>{STEPS[Math.min(i + 2, STEPS.length - 1)].eyebrow}</strong>
-            <span>Keep tapping - you’re almost in</span>
+            <span>Keep tapping - you're almost in</span>
           </div>
         </section>
       )}
+
+      <section className="flow-app-peek" aria-hidden>
+        <p className="flow-peek-kicker">Inside the app</p>
+        <div className="flow-peek-row">
+          <div className="flow-peek-card">
+            <strong>Home</strong>
+            <span>Ready signal + streak</span>
+          </div>
+          <div className="flow-peek-card">
+            <strong>Log</strong>
+            <span>One-tap dessert</span>
+          </div>
+          <div className="flow-peek-card">
+            <strong>Move</strong>
+            <span>Walks bank vibes</span>
+          </div>
+        </div>
+      </section>
 
       <div className="flow-actions">
         {!last ? (

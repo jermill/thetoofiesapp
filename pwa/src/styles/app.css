@@ -945,7 +945,8 @@ a {
 
 /* Dense onboarding: fill the viewport so people skim + tap Continue */
 .flow-screen.flow-dense {
-  gap: 10px;
+  gap: 8px;
+  min-height: 0;
 }
 
 .flow-topbar {
@@ -1202,12 +1203,134 @@ a {
   padding: 12px 14px;
 }
 
-.flow-actions {
-  margin-top: auto;
+.flow-path-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.flow-path-rail-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.flow-path-rail li {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-bottom: 8px;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 8px 8px 9px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper-deep);
+  min-width: 0;
+}
+
+.flow-path-rail li.is-done {
+  background: color-mix(in oklab, var(--lime) 22%, var(--surface));
+}
+
+.flow-path-rail li.is-now {
+  background: color-mix(in oklab, var(--matcha) 12%, var(--surface));
+  border-color: color-mix(in oklab, var(--matcha) 35%, var(--line));
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--matcha) 20%, transparent);
+}
+
+.flow-path-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+.flow-path-rail li.is-now .flow-path-num {
+  color: var(--matcha);
+}
+
+.flow-path-label {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.flow-path-rail li.is-now .flow-path-label {
+  color: var(--ink);
+}
+
+.flow-app-peek {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px dashed var(--line-strong);
+  background: color-mix(in oklab, var(--surface) 80%, var(--blossom));
+}
+
+.flow-peek-kicker {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.flow-peek-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.flow-peek-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 9px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.flow-peek-card strong {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.flow-peek-card span {
+  font-size: 10px;
+  line-height: 1.25;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.flow-actions {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 4px;
+}
+
+.flow-dense .flow-actions {
+  /* Keep CTA attached to content - no giant empty flex band */
+  margin-top: 6px;
+}
+
+.flow-dense .flow-bullet {
+  min-height: 0;
+  padding: 8px 10px;
+}
+
+.flow-dense .flow-preview-tile {
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

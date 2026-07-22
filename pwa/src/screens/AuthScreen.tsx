@@ -37,15 +37,52 @@ export function AuthScreen() {
   }
 
   return (
-    <div className="flow-screen">
-      <p className="ui-only-chip">UI only · mock account (nothing is sent)</p>
-      <div className="flow-hero">
-        <ToofieSprite anim="wave" size={100} />
-        <h1 className="flow-title">{mode === 'up' ? 'Create account' : 'Welcome back'}</h1>
+    <div className="flow-screen flow-dense">
+      <div className="flow-topbar">
+        <p className="ui-only-chip">UI only · mock account (nothing is sent)</p>
+        <p className="flow-step-pill">Gate</p>
+      </div>
+
+      <div className="flow-callouts" aria-hidden>
+        <span className="flow-callout">Mock only</span>
+        <span className="flow-callout">Skip ok</span>
+        <span className="flow-callout">Then onboarding</span>
+      </div>
+
+      <div className="flow-hero flow-hero-dense">
+        <div className="flow-hero-row">
+          <ToofieSprite anim="wave" size={96} className="flow-toofie" />
+          <div className="flow-hero-copy">
+            <p className="eyebrow">{mode === 'up' ? 'Start here' : 'Welcome back'}</p>
+            <h1 className="flow-title">{mode === 'up' ? 'Create account' : 'Sign back in'}</h1>
+          </div>
+        </div>
         <p className="lede">
-          Accounts unlock sync + Moments later. This screen is a visual stub - no auth backend yet.
+          Accounts unlock sync + Moments later. This screen is a visual stub - nothing is sent.
         </p>
       </div>
+
+      <div className="flow-chip-row" aria-label="Quick tags">
+        <span className="flow-chip">No backend yet</span>
+        <span className="flow-chip">On-device fine</span>
+        <span className="flow-chip">Privacy first</span>
+        <span className="flow-chip">30-sec hop</span>
+      </div>
+
+      <ol className="flow-path-rail flow-path-rail-3" aria-label="First-run path">
+        <li className="is-now">
+          <span className="flow-path-num">1</span>
+          <span className="flow-path-label">Account</span>
+        </li>
+        <li className="is-next">
+          <span className="flow-path-num">2</span>
+          <span className="flow-path-label">Onboarding</span>
+        </li>
+        <li className="is-next">
+          <span className="flow-path-num">3</span>
+          <span className="flow-path-label">Home</span>
+        </li>
+      </ol>
 
       <section className="card stack-form">
         <div className="seg">
@@ -106,6 +143,24 @@ export function AuthScreen() {
         >
           Continue without account
         </button>
+      </section>
+
+      <section className="flow-app-peek" aria-hidden>
+        <p className="flow-peek-kicker">What happens next</p>
+        <div className="flow-peek-row">
+          <div className="flow-peek-card">
+            <strong>Skim</strong>
+            <span>4 quick beats</span>
+          </div>
+          <div className="flow-peek-card">
+            <strong>Meet Toofie</strong>
+            <span>Hype, no guilt</span>
+          </div>
+          <div className="flow-peek-card">
+            <strong>Home</strong>
+            <span>Log when ready</span>
+          </div>
+        </div>
       </section>
 
       <p className="fineprint">
