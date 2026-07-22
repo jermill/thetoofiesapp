@@ -243,8 +243,10 @@ export function AuthScreen() {
       </section>
 
       <p className="fineprint">
-        Auth runs on Supabase; only your email + display name are stored. Dessert logs never
-        leave this device. <Link to="/resources">ED resources</Link>
+        Toofies is a dessert-tracking app prototype. Auth runs on Supabase; only your email +
+        display name are stored, and dessert logs never leave this device. We never ask for
+        payment or banking details. <Link to="/privacy">Privacy</Link> ·{' '}
+        <Link to="/resources">ED resources</Link>
       </p>
     </div>
   );

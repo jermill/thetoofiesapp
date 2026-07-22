@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Toofies - a playful dessert-balance app prototype.
+# Not a financial, banking, or credential-harvesting site.
