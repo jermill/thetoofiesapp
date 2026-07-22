@@ -22,6 +22,9 @@ function toofieLine(opts: {
   return 'Small check-ins. Big peace of mind. Zero guilt.';
 }
 
+const RING_R = 88;
+const RING_C = 2 * Math.PI * RING_R;
+
 export function HomeScreen() {
   const now = useMemo(() => new Date(), []);
   const t = useToofies(now);
@@ -37,28 +40,36 @@ export function HomeScreen() {
   }, [t.streakMilestoneToday]);
 
   const ready = t.availability.bankedDesserts > 0;
-  const progressPct = Math.round(t.availability.progress * 100);
   const loggedToday = t.daysSinceLastDessert === 0;
   const empty = state.entries.length === 0;
+  const progress = ready ? 1 : t.availability.progress;
 
-  const recencyHeadline =
+  const heroEyebrow = empty
+    ? 'Welcome in'
+    : ready
+      ? 'You’re clear'
+      : 'Banking sweetness';
+
+  const heroHeadline = empty
+    ? 'Start your dessert story'
+    : ready
+      ? `Dessert unlocked ×${t.availability.bankedDesserts}`
+      : `${t.availability.pointsNeeded} pts to your next treat`;
+
+  const heroSub = empty
+    ? 'Log your first treat whenever it sounds good - Toofie handles the vibes.'
+    : ready
+      ? 'Banked and ready. Enjoy it guilt-free whenever you want.'
+      : t.pendingPointsToday > 0
+        ? `${t.availability.balance} / ${t.availability.cost} pts · +${t.pendingPointsToday} banks tonight`
+        : `${t.availability.balance} / ${t.availability.cost} pts · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
+
+  const daysSinceChip =
     t.daysSinceLastDessert === null
-      ? 'Your dessert story starts whenever you want'
+      ? 'No treats yet'
       : loggedToday
-        ? 'You treated yourself today'
-        : t.daysSinceLastDessert === 1
-          ? 'One day since your last treat'
-          : `${t.daysSinceLastDessert} days since your last treat`;
-
-  const readyTitle = ready
-    ? `Dessert unlocked ×${t.availability.bankedDesserts}`
-    : `${t.availability.pointsNeeded} pts to the next treat`;
-
-  const readySub = ready
-    ? 'Banked and ready - enjoy it guilt-free when you want.'
-    : t.pendingPointsToday > 0
-      ? `${t.availability.balance} / ${t.availability.cost} pts · +${t.pendingPointsToday} banks tonight`
-      : `${t.availability.balance} / ${t.availability.cost} pts · about ${t.availability.cleanDaysNeeded} clean day${t.availability.cleanDaysNeeded === 1 ? '' : 's'}`;
+        ? 'Treated today'
+        : `${t.daysSinceLastDessert}d since treat`;
 
   const anim = pickHomeAnim({
     empty,
@@ -75,6 +86,12 @@ export function HomeScreen() {
     loggedToday,
   });
 
+  const dayLabel = now.toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
   const tickerBits = [
     showMilestone && t.streakMilestoneToday != null
       ? `${t.streakMilestoneToday} days on plan · keep enjoying`
@@ -85,33 +102,87 @@ export function HomeScreen() {
   ].filter(Boolean) as string[];
 
   return (
-    <div className="home-fun">
-      <header className="home-stage">
-        <div className="home-stage-bg" aria-hidden />
-        <div className="home-stage-top">
-          <div className="home-brand">
-            <p className="home-kicker">Toofies</p>
-            <h1 className="home-title">Let’s play nice with dessert</h1>
+    <div className="home-hero-screen">
+      <section className={`home-hero${ready ? ' is-ready' : ''}`} aria-label="Today with Toofie">
+        <div className="hh-sky" aria-hidden />
+        <header className="hh-top">
+          <p className="hh-kicker">Toofies</p>
+          <p className="hh-day">{dayLabel}</p>
+        </header>
+
+        <div className="hh-center">
+          <div className="hh-ring-wrap">
+            <svg
+              className="hh-ring"
+              viewBox="0 0 200 200"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progress * 100)}
+              aria-label="Progress toward next dessert"
+            >
+              <circle className="hh-ring-track" cx="100" cy="100" r={RING_R} />
+              <circle
+                className="hh-ring-fill"
+                cx="100"
+                cy="100"
+                r={RING_R}
+                strokeDasharray={RING_C}
+                strokeDashoffset={RING_C * (1 - progress)}
+              />
+            </svg>
+            <div className="hh-toofie">
+              <ToofieSprite
+                anim={anim}
+                size={150}
+                alt="Toofie"
+                motion={anim === 'milestone' ? 'task' : 'still'}
+                loop={false}
+                onComplete={() => {
+                  if (anim === 'milestone') setMilestoneDone(true);
+                }}
+              />
+            </div>
+            {ready && <span className="hh-ready-badge">Ready!</span>}
           </div>
-          <div className="home-toofie-wrap">
-            <ToofieSprite
-              className="home-toofie"
-              anim={anim}
-              size={112}
-              alt="Toofie"
-              motion={anim === 'milestone' ? 'task' : 'still'}
-              loop={false}
-              onComplete={() => {
-                if (anim === 'milestone') setMilestoneDone(true);
-              }}
-            />
-          </div>
+
+          <p className="hh-eyebrow">{heroEyebrow}</p>
+          <h1 className="hh-headline">{heroHeadline}</h1>
+          <p className="hh-sub">{heroSub}</p>
+
+          <p className="hh-bubble" role="status">
+            <span className="hh-bubble-label">Toofie</span>
+            {bubble}
+          </p>
         </div>
-        <p className="home-bubble" role="status">
-          <span className="home-bubble-label">Toofie</span>
-          {bubble}
-        </p>
-      </header>
+
+        <div className="hh-chips" aria-label="Your rhythm">
+          <span className="hh-chip">
+            <strong>{t.onPlanStreak}d</strong> streak
+          </span>
+          <span className="hh-chip">
+            <strong>{t.availability.balance}</strong> pts
+          </span>
+          <span className="hh-chip">{daysSinceChip}</span>
+        </div>
+
+        <Link to="/log" className="hh-cta">
+          <span className="hh-cta-glow" aria-hidden />
+          <IconSpark size={22} />
+          <span>Log a dessert</span>
+        </Link>
+
+        <div className="hh-links">
+          <Link to="/buddies" className="hh-link">
+            <IconBuddies size={18} />
+            Buddy walk
+          </Link>
+          <Link to="/recap" className="hh-link">
+            <IconMoon size={18} />
+            Day recap
+          </Link>
+        </div>
+      </section>
 
       <div className="home-marquee" aria-hidden>
         <div className="home-marquee-track">
@@ -121,53 +192,9 @@ export function HomeScreen() {
         </div>
       </div>
 
-      <section className={`home-pulse${ready ? ' is-ready' : ''}`} aria-label="Dessert readiness">
-        <div className="home-pulse-copy">
-          <p className="eyebrow">{ready ? 'You’re clear' : 'Almost there'}</p>
-          <h2 className="home-pulse-title">{readyTitle}</h2>
-          <p className="home-pulse-sub">{readySub}</p>
-        </div>
-        <div
-          className="home-meter"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={progressPct}
-          aria-label="Progress toward next dessert"
-        >
-          <span className="home-meter-fill" style={{ width: `${progressPct}%` }} />
-          <span className="home-meter-shine" aria-hidden />
-        </div>
-        <div className="home-pulse-stats">
-          <div>
-            <strong>{t.availability.balance}</strong>
-            <span>pts banked</span>
-          </div>
-          <div>
-            <strong>{t.availability.cost}</strong>
-            <span>per treat</span>
-          </div>
-          <div>
-            <strong>{t.availability.bankedDesserts}</strong>
-            <span>unlocked</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="home-streak" aria-label="Days on plan">
-        <div className="home-streak-head">
-          <div>
-            <p className="eyebrow">On-plan streak</p>
-            <p className="home-streak-num">
-              {t.onPlanStreak}
-              <span>days</span>
-            </p>
-          </div>
-          <p className="home-streak-note">
-            Clean days and earned desserts both count. Miss a day? No shame - just keep going.
-          </p>
-        </div>
-        <div className="streak-row home-streak-row">
+      <section className="hh-week" aria-label="Days on plan this week">
+        <p className="eyebrow">This week</p>
+        <div className="streak-row">
           {t.week.map((d) => (
             <div
               key={d.key}
@@ -178,36 +205,8 @@ export function HomeScreen() {
             </div>
           ))}
         </div>
+        <p className="hh-week-note">Miss a day? No shame - just keep going.</p>
       </section>
-
-      <section className="home-recency" aria-label="Last dessert">
-        <p className="eyebrow">Last dessert</p>
-        <h2 className="home-recency-title">{recencyHeadline}</h2>
-        <p className="home-recency-sub">
-          {t.cleanSoFarToday
-            ? 'Clean so far today - savor that calm.'
-            : 'Logged one today - still on plan if it was banked.'}
-        </p>
-      </section>
-
-      <Link to="/log" className="home-cta">
-        <span className="home-cta-glow" aria-hidden />
-        <IconSpark size={22} />
-        <span>Log a dessert</span>
-      </Link>
-
-      <div className="home-quick">
-        <Link to="/buddies" className="home-quick-tile tone-matcha">
-          <IconBuddies size={22} />
-          <strong>Buddy walk</strong>
-          <span>Stroll for fun</span>
-        </Link>
-        <Link to="/recap" className="home-quick-tile tone-blossom">
-          <IconMoon size={22} />
-          <strong>Day recap</strong>
-          <span>Gentle close</span>
-        </Link>
-      </div>
     </div>
   );
 }
