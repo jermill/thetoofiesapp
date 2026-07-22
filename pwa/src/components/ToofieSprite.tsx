@@ -42,9 +42,26 @@ type FrameBox = {
 };
 
 /**
- * Map one atlas cell into a clip box that can never show neighbors.
- * Tall cycle sheets: size×size, width-locked to one column, crop to band.
- * Grid sheets: exact scaled cell (contained in size); parent centers it.
+ * Vertical character band (top/bottom fractions of the cell) for each tall
+ * cycle sheet, measured from the keyed plates. Cropping to the band keeps
+ * Toofie whole; a square mid-crop was chopping head + feet.
+ */
+const TALL_BANDS: Array<{ match: string; top: number; bottom: number }> = [
+  { match: 'walk', top: 0.29, bottom: 0.71 },
+  { match: 'celebrate', top: 0.32, bottom: 0.67 },
+  { match: 'milestone', top: 0.31, bottom: 0.69 },
+  { match: 'log', top: 0.2, bottom: 0.79 },
+];
+
+function bandFor(src: string): { top: number; bottom: number } {
+  const hit = TALL_BANDS.find((b) => src.includes(b.match));
+  return hit ?? { top: 0.2, bottom: 0.8 };
+}
+
+/**
+ * Map one atlas cell into a clip box that can never show neighbors:
+ * the box is exactly the scaled cell (or character band), so neighboring
+ * frames physically cannot leak in. The outer slot centers the box.
  */
 function frameStyle(sheet: Sheet, cellIndex: number, size: number): FrameBox {
   const cols = sheet.cols;
@@ -58,19 +75,19 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number): FrameBox {
   const tall = ch / cw > 1.5;
 
   if (tall) {
-    // One column wide so neighbors never leak. Vertically center on the
-    // cell midpoint - keyed walk/celebrate plates put Toofie around 50%
-    // height; the old top-band crop showed empty transparency.
-    const scale = size / cw;
-    const midY = row * ch + ch / 2;
+    const band = bandFor(sheet.src);
+    const bandTop = band.top * ch;
+    const bandH = (band.bottom - band.top) * ch;
+    // Contain the full band: whole character visible, nothing chopped.
+    const scale = Math.min(size / cw, size / bandH);
     return {
-      width: size,
-      height: size,
+      width: cw * scale,
+      height: bandH * scale,
       overflow: 'hidden',
       backgroundImage: `url(${sheet.src})`,
       backgroundSize: `${sheetW * scale}px ${sheetH * scale}px`,
       backgroundPosition: `${-(col * cw * scale)}px ${
-        -midY * scale + size / 2
+        -(row * ch + bandTop) * scale
       }px`,
       backgroundRepeat: 'no-repeat',
     };

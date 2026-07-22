@@ -38,7 +38,7 @@ export function LoadSplash({ onReady }: Props) {
     <div className="load-splash" role="status" aria-busy="true" aria-label="Loading">
       <ToofieSprite
         anim="walk"
-        size={180}
+        size={230}
         alt="Toofie walking"
         className="load-mascot-solo"
         motion="task"
