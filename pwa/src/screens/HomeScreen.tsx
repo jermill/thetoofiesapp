@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IconBuddies, IconMoon, IconSpark } from '../components/NavIcons';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { pickHomeAnim, ToofieSprite } from '../components/ToofieSprite';
 import { useStore, useToofies } from '../lib/store';
 
@@ -107,7 +108,10 @@ export function HomeScreen() {
         <div className="hh-sky" aria-hidden />
         <header className="hh-top">
           <p className="hh-kicker">Toofies</p>
-          <p className="hh-day">{dayLabel}</p>
+          <div className="hh-top-actions">
+            <ThemeToggle className="theme-toggle-hero" />
+            <p className="hh-day">{dayLabel}</p>
+          </div>
         </header>
 
         <div className="hh-center">

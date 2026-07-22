@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 import { IconBuddies, IconHome, IconLog, IconMove, IconYou } from './NavIcons';
+import { ThemeToggle } from './ThemeToggle';
 
 const HIDE_NAV = new Set(['/onboarding', '/auth']);
 
@@ -52,6 +53,10 @@ export function AppShell({ children, path }: { children: ReactNode; path: string
                 <span>{label}</span>
               </NavLink>
             ))}
+          </div>
+          <div className="side-theme-row">
+            <span>Appearance</span>
+            <ThemeToggle />
           </div>
           <p className="side-foot">Playful, never punitive · no calories, ever</p>
         </aside>
