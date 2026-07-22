@@ -310,7 +310,7 @@ a {
   margin-top: 12px;
 }
 
-/* Day capsules: label on top, state chip below */
+/* Day capsules: label on top, state chip below, color-coded */
 .streak-day {
   flex: 1;
   display: flex;
@@ -319,9 +319,17 @@ a {
   gap: 7px;
   padding: 9px 3px 8px;
   border-radius: 999px;
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
   transition: transform 0.15s ease;
+}
+
+/* On-plan day: matcha→lime wash */
+.streak-day.clean {
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--matcha) 22%, var(--surface)),
+    color-mix(in oklab, var(--lime) 34%, var(--surface))
+  );
+  border: 1px solid color-mix(in oklab, var(--matcha) 40%, transparent);
 }
 
 .streak-day .dot {
@@ -335,13 +343,18 @@ a {
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  background: color-mix(in oklab, var(--matcha) 14%, var(--surface));
-  color: var(--matcha);
+  background: var(--matcha);
+  color: var(--paper);
 }
 
+/* Treat day: blossom wash */
 .streak-day.logged {
-  background: color-mix(in oklab, var(--blossom) 24%, var(--surface));
-  border-color: color-mix(in oklab, var(--blossom-deep) 40%, transparent);
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, var(--blossom) 42%, var(--surface)),
+    color-mix(in oklab, var(--blossom-deep) 30%, var(--surface))
+  );
+  border: 1px solid color-mix(in oklab, var(--blossom-deep) 50%, transparent);
 }
 
 .streak-day.logged .dot {
@@ -349,25 +362,40 @@ a {
   color: #121212;
 }
 
+/* Today: solid matcha pop */
 .streak-day.today {
-  background: var(--surface);
-  border: 1.5px solid color-mix(in oklab, var(--matcha) 55%, transparent);
-  box-shadow: 0 4px 12px -6px color-mix(in oklab, var(--matcha) 45%, transparent);
+  background: linear-gradient(
+    165deg,
+    var(--matcha),
+    color-mix(in oklab, var(--matcha) 72%, var(--lime))
+  );
+  border: 1px solid color-mix(in oklab, var(--matcha) 70%, black);
+  box-shadow: 0 6px 16px -6px color-mix(in oklab, var(--matcha) 60%, transparent);
   transform: translateY(-2px);
 }
 
 .streak-day.today .dot {
-  background: var(--matcha);
-  color: var(--paper);
-}
-
-.streak-day.today.logged .dot {
-  background: var(--blossom-deep);
+  background: var(--lime);
   color: #121212;
 }
 
+.streak-day.today.logged {
+  background: linear-gradient(
+    165deg,
+    var(--blossom-deep),
+    color-mix(in oklab, var(--blossom) 80%, var(--surface))
+  );
+  border-color: color-mix(in oklab, var(--blossom-deep) 70%, black);
+  box-shadow: 0 6px 16px -6px color-mix(in oklab, var(--blossom-deep) 60%, transparent);
+}
+
+.streak-day.today.logged .dot {
+  background: #121212;
+  color: var(--blossom);
+}
+
 .streak-day.today .lbl {
-  color: var(--ink);
+  color: var(--paper);
   font-weight: 800;
 }
 
@@ -375,7 +403,7 @@ a {
   order: -1;
   font-size: 9.5px;
   font-weight: 700;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
