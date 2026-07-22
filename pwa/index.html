@@ -23,78 +23,21 @@
       rel="stylesheet"
     />
     <title>Toofies</title>
-    <!-- cache-bust marker: splash-v11-walk -->
-    <link rel="preload" as="image" href="/mascot/toofie-sprite-walk-cycle.png?v=8" />
-    <link rel="preload" as="image" href="/mascot/toofie-splash.png?v=10" />
+    <!-- cache-bust marker: splash-v13-one-toofie-dock -->
+    <link rel="preload" as="image" href="/mascot/toofie-sprite-walk-cycle.png?v=9" />
     <style>
-      /* First-paint splash - CSS walk strip until React mounts */
+      /* First-paint: cream only until React mounts one walking Toofie */
       #boot-splash {
         position: fixed;
         inset: 0;
         z-index: 200;
-        display: grid;
-        place-items: center;
         margin: 0;
-        background:
-          radial-gradient(600px 320px at 50% 30%, rgba(244, 194, 194, 0.35), transparent 60%),
-          #fefae7;
-        font-family: Outfit, system-ui, sans-serif;
-      }
-      #boot-splash .boot-inner {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-      }
-      #boot-splash .boot-walk {
-        width: 168px;
-        height: 168px;
-        overflow: hidden;
-        position: relative;
-        animation: boot-stroll 1.6s ease-in-out infinite;
-      }
-      /* Tall walk cells (192×1024) → crop to character band in a 168 box */
-      #boot-splash .boot-walk-strip {
-        width: 168px;
-        height: 168px;
-        background-image: url('/mascot/toofie-sprite-walk-cycle.png?v=8');
-        background-repeat: no-repeat;
-        background-size: 600.576px 400.384px;
-        background-position: 46.464px -116.192px;
-        animation: boot-walk-frames 0.8s steps(8) infinite;
-      }
-      #boot-splash .boot-brand {
-        margin: 8px 0 0;
-        font-family: Anton, Impact, sans-serif;
-        font-size: 34px;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: #1a1a1a;
-      }
-      #boot-splash .boot-label {
-        margin: 0;
-        color: #5c5c5c;
-        font-size: 14px;
-      }
-      @keyframes boot-walk-frames {
-        from { background-position: 46.464px -116.192px; }
-        to { background-position: -554.112px -116.192px; }
-      }
-      @keyframes boot-stroll {
-        0%, 100% { transform: translateX(-10px); }
-        50% { transform: translateX(10px); }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        #boot-splash .boot-walk,
-        #boot-splash .boot-walk-strip {
-          animation: none !important;
-        }
+        background: #fefae7;
       }
     </style>
     <script>
-      /* One-shot: drop stale SW/caches that still show the dashed orbit */
       (function () {
-        var EPOCH = 'splash-v11-walk';
+        var EPOCH = 'splash-v13-one-toofie-dock';
         try {
           if (localStorage.getItem('toofies-cache-epoch') === EPOCH) return;
           localStorage.setItem('toofies-cache-epoch', EPOCH);
@@ -136,15 +79,7 @@
     </script>
   </head>
   <body>
-    <div id="boot-splash" aria-hidden="true">
-      <div class="boot-inner">
-        <div class="boot-walk">
-          <div class="boot-walk-strip" role="img" aria-label="Toofie walking"></div>
-        </div>
-        <p class="boot-brand">Toofies</p>
-        <p class="boot-label">Warming up the bakery…</p>
-      </div>
-    </div>
+    <div id="boot-splash" aria-hidden="true"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

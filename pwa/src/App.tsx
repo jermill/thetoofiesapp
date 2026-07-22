@@ -78,10 +78,7 @@ function BootGate({ children }: { children: React.ReactNode }) {
 
   if (!storeReady || !prefsReady || !minSplashDone) {
     return (
-      <LoadSplash
-        label="Warming up the bakery…"
-        onReady={() => setMascotReady(true)}
-      />
+      <LoadSplash onReady={() => setMascotReady(true)} />
     );
   }
 

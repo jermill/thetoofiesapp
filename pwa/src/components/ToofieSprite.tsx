@@ -31,12 +31,22 @@ type Props = {
 type Sheet = (typeof atlas.sheets)[keyof typeof atlas.sheets];
 type AnimDef = (typeof atlas.animations)[ToofieAnimName];
 
+type FrameBox = {
+  width: number;
+  height: number;
+  overflow: 'hidden';
+  backgroundImage: string;
+  backgroundSize: string;
+  backgroundPosition: string;
+  backgroundRepeat: 'no-repeat';
+};
+
 /**
- * Map one atlas cell into a size×size box without stretching or chopping
- * Toofie. Grid sheets use contain (full cell). Tall cycle sheets fit the
- * character band. Never cover-crop - that was clipping limbs/frosting.
+ * Map one atlas cell into a clip box that can never show neighbors.
+ * Tall cycle sheets: size×size, width-locked to one column, crop to band.
+ * Grid sheets: exact scaled cell (contained in size); parent centers it.
  */
-function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
+function frameStyle(sheet: Sheet, cellIndex: number, size: number): FrameBox {
   const cols = sheet.cols;
   const rows = sheet.rows;
   const sheetW = Number(sheet.width);
@@ -47,25 +57,33 @@ function frameStyle(sheet: Sheet, cellIndex: number, size: number) {
   const row = Math.floor(cellIndex / cols);
   const tall = ch / cw > 1.5;
 
-  // Tall cells: fit the ~character band. Grid cells: fit the whole cell
-  // (keyed plates are transparent, so empty margin is fine - cropping is not).
-  const scale = tall
-    ? Math.min(size / cw, size / (ch * 0.42))
-    : Math.min(size / cw, size / ch);
+  if (tall) {
+    const scale = size / cw;
+    const band = ch * 0.42;
+    return {
+      width: size,
+      height: size,
+      overflow: 'hidden',
+      backgroundImage: `url(${sheet.src})`,
+      backgroundSize: `${sheetW * scale}px ${sheetH * scale}px`,
+      backgroundPosition: `${-(col * cw * scale)}px ${
+        -(row * ch * scale) - (band * scale - size) / 2
+      }px`,
+      backgroundRepeat: 'no-repeat',
+    };
+  }
 
-  const bgW = sheetW * scale;
-  const bgH = sheetH * scale;
-  const x = -(col * cw * scale) - (cw * scale - size) / 2;
-  const y = -(row * ch * scale) - (ch * scale - size) / 2;
-
+  const scale = Math.min(size / cw, size / ch);
+  const cellW = cw * scale;
+  const cellH = ch * scale;
   return {
-    width: size,
-    height: size,
-    overflow: 'hidden' as const,
+    width: cellW,
+    height: cellH,
+    overflow: 'hidden',
     backgroundImage: `url(${sheet.src})`,
-    backgroundSize: `${bgW}px ${bgH}px`,
-    backgroundPosition: `${x}px ${y}px`,
-    backgroundRepeat: 'no-repeat' as const,
+    backgroundSize: `${sheetW * scale}px ${sheetH * scale}px`,
+    backgroundPosition: `${-(col * cw * scale)}px ${-(row * ch * scale)}px`,
+    backgroundRepeat: 'no-repeat',
   };
 }
 
@@ -169,15 +187,23 @@ export function ToofieSprite({
 
   const sprite = (
     <div
-      className={spriteClass}
-      role={tappable ? undefined : 'img'}
-      aria-hidden={tappable ? true : undefined}
-      aria-label={tappable ? undefined : alt}
+      className="toofie-sprite-slot"
       style={{
+        width: size,
+        height: size,
         flex: '0 0 auto',
-        ...style,
+        display: 'grid',
+        placeItems: 'center',
       }}
-    />
+    >
+      <div
+        className={spriteClass}
+        role={tappable ? undefined : 'img'}
+        aria-hidden={tappable ? true : undefined}
+        aria-label={tappable ? undefined : alt}
+        style={style}
+      />
+    </div>
   );
 
   if (!tappable) return sprite;

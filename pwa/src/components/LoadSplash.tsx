@@ -4,7 +4,6 @@ import { atlas } from '../mascot/atlas';
 import { ToofieSprite } from './ToofieSprite';
 
 type Props = {
-  label?: string;
   /** Fires once the walk sheet is ready (or fails / times out). */
   onReady?: () => void;
 };
@@ -12,12 +11,10 @@ type Props = {
 const WALK_SRC = atlas.sheets.walk_cycle.src;
 
 /**
- * Full-screen boot splash. Toofie walks while the app warms up.
- * No orbit ring. Splash is a loading moment - walk is intentional motion.
+ * Full-screen boot splash: one walking Toofie, nothing else.
  */
-export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
+export function LoadSplash({ onReady }: Props) {
   useEffect(() => {
-    // Remove the pre-React HTML splash once React owns the screen.
     document.getElementById('boot-splash')?.remove();
 
     let done = false;
@@ -38,24 +35,16 @@ export function LoadSplash({ label = 'Loading Toofies…', onReady }: Props) {
   }, [onReady]);
 
   return (
-    <div className="load-splash" role="status" aria-busy="true" aria-live="polite">
-      <div className="load-splash-inner">
-        <div className="load-mascot-walk">
-          <ToofieSprite
-            anim="walk"
-            size={168}
-            alt="Toofie walking"
-            motion="task"
-            loop
-            tappable={false}
-          />
-        </div>
-        <p className="load-brand">Toofies</p>
-        <p className="load-label">{label}</p>
-        <div className="load-bar" aria-hidden>
-          <span />
-        </div>
-      </div>
+    <div className="load-splash" role="status" aria-busy="true" aria-label="Loading">
+      <ToofieSprite
+        anim="walk"
+        size={180}
+        alt="Toofie walking"
+        className="load-mascot-solo"
+        motion="task"
+        loop
+        tappable={false}
+      />
     </div>
   );
 }
