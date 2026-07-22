@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
+import { GuestLock } from '../components/GuestLock';
 import { ToofieSprite } from '../components/ToofieSprite';
+import { loadUiPrefs } from '../lib/uiPrefs';
 
 const NEARBY = [
   {
@@ -37,6 +39,15 @@ function mapsEmbedUrl(query: string) {
 /** Explore dessert spots via Google Maps (place search - not live location). */
 export function DessertMapScreen() {
   const defaultQuery = 'dessert restaurants near me';
+
+  if (loadUiPrefs().guestMode) {
+    return (
+      <GuestLock
+        title="The dessert map"
+        blurb="Saving and sharing spots is an account thing - guests keep the core tracker."
+      />
+    );
+  }
 
   return (
     <div className="page-stack">

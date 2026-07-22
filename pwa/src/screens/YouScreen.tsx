@@ -53,6 +53,17 @@ export function YouScreen() {
 
   return (
     <>
+      {prefs.guestMode && (
+        <section className="guest-banner">
+          <div className="guest-banner-copy">
+            <strong>Guest mode</strong>
+            <span>Core tracking only - buddies, moments, map + nudges are locked.</span>
+          </div>
+          <Link to="/auth" className="mini-btn">
+            Create account
+          </Link>
+        </section>
+      )}
       <section className="you-hero">
         <div className="you-hero-glow" aria-hidden />
         <div className="you-hero-top">

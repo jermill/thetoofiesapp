@@ -7,6 +7,8 @@ export type UiPrefs = {
   /** Create-account / sign-in / continue-without completed. */
   authGateDone: boolean;
   onboardingDone: boolean;
+  /** Skipped the gate: core tracking only, account features locked. */
+  guestMode: boolean;
   signedInMock: boolean;
   displayName: string;
   economyOptIn: boolean;
@@ -21,6 +23,7 @@ export type UiPrefs = {
 const defaults: UiPrefs = {
   authGateDone: false,
   onboardingDone: false,
+  guestMode: false,
   signedInMock: false,
   displayName: '',
   economyOptIn: true,

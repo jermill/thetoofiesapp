@@ -24,6 +24,7 @@ export function AuthScreen() {
   function finishSignedIn(displayName: string) {
     saveUiPrefs({
       authGateDone: true,
+      guestMode: false,
       signedInMock: true,
       displayName,
     });
@@ -212,12 +213,12 @@ export function AuthScreen() {
               className="ghost-btn"
               disabled={busy}
               onClick={() => {
-                saveUiPrefs({ authGateDone: true });
-                show('Continuing locally', { tone: 'soft', anim: 'peace', ms: 1600 });
-                goNext();
+                saveUiPrefs({ authGateDone: true, onboardingDone: true, guestMode: true });
+                show('Guest mode - core tracking only', { tone: 'soft', anim: 'peace', ms: 1900 });
+                navigate('/', { replace: true });
               }}
             >
-              Continue without account
+              Skip - try it as a guest
             </button>
           </>
         )}

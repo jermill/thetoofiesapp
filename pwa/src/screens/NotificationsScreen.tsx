@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { GuestLock } from '../components/GuestLock';
 import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
@@ -38,6 +39,15 @@ export function NotificationsScreen() {
   const { show } = useToast();
   const [prefs, setPrefs] = useState(loadUiPrefs);
   const [preview, setPreview] = useState(0);
+
+  if (prefs.guestMode) {
+    return (
+      <GuestLock
+        title="Nudges"
+        blurb="Snarky Toofie pings need somewhere to land - accounts wire them up."
+      />
+    );
+  }
 
   function toggle(key: 'notifyEvening' | 'notifyMilestone' | 'notifySnarky') {
     const next = !prefs[key];

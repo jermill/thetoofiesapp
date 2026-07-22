@@ -1,8 +1,10 @@
 import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { GuestLock } from '../components/GuestLock';
 import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
+import { loadUiPrefs } from '../lib/uiPrefs';
 import {
   loadBuddy,
   mockPair,
@@ -15,6 +17,7 @@ import { composeWalkMemoryCard } from '../lib/walkMemory';
 
 export function BuddiesScreen() {
   const { show } = useToast();
+  const guest = loadUiPrefs().guestMode;
   const [buddy, setBuddy] = useState<BuddyState>(loadBuddy);
   const [codeIn, setCodeIn] = useState('');
   const [tab, setTab] = useState<'home' | 'walk' | 'play'>('home');
@@ -166,6 +169,15 @@ export function BuddiesScreen() {
     });
     setBuddy(next);
     show('Challenge progress!', { tone: 'good', anim: 'celebrate', ms: 1800 });
+  }
+
+  if (guest) {
+    return (
+      <GuestLock
+        title="Buddies"
+        blurb="Pairing with a partner or friend needs an account on both sides."
+      />
+    );
   }
 
   return (

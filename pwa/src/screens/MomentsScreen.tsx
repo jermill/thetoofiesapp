@@ -1,4 +1,6 @@
+import { GuestLock } from '../components/GuestLock';
 import { ToofieSprite } from '../components/ToofieSprite';
+import { loadUiPrefs } from '../lib/uiPrefs';
 
 const FEED = [
   {
@@ -28,6 +30,14 @@ const FEED = [
 ];
 
 export function MomentsScreen() {
+  if (loadUiPrefs().guestMode) {
+    return (
+      <GuestLock
+        title="Moments"
+        blurb="The shared dessert feed is tied to real people - it needs an account."
+      />
+    );
+  }
   return (
     <>
       <p className="ui-only-chip">UI only · mock feed · no network</p>
