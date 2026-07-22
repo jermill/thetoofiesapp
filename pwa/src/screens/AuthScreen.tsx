@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
+import { supabase } from '../lib/supabase';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 export function AuthScreen() {
@@ -11,40 +12,81 @@ export function AuthScreen() {
   const [mode, setMode] = useState<'in' | 'up'>('up');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmSent, setConfirmSent] = useState(false);
 
   function goNext() {
     const prefs = loadUiPrefs();
     navigate(prefs.onboardingDone ? '/' : '/onboarding', { replace: true });
   }
 
-  function mockContinue() {
-    if (busy) return;
-    setBusy(true);
-    show(mode === 'up' ? 'Account created (mock)' : 'Signed in (mock)', {
-      tone: 'good',
-      anim: 'wave',
-      ms: 1800,
+  function finishSignedIn(displayName: string) {
+    saveUiPrefs({
+      authGateDone: true,
+      signedInMock: true,
+      displayName,
     });
-    window.setTimeout(() => {
-      saveUiPrefs({
-        authGateDone: true,
-        signedInMock: true,
-        displayName: name.trim() || 'Friend',
-      });
-      goNext();
-    }, 700);
+    goNext();
+  }
+
+  async function submit() {
+    if (busy) return;
+    const mail = email.trim();
+    if (!mail || !password) {
+      show('Email + password needed', { tone: 'soft', anim: 'think', ms: 1600 });
+      return;
+    }
+    setBusy(true);
+    try {
+      if (mode === 'up') {
+        const { data, error } = await supabase.auth.signUp({
+          email: mail,
+          password,
+          options: {
+            data: { display_name: name.trim() || 'Friend' },
+            emailRedirectTo: window.location.origin,
+          },
+        });
+        if (error) throw error;
+        if (data.session) {
+          show('Account created - welcome in', { tone: 'good', anim: 'cheer', ms: 2000 });
+          finishSignedIn(name.trim() || 'Friend');
+        } else {
+          // Email confirmation required before the session exists.
+          setConfirmSent(true);
+          show('Check your email to confirm', { tone: 'soft', anim: 'wave', ms: 2400 });
+        }
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: mail,
+          password,
+        });
+        if (error) throw error;
+        const dn =
+          (data.user?.user_metadata?.display_name as string | undefined) ||
+          name.trim() ||
+          'Friend';
+        show('Signed in - welcome back', { tone: 'good', anim: 'wave', ms: 1800 });
+        finishSignedIn(dn);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Something went wrong';
+      show(msg, { tone: 'soft', anim: 'shrug', ms: 2600 });
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
     <div className="flow-screen flow-dense">
       <div className="flow-topbar">
-        <p className="ui-only-chip">UI only · mock account (nothing is sent)</p>
+        <p className="ui-only-chip">Accounts live · dessert data stays on this device</p>
         <p className="flow-step-pill">Gate</p>
       </div>
 
       <div className="flow-callouts" aria-hidden>
-        <span className="flow-callout">Mock only</span>
+        <span className="flow-callout">Real accounts</span>
         <span className="flow-callout">Skip ok</span>
         <span className="flow-callout">Then onboarding</span>
       </div>
@@ -58,14 +100,14 @@ export function AuthScreen() {
           </div>
         </div>
         <p className="lede">
-          Accounts unlock sync + Moments later. This screen is a visual stub - nothing is sent.
+          Accounts unlock sync + Moments later. Your dessert logs stay on this device.
         </p>
       </div>
 
       <div className="flow-chip-row" aria-label="Quick tags">
-        <span className="flow-chip">No backend yet</span>
-        <span className="flow-chip">On-device fine</span>
+        <span className="flow-chip">Logs stay local</span>
         <span className="flow-chip">Privacy first</span>
+        <span className="flow-chip">No spam</span>
         <span className="flow-chip">30-sec hop</span>
       </div>
 
@@ -85,64 +127,100 @@ export function AuthScreen() {
       </ol>
 
       <section className="card stack-form">
-        <div className="seg">
-          <button
-            type="button"
-            className={mode === 'up' ? 'on' : ''}
-            onClick={() => setMode('up')}
-          >
-            Sign up
-          </button>
-          <button
-            type="button"
-            className={mode === 'in' ? 'on' : ''}
-            onClick={() => setMode('in')}
-          >
-            Sign in
-          </button>
-        </div>
+        {confirmSent ? (
+          <div className="auth-confirm">
+            <p className="eyebrow">One more step</p>
+            <p className="title buddy-title-sm">Confirm your email</p>
+            <p className="muted">
+              We sent a link to <strong>{email.trim()}</strong>. Tap it, then sign in here.
+            </p>
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={() => {
+                setConfirmSent(false);
+                setMode('in');
+              }}
+            >
+              I confirmed - sign in
+            </button>
+            <button type="button" className="ghost-btn" onClick={() => setConfirmSent(false)}>
+              Back
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="seg">
+              <button
+                type="button"
+                className={mode === 'up' ? 'on' : ''}
+                onClick={() => setMode('up')}
+              >
+                Sign up
+              </button>
+              <button
+                type="button"
+                className={mode === 'in' ? 'on' : ''}
+                onClick={() => setMode('in')}
+              >
+                Sign in
+              </button>
+            </div>
 
-        {mode === 'up' && (
-          <label className="field">
-            <span>Display name</span>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Danny"
-              autoComplete="nickname"
-            />
-          </label>
+            {mode === 'up' && (
+              <label className="field">
+                <span>Display name</span>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Danny"
+                  autoComplete="nickname"
+                />
+              </label>
+            )}
+            <label className="field">
+              <span>Email</span>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                autoComplete="email"
+              />
+            </label>
+            <label className="field">
+              <span>Password</span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete={mode === 'up' ? 'new-password' : 'current-password'}
+              />
+            </label>
+
+            <button
+              type="button"
+              className="primary-btn"
+              onClick={() => void submit()}
+              disabled={busy}
+            >
+              {busy ? 'One sec…' : mode === 'up' ? 'Create account' : 'Sign in'}
+            </button>
+            <button
+              type="button"
+              className="ghost-btn"
+              disabled={busy}
+              onClick={() => {
+                saveUiPrefs({ authGateDone: true });
+                show('Continuing locally', { tone: 'soft', anim: 'peace', ms: 1600 });
+                goNext();
+              }}
+            >
+              Continue without account
+            </button>
+          </>
         )}
-        <label className="field">
-          <span>Email</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@email.com"
-            autoComplete="email"
-          />
-        </label>
-        <label className="field">
-          <span>Password</span>
-          <input type="password" placeholder="••••••••" autoComplete="new-password" />
-        </label>
-
-        <button type="button" className="primary-btn" onClick={mockContinue} disabled={busy}>
-          {busy ? 'One sec…' : mode === 'up' ? 'Create account (mock)' : 'Sign in (mock)'}
-        </button>
-        <button
-          type="button"
-          className="ghost-btn"
-          disabled={busy}
-          onClick={() => {
-            saveUiPrefs({ authGateDone: true });
-            show('Continuing locally', { tone: 'soft', anim: 'peace', ms: 1600 });
-            goNext();
-          }}
-        >
-          Continue without account
-        </button>
       </section>
 
       <section className="flow-app-peek" aria-hidden>
@@ -164,8 +242,8 @@ export function AuthScreen() {
       </section>
 
       <p className="fineprint">
-        By continuing you agree this is a prototype. Real privacy policy + deletion arrive with a
-        backend. <Link to="/resources">ED resources</Link>
+        Auth runs on Supabase; only your email + display name are stored. Dessert logs never
+        leave this device. <Link to="/resources">ED resources</Link>
       </p>
     </div>
   );

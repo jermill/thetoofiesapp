@@ -154,12 +154,16 @@ NOT override the decision):** sequence a **thin, shippable social core** first
 heavy parts (discovery, rich profiles, comments-at-scale, moderation depth), so
 something real ships and teaches before the full platform is built.
 
-**New decisions this spawns (all 🔴 OPEN):**
-- **D30 · Backend provider** — Rec (🟡) **Supabase** (Postgres + Auth + Storage +
-  Realtime + row-level security); the founder's other product already runs on
-  Supabase, so it reuses a known stack.
-- **D31 · Auth** — Rec (🟡) **Clerk** or **Supabase Auth**, plus **Sign in with
-  Apple** (Apple requires it when other social logins are offered).
+**New decisions this spawns:**
+- **D30 · Backend provider 🟢 RATIFIED 2026-07-22** — founder provisioned a
+  **Supabase** project (`fmqdojgjxjtlkusxqnur`) and supplied keys. Publishable
+  key ships in the PWA client; the **secret key is server-side only** (never in
+  repo/bundle; rotation recommended since it transited chat).
+- **D31 · Auth — partially shipped 2026-07-22:** **Supabase Auth**
+  (email + password, email-confirm flow) is live in the PWA gate; "continue
+  without account" stays. Scope so far: **auth only** — dessert logs remain
+  on-device until a sync scope is ratified (D33). **Sign in with Apple** still
+  🔴 (Apple requires it if other social logins are offered).
 - **D32 · Content moderation** — required for a public dessert feed (report/block +
   a content policy). Scope + tooling 🔴.
 - **D33 · Minimum "social v1" scope** — exactly what ships first vs fast-follow.

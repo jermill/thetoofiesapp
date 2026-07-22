@@ -16,6 +16,7 @@ import { useToast } from '../components/Toast';
 import { getLogMeta } from '../lib/logMeta';
 import { loadProfile } from '../lib/profile';
 import { useStore, useToofies } from '../lib/store';
+import { supabase } from '../lib/supabase';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
 
 function formatWhen(iso: string): string {
@@ -260,9 +261,13 @@ export function YouScreen() {
                 <button
                   type="button"
                   className="ghost-btn"
-                  onClick={() => setPrefs(saveUiPrefs({ signedInMock: false, displayName: '' }))}
+                  onClick={() => {
+                    void supabase.auth.signOut();
+                    setPrefs(saveUiPrefs({ signedInMock: false, displayName: '' }));
+                    show('Signed out', { tone: 'soft', anim: 'peace', ms: 1500 });
+                  }}
                 >
-                  Sign out (mock)
+                  Sign out
                 </button>
               )}
               <button
