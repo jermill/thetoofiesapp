@@ -716,12 +716,13 @@ a {
   z-index: 100;
   display: grid;
   place-items: center;
-  background: var(--paper);
-  animation: splash-in 0.3s ease both;
+  /* Solid cream, no fade: fading in flashed the body gradient behind it */
+  background: #fefae7;
 }
 
 .load-mascot-solo {
-  filter: drop-shadow(0 14px 22px rgba(18, 18, 18, 0.12));
+  /* No shadow/filter: keep the splash perfectly clean cream + Toofie */
+  filter: none;
 }
 
 /* Kill leftover splash chrome from stale cached bundles */
@@ -831,11 +832,6 @@ a {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes splash-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 @keyframes spin {
