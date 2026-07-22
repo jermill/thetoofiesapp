@@ -26,23 +26,18 @@ import './styles/app.css';
 
 function Gate({ children }: { children: React.ReactNode }) {
   const loc = useLocation();
-  const [authGateDone, setAuthGateDone] = useState(true);
-  const [onboardingDone, setOnboardingDone] = useState(true);
-
-  useEffect(() => {
-    const p = loadUiPrefs();
-    setAuthGateDone(p.authGateDone);
-    setOnboardingDone(p.onboardingDone);
-  }, [loc.pathname]);
-
+  // Read prefs synchronously. Async useState+useEffect lagged one render behind
+  // localStorage, so finish/skip → navigate('/') still saw onboardingDone=false
+  // and bounced back to /onboarding (loop / "onboarding twice").
+  const prefs = loadUiPrefs();
   const onAuth = loc.pathname === '/auth';
   const onOnboarding = loc.pathname === '/onboarding';
 
   // Account first, then onboarding - never the reverse.
-  if (!authGateDone && !onAuth) {
+  if (!prefs.authGateDone && !onAuth) {
     return <Navigate to="/auth" replace />;
   }
-  if (authGateDone && !onboardingDone && !onOnboarding && !onAuth) {
+  if (prefs.authGateDone && !prefs.onboardingDone && !onOnboarding && !onAuth) {
     return <Navigate to="/onboarding" replace />;
   }
 
