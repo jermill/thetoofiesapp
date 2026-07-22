@@ -1547,20 +1547,198 @@ a {
   opacity: 0.55;
 }
 
+/* -- Buddies overhaul: consistent rhythm, no broken seg -- */
+.buddies-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buddy-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 2px 2px 0;
+}
+
+.buddy-head-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.buddy-head .lede {
+  max-width: none;
+}
+
+.buddy-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 5px;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.buddy-tabs button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  border-radius: 999px;
+  padding: 11px 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.buddy-tabs button.on {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.buddy-section,
+.buddy-pair-card,
+.buddy-quest {
+  padding: 18px 16px;
+}
+
+.buddy-title-sm {
+  font-size: 17px !important;
+}
+
+.buddy-cta {
+  margin-top: 14px;
+  width: 100%;
+}
+
+.buddy-cheer-note {
+  margin-top: 10px !important;
+}
+
+.buddy-unpair {
+  margin-top: 10px;
+}
+
+.buddy-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--paper-deep);
+  border: 1px dashed var(--line-strong);
+}
+
 .buddy-code {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(36px, 10vw, 48px);
+  font-size: clamp(28px, 8vw, 38px);
   letter-spacing: 0.14em;
   line-height: 1;
 }
 
-.buddy-tabs {
-  margin-bottom: 2px;
+.buddy-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 12px;
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.buddy-divider::before,
+.buddy-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
 .buddy-hero .headline {
   font-size: clamp(26px, 7vw, 34px);
+}
+
+.buddy-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.buddy-quest-banner {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--lime) 24%, var(--surface));
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.buddy-quest-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.buddy-quest-head .eyebrow {
+  margin: 0;
+}
+
+.buddy-quest-state {
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+}
+
+.buddy-quest-state.is-done {
+  background: color-mix(in oklab, var(--lime) 45%, white);
+  color: var(--matcha);
+  border-color: color-mix(in oklab, var(--matcha) 30%, transparent);
+}
+
+.buddy-quest .title {
+  margin-top: 8px;
+}
+
+.buddy-quest-progress {
+  margin-top: 12px;
+}
+
+.buddy-quest-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.buddy-quest-reward {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .text-link {

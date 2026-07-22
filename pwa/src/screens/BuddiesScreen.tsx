@@ -169,26 +169,25 @@ export function BuddiesScreen() {
   }
 
   return (
-    <>
+    <div className="buddies-page">
       <p className="ui-only-chip">UI only · buddy system mock · no calories</p>
-      <div className="brand-lockup">
-        <div className="brand-left">
+
+      <header className="buddy-head">
+        <div className="buddy-head-copy">
           <h1 className="screen-title">Buddies</h1>
-          <p className="lede">
-            Couples & friends - dessert walks, shared cheers, gamified treats. Never a diet club.
-          </p>
+          <p className="lede">Dessert walks, shared cheers, duo quests - never a diet club.</p>
         </div>
         <ToofieSprite
           anim={buddy.walkActive && tab === 'walk' ? 'walk' : heroAnim}
-          size={84}
+          size={92}
           motion={buddy.walkActive && tab === 'walk' ? 'task' : 'still'}
           loop={buddy.walkActive && tab === 'walk'}
         />
-      </div>
+      </header>
 
-      <div className="seg buddy-tabs">
+      <nav className="buddy-tabs" aria-label="Buddy sections">
         <button type="button" className={tab === 'home' ? 'on' : ''} onClick={() => setTab('home')}>
-          Pair
+          Duo
         </button>
         <button type="button" className={tab === 'walk' ? 'on' : ''} onClick={() => setTab('walk')}>
           Walks
@@ -196,16 +195,20 @@ export function BuddiesScreen() {
         <button type="button" className={tab === 'play' ? 'on' : ''} onClick={() => setTab('play')}>
           Play
         </button>
-      </div>
+      </nav>
 
       {tab === 'home' && (
         <>
           {!buddy.paired ? (
-            <>
-              <section className="card">
-                <p className="eyebrow">Your invite code</p>
+            <section className="card buddy-pair-card">
+              <p className="eyebrow">Pair up</p>
+              <h2 className="title">Bring a dessert buddy</h2>
+              <p className="muted">
+                Share your code with a partner or friend - or punch in theirs.
+              </p>
+
+              <div className="buddy-code-row">
                 <p className="buddy-code">{buddy.myCode}</p>
-                <p className="muted">Share with a partner or friend so they can pair with you.</p>
                 <button
                   type="button"
                   className="mini-btn"
@@ -214,26 +217,27 @@ export function BuddiesScreen() {
                     show('Code copied', { tone: 'soft', anim: 'wave', ms: 1400 });
                   }}
                 >
-                  Copy code
+                  Copy
                 </button>
-              </section>
+              </div>
 
-              <section className="card stack-form">
-                <p className="eyebrow">Enter their code</p>
-                <label className="field">
-                  <span>Buddy code</span>
-                  <input
-                    value={codeIn}
-                    onChange={(e) => setCodeIn(e.target.value.toUpperCase())}
-                    placeholder="e.g. SWEET2"
-                    maxLength={8}
-                  />
-                </label>
-                <button type="button" className="primary-btn blossom" onClick={pair}>
-                  Pair up
-                </button>
-              </section>
-            </>
+              <div className="buddy-divider" aria-hidden>
+                <span>or enter theirs</span>
+              </div>
+
+              <label className="field">
+                <span>Buddy code</span>
+                <input
+                  value={codeIn}
+                  onChange={(e) => setCodeIn(e.target.value.toUpperCase())}
+                  placeholder="e.g. SWEET2"
+                  maxLength={8}
+                />
+              </label>
+              <button type="button" className="primary-btn blossom buddy-cta" onClick={pair}>
+                Pair up
+              </button>
+            </section>
           ) : (
             <>
               <section className="hero buddy-hero">
@@ -242,21 +246,21 @@ export function BuddiesScreen() {
                 <p className="sub">{buddy.duoStreak} days on plan together · playful, not punitive</p>
               </section>
 
-              <section className="card">
+              <section className="card buddy-section">
                 <p className="eyebrow">Treat check together</p>
-                <p className="title" style={{ fontSize: 17 }}>
+                <p className="title buddy-title-sm">
                   Peace-of-mind check - “feeling good about a dessert?”
                 </p>
                 <p className="muted">
                   Replaces any calorie talk. You cheer each other’s joy, not restrict it.
                 </p>
-                <button type="button" className="primary-btn" onClick={sendCheer}>
+                <button type="button" className="primary-btn buddy-cta" onClick={sendCheer}>
                   Send a treat-check cheer
                 </button>
-                {buddy.lastCheer && <p className="muted" style={{ marginTop: 10 }}>{buddy.lastCheer}</p>}
+                {buddy.lastCheer && <p className="muted buddy-cheer-note">{buddy.lastCheer}</p>}
               </section>
 
-              <section className="card">
+              <section className="card buddy-section">
                 <p className="eyebrow">Quick actions</p>
                 <div className="link-rows">
                   <button type="button" className="text-link" onClick={startWalk}>
@@ -269,7 +273,7 @@ export function BuddiesScreen() {
                 </div>
                 <button
                   type="button"
-                  className="ghost-btn"
+                  className="ghost-btn buddy-unpair"
                   onClick={() => {
                     setBuddy(mockUnpair());
                     show('Unpaired (mock)', { tone: 'soft', anim: 'sit', ms: 1600 });
@@ -286,11 +290,13 @@ export function BuddiesScreen() {
       {tab === 'walk' && (
         <>
           {!buddy.paired ? (
-            <section className="card">
-              <p className="title" style={{ fontSize: 17 }}>
-                Pair a buddy first to unlock dessert walks.
-              </p>
-              <button type="button" className="primary-btn" onClick={() => setTab('home')}>
+            <section className="card buddy-section">
+              <p className="title buddy-title-sm">Pair a buddy first to unlock dessert walks.</p>
+              <button
+                type="button"
+                className="primary-btn buddy-cta"
+                onClick={() => setTab('home')}
+              >
                 Go pair
               </button>
             </section>
@@ -320,12 +326,12 @@ export function BuddiesScreen() {
                 </div>
               </section>
 
-              <section className="card">
+              <section className="card buddy-section">
                 <p className="eyebrow">Walk loop</p>
-                <p className="title" style={{ fontSize: 16 }}>
+                <p className="title buddy-title-sm">
                   Stroll now, savor later - walks never “pay for” dessert.
                 </p>
-                <div className="flow-actions" style={{ marginTop: 12 }}>
+                <div className="buddy-actions">
                   {!buddy.walkActive ? (
                     <button type="button" className="primary-btn blossom" onClick={startWalk}>
                       Start walk
@@ -466,41 +472,41 @@ export function BuddiesScreen() {
 
       {tab === 'play' && (
         <>
-          <section className="card">
-            <p className="eyebrow">Duo quests</p>
-            <p className="muted" style={{ margin: 0 }}>
-              Gamified, forgiving, dessert-positive. No calorie counters - ever.
-            </p>
-          </section>
+          <p className="buddy-quest-banner">
+            Gamified, forgiving, dessert-positive. No calorie counters - ever.
+          </p>
           {buddy.challenges.map((c) => {
             const pct = Math.min(100, Math.round((c.progress / c.goal) * 100));
+            const done = c.progress >= c.goal;
             return (
-              <section key={c.id} className="card">
-                <p className="eyebrow">{c.unit}</p>
-                <p className="title" style={{ fontSize: 17 }}>
-                  {c.title}
-                </p>
+              <section key={c.id} className="card buddy-quest">
+                <div className="buddy-quest-head">
+                  <p className="eyebrow">{c.unit}</p>
+                  <span className={`buddy-quest-state${done ? ' is-done' : ''}`}>
+                    {done ? 'Done!' : `${c.progress}/${c.goal}`}
+                  </span>
+                </div>
+                <p className="title buddy-title-sm">{c.title}</p>
                 <p className="muted">{c.blurb}</p>
-                <div className="progress" style={{ marginTop: 12 }}>
+                <div className="progress buddy-quest-progress">
                   <span style={{ width: `${pct}%` }} />
                 </div>
-                <p className="muted">
-                  {c.progress} / {c.goal} · reward: {c.reward}
-                </p>
-                <button
-                  type="button"
-                  className="mini-btn"
-                  style={{ marginTop: 8 }}
-                  disabled={!buddy.paired || c.progress >= c.goal}
-                  onClick={() => bumpChallenge(c.id)}
-                >
-                  {c.progress >= c.goal ? 'Done' : 'Log progress (mock)'}
-                </button>
+                <div className="buddy-quest-foot">
+                  <span className="buddy-quest-reward">🎁 {c.reward}</span>
+                  <button
+                    type="button"
+                    className="mini-btn"
+                    disabled={!buddy.paired || done}
+                    onClick={() => bumpChallenge(c.id)}
+                  >
+                    {done ? 'Done' : 'Log progress'}
+                  </button>
+                </div>
               </section>
             );
           })}
         </>
       )}
-    </>
+    </div>
   );
 }
