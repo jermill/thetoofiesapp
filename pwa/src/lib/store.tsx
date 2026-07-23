@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 
+import { mergeSnapshot, pullSync, pushSync } from './account';
 import {
   availability,
   balance,
@@ -93,6 +94,28 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     } catch {
       // Quota / private mode - continue in-memory.
     }
+  }, [state, ready]);
+
+  // Cloud sync v0 (signed-in users only): pull+merge once on boot, then
+  // debounce-push local changes. Guests stay 100% on-device.
+  useEffect(() => {
+    if (!ready) return;
+    let cancelled = false;
+    void pullSync().then((cloud) => {
+      if (cancelled || !cloud) return;
+      setState((local) => mergeSnapshot(local, cloud));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [ready]);
+
+  useEffect(() => {
+    if (!ready) return;
+    const t = window.setTimeout(() => {
+      void pushSync(state);
+    }, 2500);
+    return () => window.clearTimeout(t);
   }, [state, ready]);
 
   const store = useMemo<Store>(

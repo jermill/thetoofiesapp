@@ -160,10 +160,17 @@ something real ships and teaches before the full platform is built.
   key ships in the PWA client; the **secret key is server-side only** (never in
   repo/bundle; rotation recommended since it transited chat).
 - **D31 · Auth — partially shipped 2026-07-22:** **Supabase Auth**
-  (email + password, email-confirm flow) is live in the PWA gate; "continue
-  without account" stays. Scope so far: **auth only** — dessert logs remain
-  on-device until a sync scope is ratified (D33). **Sign in with Apple** still
-  🔴 (Apple requires it if other social logins are offered).
+  (email + password, email-confirm flow) is live in the PWA gate; guest mode
+  stays. **Sign in with Apple** still 🔴 (Apple requires it if other social
+  logins are offered).
+- **D33 · Sync v0 — shipped 2026-07-23 (provisional):** signed-in users get a
+  compact dessert-log snapshot synced via **auth user metadata** (no tables,
+  capped at 300 entries, last-write-wins + entry-union merge). Guests stay
+  100% on-device. A real table + RLS design is still the ratify-able D33
+  decision; this is the thin bridge. Server-side **account deletion** ships as
+  a Netlify Function (`/api/delete-account`, secret key in Netlify env only),
+  plus in-app JSON **data export** — closes the Apple/GDPR deletion gap from
+  the 2026-07-23 ship audit.
 - **D32 · Content moderation** — required for a public dessert feed (report/block +
   a content policy). Scope + tooling 🔴.
 - **D33 · Minimum "social v1" scope** — exactly what ships first vs fast-follow.
