@@ -103,6 +103,14 @@ ship as a **PWA** (installable web app), then wrap into iOS + Android apps.
   cleanly onto the already-ratified recency-core-vs-economy split.
   **Founder decides. Until then D27 (Expo/RN) stands — do not rebuild in Framer/PWA.**
 
+**Update 2026-07-21 — founder directed: “start with frontend only, design the
+web PWA, no backend yet, mobile-first.”** That maps to synthesis option (3): a
+**frontend-only validation PWA** lives at `pwa/` (Vite + React, localStorage,
+no accounts/API). **D27 (Expo/RN) still stands for the native product**
+(HealthKit / widgets / store). This PWA does **not** replace Expo; it is the
+fast UI + recency/economy loop surface. D28 remains 🔴 until the founder
+explicitly chooses PWA-as-architecture vs PWA-as-prototype.
+
 ### D29 · Developer-account & app ownership 🔴 — NEW
 Collaborator strongly recommends enrolling the **Apple Developer Program under an
 LLC/Corp, not a personal name** (personal enrollment shows your legal name as the
@@ -146,12 +154,23 @@ NOT override the decision):** sequence a **thin, shippable social core** first
 heavy parts (discovery, rich profiles, comments-at-scale, moderation depth), so
 something real ships and teaches before the full platform is built.
 
-**New decisions this spawns (all 🔴 OPEN):**
-- **D30 · Backend provider** — Rec (🟡) **Supabase** (Postgres + Auth + Storage +
-  Realtime + row-level security); the founder's other product already runs on
-  Supabase, so it reuses a known stack.
-- **D31 · Auth** — Rec (🟡) **Clerk** or **Supabase Auth**, plus **Sign in with
-  Apple** (Apple requires it when other social logins are offered).
+**New decisions this spawns:**
+- **D30 · Backend provider 🟢 RATIFIED 2026-07-22** — founder provisioned a
+  **Supabase** project (`fmqdojgjxjtlkusxqnur`) and supplied keys. Publishable
+  key ships in the PWA client; the **secret key is server-side only** (never in
+  repo/bundle; rotation recommended since it transited chat).
+- **D31 · Auth — partially shipped 2026-07-22:** **Supabase Auth**
+  (email + password, email-confirm flow) is live in the PWA gate; guest mode
+  stays. **Sign in with Apple** still 🔴 (Apple requires it if other social
+  logins are offered).
+- **D33 · Sync v0 — shipped 2026-07-23 (provisional):** signed-in users get a
+  compact dessert-log snapshot synced via **auth user metadata** (no tables,
+  capped at 300 entries, last-write-wins + entry-union merge). Guests stay
+  100% on-device. A real table + RLS design is still the ratify-able D33
+  decision; this is the thin bridge. Server-side **account deletion** ships as
+  a Netlify Function (`/api/delete-account`, secret key in Netlify env only),
+  plus in-app JSON **data export** — closes the Apple/GDPR deletion gap from
+  the 2026-07-23 ship audit.
 - **D32 · Content moderation** — required for a public dessert feed (report/block +
   a content policy). Scope + tooling 🔴.
 - **D33 · Minimum "social v1" scope** — exactly what ships first vs fast-follow.
@@ -251,13 +270,38 @@ IAP means you never hold card data. **Rec (🟡):** free v1, revisit paid at v2.
 
 ---
 
-## Tier 4 — Design (ALL open — per your correction, nothing assumed)
+## Tier 4 — Design
 
-### D11 Vibe 🔴 · D12 Color 🔴 · D13 Typography 🔴 · D14 Mascot treatment 🔴 · D15 Layout 🔴
+### D11 Vibe 🔴 · D12 Color 🔴 · D13 Typography 🔴 · D15 Layout 🔴
 Process agreed ("both in parallel"): you share Mobbin references + we ground in
-Apple HIG, then decide each one explicitly. A candidate palette/type direction
-exists from an earlier exploration **as options only** — not applied. See
-`DESIGN-SPEC.md`.
+Apple HIG, then decide each one explicitly. See `DESIGN-SPEC.md`.
+
+**Update 2026-07-21 — provisional apply in `pwa/` only (still 🔴, not ratified):**
+Founder asked to *design* the web PWA. Applied the **OCHA soft-brutalist dessert
+ritual** candidate from `design-library/ocha/teardown.md` as a **working
+prototype** (cream `#fefae7`, matcha `#03563e`, blossom `#ffbad8`, Anton +
+Outfit, rounded cards, Home / Log / You). Banner in-app labels it provisional
+except where a ratified piece (D14) is applied. Expo/SwiftUI scaffolds stay
+unstyled pending the rest of the design gate.
+
+### D14 · Mascot treatment 🟢 RATIFIED 2026-07-21
+Founder: **"LETS GO G5 WITH FANNIE PACE AND BLACK FRAME GLASSES"**
+(fanny pack + black-frame glasses).
+
+**Locked direction:**
+- **Form:** walking tooth (molar crown + root-legs) — not a marshmallow blob
+- **Hair:** **chocolate brown frosting** with colorful **jimmies/sprinkles** on the crown (no cap; updated 2026-07-21)
+- **Glasses:** **black frames** (not gold)
+- **Accessory:** **bright hot-pink fanny pack** on the waist (updated 2026-07-21 — was grey; founder asked for bright color)
+- **Pose system:** G5 sheet energy — walk / wave / celebrate
+- **Assets:** `pwa/public/mascot/toofie-g5-*.png` +
+  `.planning/design-library/mascot/toofie-g5-*.png`
+- **Live lock page:** https://toofies-demo.netlify.app/mascot-locked.html
+- **Sprite atlas (app-wired):** `pwa/public/mascot/atlas.json` + `ToofieSprite` on home/log — animations: idle, ready, almost, empty, milestone, log_dessert, logged, proud, walk, celebrate, cheer, munch, hike, sleepy, banked, …
+- **Sprite sheet:** `pwa/public/mascot/toofie-sprite-*.png` · preview https://toofies-demo.netlify.app/mascot-sprites.html (12-action master + walk/celebrate cycles)
+
+Applied on the PWA home as the brand mascot mark. Further polish (exact line
+weight, prop set per screen) can iterate inside this lock.
 
 ---
 
@@ -280,6 +324,19 @@ Founder: *"there could be some benefit for location sharing / community
 functionality so we can have desserts with friends, or recommend amazing
 places to try new desserts."* This is a substantial, exciting expansion — and
 a major one. Captured here; **not** assumed into any version.
+
+### D31 · Buddy system (couples / friends) 🟡 PROPOSED 2026-07-21
+Founder ask: buddy system for couples/friends — connect, dessert walks, something
+fun/gamified; mentioned “calorie check.”
+
+**Framing lock:** calorie / diet / weight language is **rejected** (PRODUCT.md).
+Buddy features must use **treat-check / peace-of-mind cheers**, shared walks as
+*joy not penance*, and duo quests — never calorie counters.
+
+**UI prototype (not ratified product):** `/buddies` in the PWA — pair via code,
+dessert walks (combined steps), duo streak, treat-check cheers, duo challenges.
+No backend yet. **Founder to ratify scope** (pair model, walk goals, whether
+buddies ship in v1 with D4 social).
 
 ### D22 · Community / social ("desserts with friends") 🔴 — *forces D4=accounts, D5=backend*
 Friends, shared dessert moments, maybe a feed. Aligns with Persona A and the
@@ -375,6 +432,17 @@ reckoned with, not assumed away.
   building.
 - **R6 · Privacy-as-a-feature vs the social/location vision directly conflict**
   (D4/D23). You cannot fully have both; a deliberate tradeoff is required.
+- **R8 · First-run order (PWA mock):** founder directed 2026-07-21 — **Create
+  account → Onboarding → Home** (not onboarding-first). Auth remains a mock
+  stub until D31 ships; “continue without account” still satisfies the gate.
+- **R9 · Snarky nudges vs “never guilt”:** founder asked for sarcastic Toofie
+  nudges (2026-07-21). Provisional copy is roast/hype only — never
+  “you failed / don’t break the streak.” Needs ratify under D18 if it stays.
+- **R10 · Dessert map (Google Maps):** provisional Explore screen uses place
+  search embeds/links (not live location). Touches D23 — keep place-check-in
+  posture; no Always/live tracking in the mock.
+- **R11 · Dark mode:** founder-requested toggle in PWA (provisional). Still
+  sits under open design gate D11–D15 until ratified.
 - **R7 · Disney — CLOSED. It was only an illustrative example, never a
   strategy** (clarified 2026-07-13: *"This isn't about Disney at all — I live in
   Orlando and am referencing them as a place people go to try new desserts and

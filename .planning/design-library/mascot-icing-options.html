@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Toofie — icing options</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --paper:#fefae7; --ink:#121212; --soft:#4a4a44; --matcha:#03563e; --lime:#c6ff3a; --line:rgba(18,18,18,.12); --surface:#fffdf5; }
+  body { margin:0; font-family:Outfit,system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+  .wrap { max-width:960px; margin:0 auto; padding:24px 16px 90px; }
+  h1 { font-family:Anton,sans-serif; text-transform:uppercase; font-size:clamp(32px,7vw,48px); line-height:.95; margin:0 0 8px; }
+  .lede { color:var(--soft); margin:0 0 20px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+  .card { background:var(--surface); border:2px solid var(--line); border-radius:18px; overflow:hidden; cursor:pointer; }
+  .card.selected { border-color:var(--matcha); box-shadow:0 0 0 3px color-mix(in oklab,var(--lime) 55%, transparent); }
+  .card img { width:100%; aspect-ratio:1; object-fit:cover; display:block; }
+  .card p { margin:0; padding:12px; font-size:13px; color:var(--soft); }
+  .card strong { display:block; color:var(--ink); margin-bottom:4px; }
+  .dock { position:fixed; left:50%; bottom:12px; transform:translateX(-50%); width:min(880px,calc(100% - 20px)); background:#121212; color:#fefae7; border-radius:14px; padding:12px 14px; display:flex; justify-content:space-between; gap:10px; align-items:center; }
+  .dock strong { color:var(--lime); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pick the icing</h1>
+  <p class="lede">Same Toofie (black glasses + bright pink fanny). Only the head icing changes.</p>
+  <div class="grid" id="grid"></div>
+</div>
+<div class="dock"><div id="dock">Tap an icing style</div><a href="/mascot-locked.html" style="color:#ffbad8">Back</a></div>
+<script>
+const items = [
+  { id:'cream', letter:'I1', name:'Cream + sprinkles', src:'mascot/toofie-icing-cream-sprinkles.png', blurb:'White soft-serve with rainbow sprinkles — lets the pink pack pop.' },
+  { id:'matcha', letter:'I2', name:'Matcha swirl', src:'mascot/toofie-icing-matcha.png', blurb:'OCHA-green frosting — brand-aligned.' },
+  { id:'choc', letter:'I3', name:'Chocolate + cherry', src:'mascot/toofie-icing-chocolate.png', blurb:'Cocoa swirl with a cherry — dessert-forward.' },
+  { id:'drip', letter:'I4', name:'White drip glaze', src:'mascot/toofie-icing-drip.png', blurb:'Tall cream swirl with berry drip.' },
+];
+let sel = null;
+const grid = document.getElementById('grid');
+function render(){
+  grid.innerHTML = items.map(it => `<div class="card${sel===it.id?' selected':''}" data-id="${it.id}"><img src="${it.src}" alt="${it.name}"/><p><strong>${it.letter} · ${it.name}</strong>${it.blurb}</p></div>`).join('');
+  document.getElementById('dock').innerHTML = sel ? `Selected: <strong>${items.find(i=>i.id===sel).letter}</strong> — reply with this letter` : 'Tap an icing style';
+}
+grid.onclick = e => { const c=e.target.closest('.card'); if(!c) return; sel=c.dataset.id; render(); };
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Toofie — sprite atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --paper:#fefae7; --ink:#121212; --soft:#4a4a44; --matcha:#03563e; --lime:#c6ff3a; --line:rgba(18,18,18,.12); --surface:#fffdf5; }
+  body { margin:0; font-family:Outfit,system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+  .wrap { max-width:1000px; margin:0 auto; padding:24px 16px 90px; }
+  h1 { font-family:Anton,sans-serif; text-transform:uppercase; font-size:clamp(32px,7vw,48px); line-height:.95; margin:0 0 8px; }
+  .lede { color:var(--soft); margin:0 0 18px; max-width:60ch; }
+  .banner { display:inline-block; background:var(--lime); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; border-radius:999px; padding:7px 12px; margin-bottom:12px; }
+  section { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; }
+  h2 { margin:0 0 10px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); }
+  .check {
+    background-color:#ddd;
+    background-image:linear-gradient(45deg,#bbb 25%,transparent 25%),linear-gradient(-45deg,#bbb 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#bbb 75%),linear-gradient(-45deg,transparent 75%,#bbb 75%);
+    background-size:16px 16px; background-position:0 0,0 8px,8px -8px,-8px 0;
+  }
+  img.sheet { width:100%; border-radius:10px; border:1px solid var(--line); display:block; }
+  .anims { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .anims button { appearance:none; border:1px solid var(--line); background:var(--paper); border-radius:999px; padding:8px 12px; font-weight:700; font-size:12px; cursor:pointer; }
+  .anims button.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .player { display:flex; align-items:center; gap:16px; margin-top:12px; flex-wrap:wrap; }
+  .stage { width:140px; height:140px; border:none; border-radius:0; background-color:transparent; background-repeat:no-repeat; }
+  code { font-size:12px; background:#f3edd4; padding:2px 6px; border-radius:6px; }
+  a { color:var(--matcha); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">Atlas · wired to PWA</div>
+  <h1>Toofie sprite atlas</h1>
+  <p class="lede">Transparent (keyed) sheets from <code>/mascot/atlas.json</code>. Chroma-green edit plates live in <code>mascot-plates/green-screen/</code> (not served). No frame / plate behind the character in-app.</p>
+
+  <section>
+    <h2>Play animation</h2>
+    <div class="anims" id="animBtns"></div>
+    <div class="player">
+      <div class="stage check" id="stage"></div>
+      <div>
+        <div><strong id="animName">idle</strong></div>
+        <div style="color:var(--soft);font-size:13px" id="animMeta"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>actions · 4×3</h2>
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-actions.png" alt="actions sheet" />
+  </section>
+  <section>
+    <h2>moods · 4×3</h2>
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-moods.png" alt="moods sheet" />
+  </section>
+  <section>
+    <h2>app moments · 4×3</h2>
+    <img class="sheet check" src="mascot/toofie-sprite-sheet-app.png" alt="app sheet" />
+  </section>
+  <section>
+    <h2>cycles</h2>
+    <img class="sheet check" src="mascot/toofie-sprite-walk-cycle.png" alt="walk" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-celebrate-cycle.png" alt="celebrate" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-milestone-cycle.png" alt="milestone" />
+    <img class="sheet check" style="margin-top:8px" src="mascot/toofie-sprite-log-cycle.png" alt="log" />
+  </section>
+  <p><a href="/">Open app</a> · <a href="/mascot-locked.html">Locked mascot</a></p>
+</div>
+<script>
+let atlas, timer, frame = 0, current = 'idle';
+const stage = document.getElementById('stage');
+
+function paint() {
+  const def = atlas.animations[current];
+  const sheet = atlas.sheets[def.sheet];
+  const name = def.frames[frame % def.frames.length];
+  const idx = sheet.frames.indexOf(name);
+  const cols = sheet.cols;
+  const rows = sheet.rows;
+  const col = idx % cols;
+  const row = Math.floor(idx / cols);
+  const size = 140;
+  const sheetW = sheet.width || cols * 256;
+  const sheetH = sheet.height || rows * 256;
+  const cw = sheetW / cols;
+  const ch = sheetH / rows;
+  const scale = Math.max(size / cw, size / ch);
+  const x = -(col * cw * scale) - (cw * scale - size) / 2;
+  const y = -(row * ch * scale) - (ch * scale - size) / 2;
+  stage.style.backgroundImage = `url(${sheet.src})`;
+  stage.style.backgroundSize = `${sheetW * scale}px ${sheetH * scale}px`;
+  stage.style.backgroundPosition = `${x}px ${y}px`;
+  stage.style.overflow = 'hidden';
+  document.getElementById('animName').textContent = current;
+  document.getElementById('animMeta').textContent = `${def.sheet} · ${def.frames.length} frames · ${def.fps} fps · loop=${def.loop}`;
+}
+
+function play(name) {
+  current = name; frame = 0;
+  document.querySelectorAll('.anims button').forEach(b => b.classList.toggle('on', b.dataset.anim === name));
+  if (timer) clearInterval(timer);
+  paint();
+  const def = atlas.animations[current];
+  if (def.frames.length <= 1) return;
+  timer = setInterval(() => {
+    frame++;
+    if (!def.loop && frame >= def.frames.length) { clearInterval(timer); frame = def.frames.length - 1; }
+    paint();
+  }, 1000 / Math.max(1, def.fps));
+}
+
+fetch('/mascot/atlas.json').then(r => r.json()).then(a => {
+  atlas = a;
+  const box = document.getElementById('animBtns');
+  box.innerHTML = Object.keys(a.animations).map(k => `<button type="button" data-anim="${k}">${k}</button>`).join('');
+  box.onclick = e => { const b = e.target.closest('button'); if (b) play(b.dataset.anim); };
+  play('idle');
+});
+</script>
+</body>
+</html>

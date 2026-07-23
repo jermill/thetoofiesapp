@@ -19,3 +19,8 @@ build/
 
 .mobbin-profile/
 node_modules/
+dist/
+*.local
+
+# Local Netlify folder
+.netlify

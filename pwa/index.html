@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <meta name="theme-color" content="#fefae7" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Toofies" />
+    <meta
+      name="description"
+      content="Enjoy dessert with a little more awareness and zero guilt."
+    />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Toofies - dessert, with peace of mind</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Toofies",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "description": "A playful dessert-balance tracker. Log treats, keep gentle streaks, zero guilt. Prototype demo - dessert logs stay on your device.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+    <!-- cache-bust marker: splash-v15-white-tooth -->
+    <link rel="preload" as="image" href="/mascot/toofie-sprite-walk-cycle.png?v=11" />
+    <style>
+      /* First-paint: cream only until React mounts one walking Toofie */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        margin: 0;
+        background: #fefae7;
+      }
+    </style>
+    <script>
+      (function () {
+        var EPOCH = 'splash-v15-white-tooth';
+        try {
+          if (localStorage.getItem('toofies-cache-epoch') === EPOCH) return;
+          localStorage.setItem('toofies-cache-epoch', EPOCH);
+        } catch (e) {
+          return;
+        }
+        var reload = false;
+        var finish = function () {
+          if (reload) location.reload();
+        };
+        var pending = 0;
+        var track = function (p) {
+          pending++;
+          Promise.resolve(p)
+            .catch(function () {})
+            .then(function () {
+              pending--;
+              if (pending === 0) finish();
+            });
+        };
+        if ('serviceWorker' in navigator) {
+          track(
+            navigator.serviceWorker.getRegistrations().then(function (regs) {
+              if (regs.length) reload = true;
+              return Promise.all(regs.map(function (r) { return r.unregister(); }));
+            }),
+          );
+        }
+        if ('caches' in window) {
+          track(
+            caches.keys().then(function (keys) {
+              if (keys.length) reload = true;
+              return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+            }),
+          );
+        }
+        if (pending === 0) finish();
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="boot-splash" aria-hidden="true"></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
