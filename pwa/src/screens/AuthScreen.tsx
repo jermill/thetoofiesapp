@@ -33,9 +33,13 @@ export function AuthScreen() {
 
   async function submit() {
     if (busy) return;
-    const mail = email.trim();
-    if (!mail || !password) {
-      show('Email + password needed', { tone: 'soft', anim: 'think', ms: 1600 });
+    const mail = email.trim().slice(0, 254);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) {
+      show('That email doesn’t look right', { tone: 'soft', anim: 'think', ms: 1800 });
+      return;
+    }
+    if (password.length < 8 || password.length > 128) {
+      show('Password needs 8+ characters', { tone: 'soft', anim: 'think', ms: 1800 });
       return;
     }
     setBusy(true);
@@ -45,7 +49,7 @@ export function AuthScreen() {
           email: mail,
           password,
           options: {
-            data: { display_name: name.trim() || 'Friend' },
+            data: { display_name: name.trim().slice(0, 40) || 'Friend' },
             emailRedirectTo: window.location.origin,
           },
         });
@@ -176,6 +180,7 @@ export function AuthScreen() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Danny"
                   autoComplete="nickname"
+                  maxLength={40}
                 />
               </label>
             )}
@@ -187,6 +192,7 @@ export function AuthScreen() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
                 autoComplete="email"
+                maxLength={254}
               />
             </label>
             <label className="field">
@@ -195,8 +201,10 @@ export function AuthScreen() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="8+ characters"
                 autoComplete={mode === 'up' ? 'new-password' : 'current-password'}
+                minLength={8}
+                maxLength={128}
               />
             </label>
 
