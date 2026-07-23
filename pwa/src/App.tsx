@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AppShell } from './components/AppShell';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadSplash } from './components/LoadSplash';
 import { PageTransition } from './components/PageTransition';
 import { ToastProvider } from './components/Toast';
@@ -114,12 +115,14 @@ function ShellRoutes() {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <ToastProvider>
-        <BrowserRouter>
-          <ShellRoutes />
-        </BrowserRouter>
-      </ToastProvider>
-    </StoreProvider>
+    <ErrorBoundary>
+      <StoreProvider>
+        <ToastProvider>
+          <BrowserRouter>
+            <ShellRoutes />
+          </BrowserRouter>
+        </ToastProvider>
+      </StoreProvider>
+    </ErrorBoundary>
   );
 }

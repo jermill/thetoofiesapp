@@ -5,6 +5,12 @@ import { ToofieSprite } from '../components/ToofieSprite';
 import { useToast } from '../components/Toast';
 import { supabase } from '../lib/supabase';
 import { loadUiPrefs, saveUiPrefs } from '../lib/uiPrefs';
+import {
+  isValidEmail,
+  isValidPassword,
+  normalizeDisplayName,
+  normalizeEmail,
+} from '../lib/validate';
 
 export function AuthScreen() {
   const navigate = useNavigate();
@@ -33,12 +39,12 @@ export function AuthScreen() {
 
   async function submit() {
     if (busy) return;
-    const mail = email.trim().slice(0, 254);
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) {
+    const mail = normalizeEmail(email);
+    if (!isValidEmail(mail)) {
       show('That email doesn’t look right', { tone: 'soft', anim: 'think', ms: 1800 });
       return;
     }
-    if (password.length < 8 || password.length > 128) {
+    if (!isValidPassword(password)) {
       show('Password needs 8+ characters', { tone: 'soft', anim: 'think', ms: 1800 });
       return;
     }
@@ -49,7 +55,7 @@ export function AuthScreen() {
           email: mail,
           password,
           options: {
-            data: { display_name: name.trim().slice(0, 40) || 'Friend' },
+            data: { display_name: normalizeDisplayName(name) },
             emailRedirectTo: window.location.origin,
           },
         });
